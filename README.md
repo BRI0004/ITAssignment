@@ -8,12 +8,12 @@
 | 120 | Still Alive                         | Portal Soundtrack                 | Video Game      |
 | 159 | Running in the 90s                  | Initial D                         | Eurobeat        |
 | 160 | Ice Angel                           | Yooh                              | Trance          |
-| 166 | 3EM02 C17B Nu Te                    | World of the Fragments Soundtrack | Video Game      |
+| 166 | God's Message                       | World of the Fragments Soundtrack | Video Game      |
 | 174 | Plasticworld                        | Pendulum                          | Drum and Bass   |
 | 174 | Wings (Nu:Logic Remix)              | Birdy                             | Drum and Bass   |
 | 174 | Changing                            | Sigma                             | Drum and Bass   |
 | 175 | Midnight Riders (kanome sano Remix) | gya9                              | Drumstep        |
-| 180 | Night of Nights                     | 2hu/BeatMARIO                     | Video Game      |
+| 180 | Night of Nights                     | ZUN                               | Video Game      |
 | 200 | Through the Fire and Flames         | Dragonforce                       | Speed Metal     |
 | 200 | Fury of the Storm                   | Dragonforce                       | Speed Metal     |
 | 200 | Blue Zenith                         | xi                                | Techno          |
