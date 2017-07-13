@@ -7,7 +7,6 @@ player:setFillColor(1,1,1)
 --table to be used for hit detection and shiizz
 -- a is amount b is table
 
-
 createMakuInTable = function (a)
 	b = {}
 	for i=1,a,1 do
@@ -30,6 +29,7 @@ circleMaku = function (r,b,cx,cy)
 		b[i].dy = math.sin(a * i)
 		b[i].x = cx + r * b[i].dx
 		b[i].y = cy + r * b[i].dy
+        b[i].velocity = 1
 	end
 	return b
 end
@@ -54,8 +54,8 @@ tm.params = { i = 1}
 
 --This function creates falling danmaku, attracted to player.
 findAngleBetweenObjects = function(a,b)
-	delta_x = a.x - b.x
-	delta_y = b.x - a.x
+	local delta_x = a.x + b.x
+	local delta_y = b.x + a.x
 	local radians = math.atan2(delta_y, delta_x)
 	--returning degrees
 	return radians*(180/math.pi)
@@ -67,18 +67,19 @@ function spellCard_1()
 	nerd = createMakuInTable(50)
 	circleMaku(250,nerd,w/2,h/2)
 	for i = 1, #nerd, 1 do
-		nerd[i].rotation = findAngleBetweenObjects(nerd[i],player)
-	end
-	sleep(0.5)
-	for i = 1, #nerd, 1 do
-		nerd[i].dx = math.cos(nerd[i].rotation)
-		nerd[i].dy = math.sin(nerd[i].rotation)
+		nerd[i].dx = math.sin(findAngleBetweenObjects(nerd[i],player))
+		nerd[i].dy = math.cos(findAngleBetweenObjects(nerd[i],player))
 	end
 end
 
-
-local clock = os.clock
-function sleep(n)  -- seconds
-	local t0 = clock()
-	while clock() - t0 <= n do end
+function gameLoop()
+    if nerd ~= nil and nerd[1].velocity ~= 0 then
+        print(nerd[1].rotation)
+        for i=1, #nerd, 1 do
+            nerd[i].x = nerd[i].x + nerd[i].dx*nerd[i].velocity
+            nerd[i].y = nerd[i].y + nerd[i].dy*nerd[i].velocity
+        end
+    end
 end
+spellCard_1()
+Runtime:addEventListener("enterFrame",gameLoop)
