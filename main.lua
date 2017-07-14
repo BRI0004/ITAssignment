@@ -4,6 +4,9 @@ local physics = require("physics")
 physics.start()
 player = display.newRect(w/2,h,w/50,h/10)
 player:setFillColor(1,1,1)
+player.movementSpeed = 10
+player.movementSpeedModifer = 1
+physics.addBody(player,"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=player.contentWidth/2.0})
 --function to create amount of maku inside a table
 --table to be used for hit detection and shiizz
 -- a is amount b is table
@@ -60,7 +63,6 @@ findAngleBetweenObjects = function(a,b)
 	local delta_y = a.x - b.x
 	local radians = math.atan2(delta_y, delta_x)
 	--returning degrees
-	print(radians)
 	return radians*(180/math.pi)
 end
 --point and move all danmaku towards player
@@ -78,14 +80,74 @@ function spellCard_1()
 	end
 	
 	
+end	
+--player movement
+local function onKeyEvent( event )
+	if (event.keyName == "leftShift") then
+		if (event.phase == "down") then
+		
+		end
+		if (event.phase == "up") then
+	
+		end
+	end
+	if (event.keyName == "left") then
+		if (event.phase == "down") then
+			playerNeedToMoveLeft = true
+		else
+			playerNeedToMoveLeft = false
+		end
+	end
+	if (event.keyName == "right") then
+		if (event.phase == "down") then
+			playerNeedToMoveRight = true
+		else
+			playerNeedToMoveRight = false
+		end
+	end
+	if (event.keyName == "up") then
+		if (event.phase == "down") then
+			playerNeedToMoveUp = true
+		else
+			playerNeedToMoveUp = false
+		end
+	end
+	if (event.keyName == "down") then
+		if (event.phase == "down") then
+			playerNeedToMoveDown = true
+		else
+			playerNeedToMoveDown = false
+		end
+	end
+	if (event.keyName == "leftShift") then
+		if (event.phase == "down") then
+			player.movementSpeedModifer = 0.5
+		else
+			player.movementSpeedModifer = 1
+		end
+	end		
+    -- IMPORTANT! Return false to indicate that this app is NOT overriding the received key
+    -- This lets the operating system execute its default handling of the key
+    return false
 end
--- movement of ullets and such
-function gameLoop()
-    if nerd ~= nil and nerd[1].velocity ~= 0 then
-        print(nerd[1].rotation)
-        for i=1, #nerd, 1 do
-        end
-    end
+ -----------------------------------------------------------------------------
+-- movement of player
+function gameLoopPlayerMovement()
+		if (playerNeedToMoveLeft == true and player.x > w/50) then
+			player.x = player.x - player.movementSpeed * player.movementSpeedModifer
+		end
+		if (playerNeedToMoveRight == true and player.x < 49 * w/50) then
+			player.x = player.x + player.movementSpeed * player.movementSpeedModifer
+		end
+		if (playerNeedToMoveUp == true and player.y > h/50) then
+			player.y = player.y - player.movementSpeed * player.movementSpeedModifer
+		end
+		if (playerNeedToMoveDown == true and player.y < 49 * h/50) then
+			player.y = player.y + player.movementSpeed * player.movementSpeedModifer
+		end	
 end
 spellCard_1()
-Runtime:addEventListener("enterFrame",gameLoop)
+-- Add the key event listener
+
+Runtime:addEventListener("enterFrame",gameLoopPlayerMovement)
+Runtime:addEventListener( "key", onKeyEvent )
