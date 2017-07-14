@@ -7,9 +7,14 @@ player:setFillColor(1,1,1)
 player.movementSpeed = 10
 player.movementSpeedModifer = 1
 physics.addBody(player,"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=player.contentWidth/2.0})
+playerHitBox = display.newImageRect('danmaku1.png',w/30,w/30)
+playerHitBox:setFillColor(1,0.5,0.5)
 --function to create amount of maku inside a table
 --table to be used for hit detection and shiizz
 -- a is amount b is table
+
+
+
 
 createMakuInTable = function (a)
 	b = {}
@@ -39,38 +44,11 @@ circleMaku = function (r,b,cx,cy)
 	return b
 end
 
---This function creates an incresing value for animating
---the danmaku, uses a timer needs something better
-
---[[
-function movelmao(event)
-	local params = event.source.params
-	circleMaku(params.i,nerd,w/2,h/2)
-	params.i = params.i + 3
-	print(nerd[1].y)
-	if nerd[1].y > h/2 + h/100 then
-		timer.cancel(event.source)
-	end
-end
-tm = timer.performWithDelay( 20, movelmao, -1)
-tm.params = { i = 1}
-]]
-
-
---This function creates falling danmaku, attracted to player.
-findAngleBetweenObjects = function(a,b)
-	local delta_x = b.x - a.x
-	local delta_y = a.x - b.x
-	local radians = math.atan2(delta_y, delta_x)
-	--returning degrees
-	return radians*(180/math.pi)
-end
---point and move all danmaku towards player
 function spellCard_1()
 	-- create a cicle of danmaku
 	-- move danmaku towawrds player
-	nerd = createMakuInTable(10)
-	circleMaku(50,nerd,w/2,h/2)
+	nerd = createMakuInTable(50)
+	circleMaku(100,nerd,w/2,h/4)
 	for i = 1, #nerd, 1 do
 		nerd[i].velocity = 0.5 --times game difficulty
 		nerd[i]:setLinearVelocity(
@@ -78,19 +56,30 @@ function spellCard_1()
 			nerd[i].velocity*(player.y - nerd[i].y)
 		)
 	end
-	
-	
 end	
+function spellCard_2()
+	steve = createMakuInTable(50)
+		function spellCard_2Wave()
+			local counter
+			
+			if (counter == #steve) then
+				timer.cancel(spellCard_2Timer)
+			end
+			
+			steve[i].velocity = 0.7 --times game difficulty
+			steve[i]:setLinearVelocity(
+				steve[i].velocity*(player.x - steve[i].x),
+				steve[i].velocity*(player.y - steve[i].y)
+			)
+			
+		counter = counter + 1
+		end
+	
+	spellCard_2Timer = timer.performWithDelay( 20,spellCard_2Wave,-1)
+
+end
 --player movement
 local function onKeyEvent( event )
-	if (event.keyName == "leftShift") then
-		if (event.phase == "down") then
-		
-		end
-		if (event.phase == "up") then
-	
-		end
-	end
 	if (event.keyName == "left") then
 		if (event.phase == "down") then
 			playerNeedToMoveLeft = true
@@ -125,7 +114,11 @@ local function onKeyEvent( event )
 		else
 			player.movementSpeedModifer = 1
 		end
-	end		
+	end
+	if (event.keyName == "p") then
+			spellCard_2()
+	end	
+
     -- IMPORTANT! Return false to indicate that this app is NOT overriding the received key
     -- This lets the operating system execute its default handling of the key
     return false
@@ -133,20 +126,20 @@ end
  -----------------------------------------------------------------------------
 -- movement of player
 function gameLoopPlayerMovement()
-		if (playerNeedToMoveLeft == true and player.x > w/50) then
-			player.x = player.x - player.movementSpeed * player.movementSpeedModifer
-		end
-		if (playerNeedToMoveRight == true and player.x < 49 * w/50) then
-			player.x = player.x + player.movementSpeed * player.movementSpeedModifer
-		end
-		if (playerNeedToMoveUp == true and player.y > h/50) then
-			player.y = player.y - player.movementSpeed * player.movementSpeedModifer
-		end
-		if (playerNeedToMoveDown == true and player.y < 49 * h/50) then
-			player.y = player.y + player.movementSpeed * player.movementSpeedModifer
-		end	
+	if (playerNeedToMoveLeft == true and player.x > w/50) then
+		player.x = player.x - player.movementSpeed * player.movementSpeedModifer
+	end
+	if (playerNeedToMoveRight == true and player.x < 49 * w/50) then
+		player.x = player.x + player.movementSpeed * player.movementSpeedModifer
+	end
+	if (playerNeedToMoveUp == true and player.y > h/50) then
+		player.y = player.y - player.movementSpeed * player.movementSpeedModifer
+	end
+	if (playerNeedToMoveDown == true and player.y < 49 * h/50) then
+		player.y = player.y + player.movementSpeed * player.movementSpeedModifer
+	end
+	
 end
-spellCard_1()
 -- Add the key event listener
 
 Runtime:addEventListener("enterFrame",gameLoopPlayerMovement)
