@@ -1,6 +1,7 @@
 h = display.contentHeight
 w = display.contentWidth
-
+local physics = require("physics")
+physics.start()
 player = display.newRect(w/2,h,w/50,h/10)
 player:setFillColor(1,1,1)
 --function to create amount of maku inside a table
@@ -11,6 +12,7 @@ createMakuInTable = function (a)
 	b = {}
 	for i=1,a,1 do
 		b[i] = display.newImageRect('danmaku1.png',w/30,w/30)
+		physics.addBody(b[i], "kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=b[i].contentWidth/2.0})
 	end
 	return b
 end
@@ -54,30 +56,34 @@ tm.params = { i = 1}
 
 --This function creates falling danmaku, attracted to player.
 findAngleBetweenObjects = function(a,b)
-	local delta_x = a.x + b.x
-	local delta_y = b.x + a.x
+	local delta_x = b.x - a.x
+	local delta_y = a.x - b.x
 	local radians = math.atan2(delta_y, delta_x)
 	--returning degrees
+	print(radians)
 	return radians*(180/math.pi)
 end
 --point and move all danmaku towards player
 function spellCard_1()
 	-- create a cicle of danmaku
 	-- move danmaku towawrds player
-	nerd = createMakuInTable(50)
-	circleMaku(250,nerd,w/2,h/2)
+	nerd = createMakuInTable(10)
+	circleMaku(50,nerd,w/2,h/2)
 	for i = 1, #nerd, 1 do
-		nerd[i].dx = math.sin(findAngleBetweenObjects(nerd[i],player))
-		nerd[i].dy = math.cos(findAngleBetweenObjects(nerd[i],player))
+		nerd[i].velocity = 0.5 --times game difficulty
+		nerd[i]:setLinearVelocity(
+			nerd[i].velocity*(player.x - nerd[i].x),
+			nerd[i].velocity*(player.y - nerd[i].y)
+		)
 	end
+	
+	
 end
-
+-- movement of ullets and such
 function gameLoop()
     if nerd ~= nil and nerd[1].velocity ~= 0 then
         print(nerd[1].rotation)
         for i=1, #nerd, 1 do
-            nerd[i].x = nerd[i].x + nerd[i].dx*nerd[i].velocity
-            nerd[i].y = nerd[i].y + nerd[i].dy*nerd[i].velocity
         end
     end
 end
