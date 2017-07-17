@@ -13,25 +13,22 @@ player.myName = "player object"
 --table to be used for hit detection and shiizz
 -- a is amount b is table
 
--- collision filters
-collisionFilterPlayer =          { categoryBits = 1, maskBits = 8}
-collisionFilterPlayerSpellCard = { categoryBits = 2, maskBits = 12}
-collisionFilterEnemy           = { categoryBits = 4, maskBits = 18}
-collisionFilterEnemyBullets    = { categoryBits = 8, maskBits = 3}
-collisionFilterPlayerBullets   = { categoryBits = 16, maskBits = 4}
+
 
 
 createMakuInTable = function (a)
 	b = {}
 	for i=1,a,1 do
 		b[i] = display.newImageRect('danmaku1.png',w/30,w/30)
-		physics.addBody(b[i], "kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=b[i].contentWidth/2.0, filter=collisionFilterEnemyBullets})
+		physics.addBody(b[i], "kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=b[i].contentWidth/2.0,})
 		b[i].isBullet = true
 		b[i].myName = "enemy bullet"
 		removeSelfOnDelay(b[i])
 	end
 	return b
 end
+
+
 
 
 
@@ -51,6 +48,12 @@ circleMaku = function (r,b,cx,cy)
 	end
 	return b
 end
+
+
+
+
+
+
 function playerSpellCard()
 	if (player.selectedSpellCard == 1) then
 		player.spellCardInProgress = 1
@@ -60,8 +63,7 @@ function playerSpellCard()
 			-- player spell card 1, rotating boxes that remove any danmaku
 			playerSpellCardObjects[1] = display.newRect(player.x, player.y,50,50)
         --
-            local nw, nh = playerSpellCardObjects[1].width*0.5, playerSpellCardObjects[1].height*0.5;
-			physics.addBody(playerSpellCardObjects[1], "static",{friction=0.0, bounce=0.0, shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh},filter=collisionFilterPlayerSpellCard})
+			physics.addBody(playerSpellCardObjects[1], "static",{friction=0.0, bounce=0.0, radius=w/2})
         --
             
             playerSpellCardObjects[1].gravityScale = 0
@@ -93,6 +95,7 @@ function playerSpellCard()
 
 
 end
+-------------------------------------------------------------------
 function spellCard_1()
 	-- create a cicle of danmaku
 	-- move danmaku towawrds player
@@ -137,7 +140,7 @@ end
 -- collision
 ---------------------------------------------------------------------------------
 function onGlobalCollision(event)
-print('reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+    print('reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     
     if ( event.phase == "began" ) then
         print( "began: " .. event.object1.myName .. " and " .. event.object2.myName )
@@ -151,6 +154,7 @@ print('reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
         event.object2 = nil    
     end
 end
+Runtime:addEventListener("collision",onGlobalCollision)
 ------------------------------------------------------------------------------------
 function onLocalCollision(self, event)
 	
@@ -210,11 +214,9 @@ local function onKeyEvent( event )
 			spellCard_1()
 		end
 	end	
-
-    -- IMPORTANT! Return false to indicate that this app is NOT overriding the received key
-    -- This lets the operating system execute its default handling of the key
     return false
 end
+---------------------------------------------------------------------------------
 function playerShoot()
 	if playerBullets == nil then playerBullets = {}	end
 	function playerFire()
@@ -223,10 +225,10 @@ function playerShoot()
 		physics.addBody(playerBullets[#playerBullets],"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=playerBullets[#playerBullets].contentWidth/2.0})
 		playerBullets[#playerBullets].x = player.x
 		playerBullets[#playerBullets].y = player.y - player.contentHeight/2
-		playerBullets[#playerBullets]:setLinearVelocity(0,-800)
+		playerBullets[#playerBullets]:setLinearVelocity(0,-50)
 		removeSelfOnDelay(playerBullets[#playerBullets])
 	end
-	playerShootTimer = timer.performWithDelay( 200,playerFire,1)
+	playerShootTimer = timer.performWithDelay( 0,playerFire,1)
 end
  -----------------------------------------------------------------------------
 -- movement of player
@@ -255,4 +257,3 @@ end
 
 Runtime:addEventListener("enterFrame",gameLoopPlayerActions)
 Runtime:addEventListener( "key", onKeyEvent )
-Runtime:addEventListener("collision",onGlobalCollision)
