@@ -61,9 +61,9 @@ function playerSpellCard()
 			playerSpellCardObjects[1] = display.newRect(player.x, player.y,50,50)
         --
             local nw, nh = playerSpellCardObjects[1].width*0.5, playerSpellCardObjects[1].height*0.5;
-
 			physics.addBody(playerSpellCardObjects[1], "static",{friction=0.0, bounce=0.0, shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh},filter=collisionFilterPlayerSpellCard})
         --
+            
             playerSpellCardObjects[1].gravityScale = 0
 			playerSpellCardObjects[1].myName = "players spell card object"
 		function playerSpellCardObjectMovement()
@@ -252,7 +252,6 @@ end
 function removeSelfOnDelay(object)
 	timer.performWithDelay(20000,function() object:removeSelf() end)
 end
--- Add the key event listener
 
 Runtime:addEventListener("enterFrame",gameLoopPlayerActions)
 Runtime:addEventListener( "key", onKeyEvent )
