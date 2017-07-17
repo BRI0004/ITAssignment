@@ -1,5 +1,5 @@
 player = display.newRect(w/2,h,w/50,h/10)
-physics.addBody(player,"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=player.contentWidth/2.0})
+physics.addBody(player,"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=player.contentWidth/2.0, filter=collisionFilterPlayer})
 player:setFillColor(1,1,1)
 player.movementSpeed = 10
 player.movementSpeedModifer = 1
@@ -13,14 +13,19 @@ player.myName = "player object"
 --table to be used for hit detection and shiizz
 -- a is amount b is table
 
-
+-- collision filters
+collisionFilterPlayer =          { categoryBits = 1, maskBits = 8}
+collisionFilterPlayerSpellCard = { categoryBits = 2, maskBits = 12}
+collisionFilterEnemy           = { categoryBits = 4, maskBits = 18}
+collisionFilterEnemyBullets    = { categoryBits = 8, maskBits = 3}
+collisionFilterPlayerBullets   = { categoryBits = 16, maskBits = 4}
 
 
 createMakuInTable = function (a)
 	b = {}
 	for i=1,a,1 do
 		b[i] = display.newImageRect('danmaku1.png',w/30,w/30)
-		physics.addBody(b[i], "kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=b[i].contentWidth/2.0})
+		physics.addBody(b[i], "kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=b[i].contentWidth/2.0, filter=collisionFilterEnemyBullets})
 		b[i].isBullet = true
 		b[i].myName = "enemy bullet"
 		removeSelfOnDelay(b[i])
@@ -54,7 +59,12 @@ function playerSpellCard()
 		end
 			-- player spell card 1, rotating boxes that remove any danmaku
 			playerSpellCardObjects[1] = display.newRect(player.x, player.y,50,50)
-			physics.addBody(playerSpellCardObjects[1], "dynamic",{friction=0.0, bounce=0.0, density=0.0, radius=playerSpellCardObjects[1].contentWidth/2.0})
+        --
+            local nw, nh = playerSpellCardObjects[1].width*0.5, playerSpellCardObjects[1].height*0.5;
+
+			physics.addBody(playerSpellCardObjects[1], "static",{friction=0.0, bounce=0.0, shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh},filter=collisionFilterPlayerSpellCard})
+        --
+            playerSpellCardObjects[1].gravityScale = 0
 			playerSpellCardObjects[1].myName = "players spell card object"
 		function playerSpellCardObjectMovement()
 			if (i == nil) then i = 0 end
@@ -128,11 +138,17 @@ end
 ---------------------------------------------------------------------------------
 function onGlobalCollision(event)
 print('reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+    
     if ( event.phase == "began" ) then
         print( "began: " .. event.object1.myName .. " and " .. event.object2.myName )
  
     elseif ( event.phase == "ended" ) then
         print( "ended: " .. event.object1.myName .. " and " .. event.object2.myName )
+    end
+    if(event.object1.myName == "players spell card object" and event.object2.myName == "enemy bullet") then
+        print("removed")
+        event.object2:removeSelf()
+        event.object2 = nil    
     end
 end
 ------------------------------------------------------------------------------------
@@ -202,7 +218,7 @@ end
 function playerShoot()
 	if playerBullets == nil then playerBullets = {}	end
 	function playerFire()
-		playerBullets[#playerBullets] = display.newImageRect('danmaku1.png',w/30,w/30)
+		playerBullets[#playerBullets] = display.newImageRect('danmakublue.png',w/30,w/30)
 		playerBullets[#playerBullets].myName = "players bullet"
 		physics.addBody(playerBullets[#playerBullets],"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=playerBullets[#playerBullets].contentWidth/2.0})
 		playerBullets[#playerBullets].x = player.x
