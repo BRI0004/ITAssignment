@@ -3,19 +3,18 @@ physics.addBody(player,"kinematic",{friction=0.0, bounce=0.0, density=0.0, radiu
 player:setFillColor(1,1,1)
 player.movementSpeed = 10
 player.movementSpeedModifer = 1
-playerHitBox = display.newImageRect('danmaku1.png',w/30,w/30)
-playerHitBox:setFillColor(1,0.5,0.5)
 player.powerlevel = 1
 player.selectedSpellCard = 1
 player.spellCardInProgress = 0
 player.myName = "player object"
+
+playerHitBox = display.newImageRect('danmaku1.png',w/30,w/30)
+playerHitBox:setFillColor(1,0.5,0.5)
+
+
 --function to create amount of maku inside a table
 --table to be used for hit detection and shiizz
 -- a is amount b is table
-
-
-
-
 createMakuInTable = function (a)
 	b = {}
 	for i=1,a,1 do
@@ -96,35 +95,38 @@ function playerSpellCard()
 
 end
 -------------------------------------------------------------------
-function spellCard_1()
+spellcard_1 = function (a)
 	-- create a cicle of danmaku
 	-- move danmaku towawrds player
-	nerd = createMakuInTable(50)
-	circleMaku(100,nerd,w/2,h/4)
-	for i = 1, #nerd, 1 do
-		nerd[i].velocity = 0.5 --times game difficulty
-		nerd[i]:setLinearVelocity(
-			nerd[i].velocity*(player.x - nerd[i].x),
-			nerd[i].velocity*(player.y - nerd[i].y)
+	a = createMakuInTable(50)
+	circleMaku(100,a,w/2,h/4)
+	for i = 1, #a, 1 do
+		a[i].velocity = 0.5 --times game difficulty
+		a[i]:setLinearVelocity(
+			a[i].velocity*(player.x - a[i].x),
+			a[i].velocity*(player.y - a[i].y)
 		)
 	end
 end	
+--[[ Still doesnt work going to do another one instead
 function spellCard_2()
 	steve = createMakuInTable(50)
 	local counter = 0
 	local prevpos = 0
 		function spellCard_2Wave()
-			
 			counter = counter + 1
 			local prevpos = prevpos + counter
 			for i = prevpos, prevpos + counter, 1 do
+				print("curerent loop:"..(i).." prevpos:"..prevpos.."counter is:"..counter)
 				if i > #steve then
-					timer.cancel(spellCard_2Timer)
+					timer.cancel(spellCard_2Timer)	
 					return false
 				end
-				steve[i].x = w/2 + i*10 - 400
+				
+				
+				steve[i].x = w/2 + i*15 - 400
 				steve[i].y = h/2
-				steve[i].velocity = 0.7 --times game difficulty
+				steve[i].velocity = 1.1 --times game difficulty
 				steve[i]:setLinearVelocity(
 					steve[i].velocity*(player.x - steve[i].x),
 					steve[i].velocity*(player.y - steve[i].y)
@@ -135,7 +137,22 @@ function spellCard_2()
 		timer.cancel(spellCard_2Timer)
 	end
 	
-	spellCard_2Timer = timer.performWithDelay( 200,spellCard_2Wave,-1)
+	spellCard_2Timer = timer.performWithDelay( 20,spellCard_2Wave,#steve)
+end
+]]
+spellCard_3 = function(a)
+	a = createMakuInTable(100)
+	i = 1
+	function spellCard_3Wave()
+		a[i].x = math.random(w)+w/100
+		a[i].y = math.random((h/2))-h/50
+		a[i].gravityScale = 1.5
+		a[i]:setLinearVelocity(0,100*(i/25) + 100)
+		on420BloomIt(a[i])
+		i = i + 1
+	end
+	spellCard_3Timer = timer.performWithDelay( 50,spellCard_3Wave,#a)
+	return a
 end
 -- collision
 ---------------------------------------------------------------------------------
@@ -155,6 +172,18 @@ function onGlobalCollision(event)
     end
 end
 Runtime:addEventListener("collision",onGlobalCollision)
+-------------------------------------------------------------------------------------
+function on420BloomIt(object)
+	object.fill.effect = "filter.bloom"
+	object.fill.effect.levels.white = 0.8
+	object.fill.effect.levels.black = 0.4
+	object.fill.effect.levels.gamma = 1
+	object.fill.effect.add.alpha = 0.8
+	object.fill.effect.blur.horizontal.blurSize = 20
+	object.fill.effect.blur.horizontal.sigma = 140
+	object.fill.effect.blur.vertical.blurSize = 20
+	object.fill.effect.blur.vertical.sigma = 240
+end
 ------------------------------------------------------------------------------------
 function onLocalCollision(self, event)
 	
@@ -211,7 +240,7 @@ local function onKeyEvent( event )
 	end
 	if (event.keyName == "p") then
 		if (event.phase == "down") then
-			spellCard_1()
+			spellCard_3()
 		end
 	end	
     return false
