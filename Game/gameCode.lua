@@ -8,8 +8,19 @@ player.selectedSpellCard = 1
 player.spellCardInProgress = 0
 player.myName = "player object"
 
-playerHitBox = display.newImageRect('danmaku1.png',w/30,w/30)
+playerHitBox = display.newImageRect('danmaku1.png',w/100,w/100)
 playerHitBox:setFillColor(1,0.5,0.5)
+
+display.setDefault("textureWrapY", "mirroredRepeat")
+
+local background = display.newRect(display.contentCenterX, display.contentCenterY, w, h)
+background.fill = {type = "image", filename = "forest.jpg" }
+
+local function animateBackground()
+    transition.to( background.fill, { time=5000, y=1, delta=true, onComplete=animateBackground } )
+end
+
+animateBackground()
 
 
 --function to create amount of maku inside a table
@@ -254,7 +265,7 @@ function playerShoot()
 		physics.addBody(playerBullets[#playerBullets],"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=playerBullets[#playerBullets].contentWidth/2.0})
 		playerBullets[#playerBullets].x = player.x
 		playerBullets[#playerBullets].y = player.y - player.contentHeight/2
-		playerBullets[#playerBullets]:setLinearVelocity(0,-50)
+		playerBullets[#playerBullets]:setLinearVelocity(0,-400)
 		removeSelfOnDelay(playerBullets[#playerBullets])
 	end
 	playerShootTimer = timer.performWithDelay( 0,playerFire,1)
@@ -277,6 +288,7 @@ function gameLoopPlayerActions()
 	if (playerNeedtoShoot == true) then
 		playerShoot()
 	end
+    playerHitBox.x,playerHitBox.y = player.x,player.y
 end
 ---------------------------------------------------------------------------
 -- object remover
