@@ -16,31 +16,51 @@ local scene = composer.newScene()
  
 -- create()
 function scene:create( event )
-    h = display.contentHeight
-    w = display.contentWidth
     local sceneGroup = self.view
-    background = display.newImageRect( "images/mainmenubg.png", w, h )
-    background.x = w/2
-    background.y = h/2
-    titleText = display.newText( "Bullet Heaven", w/2, h/4, "fmm.ttf", 48 )
-    subtitleText = display.newText( "A game created by Liam Bridge and Matthew Low", w/2, 3*h/8, "fmr.ttf", 24 )
-    startButton = display.newRoundedRect( w/2, 5*h/8, w/4, h/8, 24 )
-    startButton.strokeWidth = 3
-    startButton:setFillColor( 1,1,1,0 )
-    startButton:setStrokeColor( 1,1,1 )
-    startButtonText = display.newText( "START", w/2, 5*h/8, "fmr.ttf", 36 )
-    langButton = display.newRoundedRect( w/2, 7*h/8, w/8, h/16, 12 )
-    langButton.strokeWidth = 3
-    langButton:setFillColor( 1,1,1,0 )
-    langButton:setStrokeColor( 1,1,1 )
-    langButtonText = display.newText( "English", w/2, 7*h/8, "fmr.ttf", 16 )
-    sceneGroup:insert(background)
-    sceneGroup:insert(titleText)
-    sceneGroup:insert(subtitleText)
-    sceneGroup:insert(startButton)
-    sceneGroup:insert(startButtonText)
-    sceneGroup:insert(langButton)
-    sceneGroup:insert(langButtonText)
+    mainmenu_titleText = display.newText( "Bullet Heaven", 100, 100, "ahgb.ttf", 96 )
+    mainmenu_titleText.anchorX = 0
+    mainmenu_titleText.align = "left"
+    mainmenu_subtitleText = display.newText( "A game created by Liam Bridge and Matthew Low", 100, 175, "ahgr.ttf", 24 )
+    mainmenu_subtitleText.anchorX = 0
+    mainmenu_subtitleText.align = "left"
+    mainmenu_startButton = display.newRect( 300, 300, 400, 100 )
+    mainmenu_startButton.strokeWidth = 3
+    mainmenu_startButton:setFillColor( 1,1,1,0 )
+    mainmenu_startButton:setStrokeColor( 1,1,1 )
+    mainmenu_startButtonText = display.newText( "Free Mode", 125, 300, "ahgr.ttf", 36 )
+    mainmenu_startButtonText.anchorX = 0
+    mainmenu_startButtonText.align = "left"
+    mainmenu_storyButton = display.newRect( 300, 400, 400, 100 )
+    mainmenu_storyButton.strokeWidth = 3
+    mainmenu_storyButton:setFillColor( 1,1,1,0 )
+    mainmenu_storyButton:setStrokeColor( 1,1,1 )
+    mainmenu_storyButtonText = display.newText( "Story Mode", 125, 400, "ahgr.ttf", 36 )
+    mainmenu_storyButtonText.anchorX = 0
+    mainmenu_storyButtonText.align = "left"
+    mainmenu_unlocksButton = display.newRect( 300, 500, 400, 100 )
+    mainmenu_unlocksButton.strokeWidth = 3
+    mainmenu_unlocksButton:setFillColor( 1,1,1,0 )
+    mainmenu_unlocksButton:setStrokeColor( 1,1,1 )
+    mainmenu_unlocksButtonText = display.newText( "Unlocks", 125, 500, "ahgr.ttf", 36 )
+    mainmenu_unlocksButtonText.anchorX = 0
+    mainmenu_unlocksButtonText.align = "left"
+    mainmenu_langButton = display.newRect( 200, 600, 200, 50 )
+    mainmenu_langButton.strokeWidth = 3
+    mainmenu_langButton:setFillColor( 1,1,1,0 )
+    mainmenu_langButton:setStrokeColor( 1,1,1 )
+    mainmenu_langButtonText = display.newText( "English", 112.5, 600, "ahgr.ttf", 16 )
+    mainmenu_langButtonText.anchorX = 0
+    mainmenu_langButtonText.align = "left"
+    sceneGroup:insert(mainmenu_titleText)
+    sceneGroup:insert(mainmenu_subtitleText)
+    sceneGroup:insert(mainmenu_startButton)
+    sceneGroup:insert(mainmenu_startButtonText)
+    sceneGroup:insert(mainmenu_langButton)
+    sceneGroup:insert(mainmenu_langButtonText)
+    sceneGroup:insert(mainmenu_storyButton)
+    sceneGroup:insert(mainmenu_storyButtonText)
+    sceneGroup:insert(mainmenu_unlocksButton)
+    sceneGroup:insert(mainmenu_unlocksButtonText)
 end
  
  
@@ -54,22 +74,37 @@ function scene:show( event )
         -- Code here runs when the scene is still off screen (but is about to come on screen)
  
     elseif ( phase == "did" ) then
-        local function onMouseEvent( event )
-            local message = "Mouse Position = (" .. tostring(event.x) .. "," .. tostring(event.y) .. ")"
-            print( message )
-            if event.x >= 3*w/8 and event.x <= 5*w/8 and event.y >= 9*h/16 and event.y <= 11*h/16 then
-                startButton:setFillColor(1,1,1,1)
-                startButtonText:setFillColor(0,0,0)
+        local function onMouseEvent( event )	
+            if event.x >= 100 and event.x <= 500 and event.y >= 250 and event.y <= 350 then
+                mainmenu_startButton:setFillColor(1,1,1,1)
+                mainmenu_startButtonText:setFillColor(0,0,0)
+                if event.isPrimaryButtonDown then
+                    composer.gotoScene( "freemode", settings_fadeIn )
+                end
             else
-                startButton:setFillColor(1,1,1,0)
-                startButtonText:setFillColor(1,1,1)
+                mainmenu_startButton:setFillColor(1,1,1,0)
+                mainmenu_startButtonText:setFillColor(1,1,1)
             end
-            if event.x >= 7*w/16 and event.x <= 9*w/16 and event.y >= 13*h/16 and event.y <= 15*h/16 then
-                langButton:setFillColor(1,1,1,1)
-                langButtonText:setFillColor(0,0,0)
+            if event.x >= 100 and event.x <= 500 and event.y >= 350 and event.y <= 450 then
+                mainmenu_storyButton:setFillColor(1,1,1,1)
+                mainmenu_storyButtonText:setFillColor(0,0,0)
             else
-                langButton:setFillColor(1,1,1,0)
-                langButtonText:setFillColor(1,1,1)
+                mainmenu_storyButton:setFillColor(1,1,1,0)
+                mainmenu_storyButtonText:setFillColor(1,1,1)
+            end
+            if event.x >= 100 and event.x <= 500 and event.y >= 450 and event.y <= 550 then
+                mainmenu_unlocksButton:setFillColor(1,1,1,1)
+                mainmenu_unlocksButtonText:setFillColor(0,0,0)
+            else
+                mainmenu_unlocksButton:setFillColor(1,1,1,0)
+                mainmenu_unlocksButtonText:setFillColor(1,1,1)
+            end
+            if event.x >= 100 and event.x <= 300 and event.y >= 575 and event.y <= 625 then
+                mainmenu_langButton:setFillColor(1,1,1,1)
+                mainmenu_langButtonText:setFillColor(0,0,0)
+            else
+                mainmenu_langButton:setFillColor(1,1,1,0)
+                mainmenu_langButtonText:setFillColor(1,1,1)
             end
         end
         Runtime:addEventListener( "mouse", onMouseEvent )
