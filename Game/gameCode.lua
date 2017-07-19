@@ -1,3 +1,5 @@
+h = display.contentHeight
+w = display.contentWidth
 player = display.newRect(w/2,h,w/50,h/10)
 physics.addBody(player,"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=player.contentWidth/2.0, filter=collisionFilterPlayer})
 player:setFillColor(1,1,1)
@@ -11,16 +13,7 @@ player.myName = "player object"
 playerHitBox = display.newImageRect('danmaku1.png',w/100,w/100)
 playerHitBox:setFillColor(1,0.5,0.5)
 
-display.setDefault("textureWrapY", "mirroredRepeat")
 
-local background = display.newRect(display.contentCenterX, display.contentCenterY, w, h)
-background.fill = {type = "image", filename = "forest.jpg" }
-
-local function animateBackground()
-    transition.to( background.fill, { time=5000, y=1, delta=true, onComplete=animateBackground } )
-end
-
-animateBackground()
 
 
 --function to create amount of maku inside a table
@@ -151,9 +144,10 @@ function spellCard_2()
 	spellCard_2Timer = timer.performWithDelay( 20,spellCard_2Wave,#steve)
 end
 ]]
-spellCard_3 = function(a)
+function spellCard_3(a)
 	a = createMakuInTable(100)
-	i = 1
+	local i = 1
+	math.randomseed(12312)
 	function spellCard_3Wave()
 		a[i].x = math.random(w)+w/100
 		a[i].y = math.random((h/2))-h/50
@@ -161,6 +155,9 @@ spellCard_3 = function(a)
 		a[i]:setLinearVelocity(0,100*(i/25) + 100)
 		on420BloomIt(a[i])
 		i = i + 1
+	end
+	if i >= 99 then
+		timer.cancel(spellCard_3Timer)
 	end
 	spellCard_3Timer = timer.performWithDelay( 50,spellCard_3Wave,#a)
 	return a
@@ -251,7 +248,7 @@ local function onKeyEvent( event )
 	end
 	if (event.keyName == "p") then
 		if (event.phase == "down") then
-			spellCard_3()
+			spellCard_3(maesm)
 		end
 	end	
     return false
@@ -265,10 +262,10 @@ function playerShoot()
 		physics.addBody(playerBullets[#playerBullets],"kinematic",{friction=0.0, bounce=0.0, density=0.0, radius=playerBullets[#playerBullets].contentWidth/2.0})
 		playerBullets[#playerBullets].x = player.x
 		playerBullets[#playerBullets].y = player.y - player.contentHeight/2
-		playerBullets[#playerBullets]:setLinearVelocity(0,-400)
+		playerBullets[#playerBullets]:setLinearVelocity(0,-800)
 		removeSelfOnDelay(playerBullets[#playerBullets])
 	end
-	playerShootTimer = timer.performWithDelay( 0,playerFire,1)
+	playerShootTimer = timer.performWithDelay( 20,playerFire,1)
 end
  -----------------------------------------------------------------------------
 -- movement of player
