@@ -19,6 +19,16 @@ playerHitBox:setFillColor(1,0.5,0.5)
 --function to create amount of maku inside a table
 --table to be used for hit detection and shiizz
 -- a is amount b is table
+
+
+
+
+
+
+--create circle of radius x with all maku in a table
+-- r is radius b is table
+--cx is origin x and cy origin y
+
 createMakuInTable = function (a)
 	b = {}
 	for i=1,a,1 do
@@ -30,14 +40,6 @@ createMakuInTable = function (a)
 	end
 	return b
 end
-
-
-
-
-
---create circle of radius x with all maku in a table
--- r is radius b is table
---cx is origin x and cy origin y
 circleMaku = function (r,b,cx,cy)
 	--find degree seperatin
 	local a = (360 / #b)*(math.pi/180)
@@ -52,6 +54,38 @@ circleMaku = function (r,b,cx,cy)
 	return b
 end
 
+
+spellcard_1 = function (a)
+	-- create a cicle of danmaku
+	-- move danmaku towawrds player
+	a = createMakuInTable(50)
+	circleMaku(100,a,w/2,h/4)
+	for i = 1, #a, 1 do
+		a[i].velocity = 0.5 --times game difficulty
+		a[i]:setLinearVelocity(
+			a[i].velocity*(player.x - a[i].x),
+			a[i].velocity*(player.y - a[i].y)
+		)
+	end
+end
+
+function spellCard_3(a)
+	a = createMakuInTable(100)
+	local i = 1
+	math.randomseed(12312)
+	function spellCard_3Wave()
+		a[i].x = math.random(w)+w/100
+		a[i].y = math.random((h/2))-h/50
+		a[i].gravityScale = 1.5
+		a[i]:setLinearVelocity(0,100*(i/25) + 100)
+		i = i + 1
+	end
+	if i >= 99 then
+		timer.cancel(spellCard_3Timer)
+	end
+	spellCard_3Timer = timer.performWithDelay( 50,spellCard_3Wave,#a)
+	return a
+end
 
 
 
@@ -107,19 +141,7 @@ playerSpellCardObjects[1]:addEventListener( "preCollision" )
 
 end
 -------------------------------------------------------------------
-spellcard_1 = function (a)
-	-- create a cicle of danmaku
-	-- move danmaku towawrds player
-	a = createMakuInTable(50)
-	circleMaku(100,a,w/2,h/4)
-	for i = 1, #a, 1 do
-		a[i].velocity = 0.5 --times game difficulty
-		a[i]:setLinearVelocity(
-			a[i].velocity*(player.x - a[i].x),
-			a[i].velocity*(player.y - a[i].y)
-		)
-	end
-end	
+
 --[[ Still doesnt work going to do another one instead
 function spellCard_2()
 	steve = createMakuInTable(50)
@@ -152,23 +174,7 @@ function spellCard_2()
 	spellCard_2Timer = timer.performWithDelay( 20,spellCard_2Wave,#steve)
 end
 ]]
-function spellCard_3(a)
-	a = createMakuInTable(100)
-	local i = 1
-	math.randomseed(12312)
-	function spellCard_3Wave()
-		a[i].x = math.random(w)+w/100
-		a[i].y = math.random((h/2))-h/50
-		a[i].gravityScale = 1.5
-		a[i]:setLinearVelocity(0,100*(i/25) + 100)
-		i = i + 1
-	end
-	if i >= 99 then
-		timer.cancel(spellCard_3Timer)
-	end
-	spellCard_3Timer = timer.performWithDelay( 50,spellCard_3Wave,#a)
-	return a
-end
+
 -- collision
 ---------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
