@@ -30,7 +30,7 @@ function scene:create( event )
     local scrollView = widget.newScrollView(
         {
             width = 606,
-            height = 500,
+            height = 520,
             top = 200,
             left = 100,
             scrollWidth = 600,
@@ -42,15 +42,31 @@ function scene:create( event )
     freemode_songRectList = {}
     freemode_songRectTextList = {}
     for i=1,10 do
-        freemode_songRect = display.newRect( 303 ,(60*i), 594, 50 )
+        freemode_songRect = display.newRect( 303 ,(50*i), 594, 50 )
         freemode_songRect.strokeWidth = 3
         freemode_songRect:setFillColor( 1,1,1,0 )
         freemode_songRect:setStrokeColor( 1,1,1 )
-        freemode_songRectText = display.newText( "Test", 50,(60*i), "ahgr.ttf", 20 )
+        scrollView:insert(freemode_songRect)
+        local path = i
+        local file, errorString = io.open( i .. ".txt", "r" )
+         
+        if not file then
+            -- Error occurred; output the cause
+            print( "File error: " .. errorString )
+        else
+            -- Read data from file
+            local contents = file:read( "*a" )
+            -- Output the file contents
+            freemode_songRectText = display.newText( contents, 30,(50*i), "ahgr.ttf", 20 )
+            freemode_songRectText.anchorX = 0
+            freemode_songRectText.align = "left"
+            scrollView:insert(freemode_songRectText)
+            -- Close the file handle
+            io.close( file )
+        end
+        file = nil
         table.insert(freemode_songRectList, i)
         table.insert(freemode_songRectTextList, i)
-        scrollView:insert(freemode_songRect)
-        scrollView:insert(freemode_songRectText)
     end
 end
  

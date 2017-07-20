@@ -9,6 +9,6 @@ main_background:toBack()
 -- Assumes that "scene1.lua" exists and is configured as a Composer scene
 settings_fadeIn = {
     effect = "slideUp",
-    time = 200
+    time = 400
 }
 composer.gotoScene( "mainmenu", settings_fadeIn )
