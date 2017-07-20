@@ -56,8 +56,11 @@ end
 
 
 
-
+playerSpellCardObjectsPlayerX = 0
+playerSpellCardObjectsPlayerY = 0
 function playerSpellCard()
+	playerSpellCardObjectsPlayerX = player.x
+	playerSpellCardObjectsPlayerY = player.y
 	if (player.selectedSpellCard == 1) then
 		player.spellCardInProgress = 1
 		if playerSpellCardObjects == nil then
@@ -66,10 +69,14 @@ function playerSpellCard()
 			-- player spell card 1, rotating boxes that remove any danmaku
 			playerSpellCardObjects[1] = display.newRect(player.x, player.y,50,50)
         --
-			physics.addBody(playerSpellCardObjects[1], "static",{friction=0.0, bounce=0.0, radius=w/2})
+			physics.addBody(playerSpellCardObjects[1], "dynamic",{friction=0.0, bounce=0.0, radius=w/2})
         --
-            
-            playerSpellCardObjects[1].gravityScale = 0
+		
+playerSpellCardObjects[1].preCollision = onLocalPreCollision
+playerSpellCardObjects[1]:addEventListener( "preCollision" )
+		
+
+		playerSpellCardObjects[1].gravityScale = 0
 			playerSpellCardObjects[1].myName = "players spell card object"
 		function playerSpellCardObjectMovement()
 			if (i == nil) then i = 0 end
@@ -80,6 +87,7 @@ function playerSpellCard()
 			if (i > 99) then
 				for j = 1,#playerSpellCardObjects,1 do
 					playerSpellCardObjects[j]:removeSelf()
+					playerSpellCardObjects[j]=nil
 				end
 				playerSpellCardObjects = nil
 				timer.cancel(playerSpellCard1Timer)
@@ -89,7 +97,7 @@ function playerSpellCard()
 				player.spellCardInProgress = 0
 			end
 		end
-		playerSpellCard1Timer = timer.performWithDelay(20, playerSpellCardObjectMovement, 100)
+		playerSpellCard1Timer = timer.performWithDelay(10, playerSpellCardObjectMovement, 200)
 	else
 
 	end
@@ -153,7 +161,6 @@ function spellCard_3(a)
 		a[i].y = math.random((h/2))-h/50
 		a[i].gravityScale = 1.5
 		a[i]:setLinearVelocity(0,100*(i/25) + 100)
-		on420BloomIt(a[i])
 		i = i + 1
 	end
 	if i >= 99 then
@@ -164,38 +171,21 @@ function spellCard_3(a)
 end
 -- collision
 ---------------------------------------------------------------------------------
-function onGlobalCollision(event)
-    print('reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-    
-    if ( event.phase == "began" ) then
-        print( "began: " .. event.object1.myName .. " and " .. event.object2.myName )
- 
-    elseif ( event.phase == "ended" ) then
-        print( "ended: " .. event.object1.myName .. " and " .. event.object2.myName )
-    end
-    if(event.object1.myName == "players spell card object" and event.object2.myName == "enemy bullet") then
-        print("removed")
-        event.object2:removeSelf()
-        event.object2 = nil    
-    end
-end
-Runtime:addEventListener("collision",onGlobalCollision)
 -------------------------------------------------------------------------------------
-function on420BloomIt(object)
-	object.fill.effect = "filter.bloom"
-	object.fill.effect.levels.white = 0.8
-	object.fill.effect.levels.black = 0.4
-	object.fill.effect.levels.gamma = 1
-	object.fill.effect.add.alpha = 0.8
-	object.fill.effect.blur.horizontal.blurSize = 20
-	object.fill.effect.blur.horizontal.sigma = 140
-	object.fill.effect.blur.vertical.blurSize = 20
-	object.fill.effect.blur.vertical.sigma = 240
-end
 ------------------------------------------------------------------------------------
-function onLocalCollision(self, event)
-	
+-- Local preCollision handling
+function onLocalPreCollision( self, event )
+    print( event.target )       --the first object in the collision
+    print( event.other )         --the second object in the collision
+    print( event.selfElement )   --the element (number) of the first object which was hit in the collision
+    print( event.otherElement )  --the element (number) of the second object which was hit in the collision
+	if (event.target.myName == "players spell card object" and event.other.myName == "enemy bullet") then
+		physics.removeBody(event.other)
+		display.remove(event.other)
+		event.other.x = 99999999
+	end
 end
+
 ------------------------------------------------------------------------------------
 --player movement
 local function onKeyEvent( event )
@@ -253,6 +243,14 @@ local function onKeyEvent( event )
 	end	
     return false
 end
+--------------------------------------------------------------------------------
+function getDistance(objA, objB)
+    -- Get the length for each of the components x and y
+    local xDist = objB.x - objA.x
+    local yDist = objB.y - objA.y
+
+    return math.sqrt( (xDist ^ 2) + (yDist ^ 2) ) 
+end
 ---------------------------------------------------------------------------------
 function playerShoot()
 	if playerBullets == nil then playerBullets = {}	end
@@ -286,6 +284,9 @@ function gameLoopPlayerActions()
 		playerShoot()
 	end
     playerHitBox.x,playerHitBox.y = player.x,player.y
+	if playerSpellCardObjects ~= nil then
+		playerSpellCardObjects[1].x,playerSpellCardObjects[1].y = playerSpellCardObjectsPlayerX,playerSpellCardObjectsPlayerY
+	end
 end
 ---------------------------------------------------------------------------
 -- object remover
