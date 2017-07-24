@@ -65,7 +65,7 @@ local topscore = 0
 local PlayerHealth = 100
 
 local score = 0
-local bg = love.graphics.newImage("assets/title.png")
+local bg = love.graphics.newImage("assets/bg.png")
 
 function love.keypressed(key)
   print(key)
@@ -99,11 +99,13 @@ function love.update(dt)
     else
       playerSpeed = 100
     end
+    
 end
 function love.load()
 end
 
 function love.draw()
+    --[[
   pause_dialog = false
   if pause_dialog then
     -- draw pause screen
@@ -117,8 +119,11 @@ function love.draw()
   elseif song_select_dialog then
   --------
   else
+    ]]
   love.graphics.setColor(255, 255, 255, 192)
   love.graphics.draw(bg,player.Position.x/8-600,player.Position.y/8-600,0,4,4,0,0)
+  love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
+  love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
+  love.graphics.setColor(255, 255, 255, 255)
   love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
-  end
 end
