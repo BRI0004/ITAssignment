@@ -7,11 +7,12 @@ print(socket.gettime())
 love.window.setTitle("blyat")
 -- initial variables
 local playernum = 1
-local bulletSpeed = 500
+local bulletSpeed = 100
 local enemySpeed = 100
 local playerSize = 64
 local bulletSize = 48
 local playerSpeed = 100
+local playerShootRate = 0.10
 song_select_dialog = not song_select_dialog
 menu_dialog = not menu_dialog
 math.randomseed(os.time())
@@ -30,14 +31,14 @@ local powerImage = love.graphics.newImage("assets/title.png")
 
 -- images for bullets
 local bullets = {}
-local playerBulletQuad = {}
+local playerBullets = {}
 -- offset x by 48 each quad
-playerBulletQuad[0] = love.graphics.newQuad(0,0,48,48,240,48)
-playerBulletQuad[1] = love.graphics.newQuad(48,0,48,48,240,48)
-playerBulletQuad[2] = love.graphics.newQuad(96,0,48,48,240,48)
-playerBulletQuad[3] = love.graphics.newQuad(144,0,48,48,240,48)
-playerBulletQuad[4] = love.graphics.newQuad(192,0,48,48,240,48)
-playerBulletQuad[5] = love.graphics.newQuad(240,0,48,48,240,48)
+playerBullets[0] = love.graphics.newImage("assets/bulletBlue.png")
+playerBullets[1] = love.graphics.newQuad(48,0,48,48,240,48)
+playerBullets[2] = love.graphics.newQuad(96,0,48,48,240,48)
+playerBullets[3] = love.graphics.newQuad(144,0,48,48,240,48)
+playerBullets[4] = love.graphics.newQuad(192,0,48,48,240,48)
+playerBullets[5] = love.graphics.newQuad(240,0,48,48,240,48)
 -- playerbullet variables
 local bulletScale = 1
 local bulletOffset = 24
@@ -62,11 +63,18 @@ end
 -- timer for enemies
 local enemyTimer = 0
 local topscore = 0
-local PlayerHealth = 100
+local playerHealth = 100
 
 local score = 0
 local bg = love.graphics.newImage("assets/title.png")
+-- functions for Game
+function round(num, idp)
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
 
+
+-----------------------------------------------
 function love.keypressed(key)
   print(key)
   if key == "escape" then
@@ -80,6 +88,10 @@ end
 
 
 function love.update(dt)
+  print(#bullets)
+  -- update shooting rate timer
+  bulletTimer = bulletTimer + dt
+  print(bulletTimer)
   --if not pause_dialog and not menu_dialog and not song_select_dialog then
   -- make player move
     if love.keyboard.isDown("up") then
@@ -99,12 +111,45 @@ function love.update(dt)
     else
       playerSpeed = 100
     end
+    if love.keyboard.isDown("z") then
+      if bulletTimer > playerShootRate then
+        bulletTimer = 0
+        local Bullet = {
+          Position = {x = player.Position.x, y = player.Position.y},
+        }
+        table.insert(bullets,Bullet)
+      end
+    end
+--------------------------------------------------------------------------
+
+-- making bullets move and checking if enemy collision using simple detection
+for bi,b in pairs(bullets) do
+      b.Position.y = b.Position.y +b.Position.y*dt*bulletSpeed
+      for ei,e in pairs(enemies) do
+        distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
+        if distance < ((enemySize[e.sprite]/2+bulletSize/2)*enemyScale.x) then
+          e.health = e.health - 5
+          if e.health < 0 then
+            e.health = 0
+          end
+          table.remove(bullets,bi)
+          score = score + 100
+          enemyRate = enemyRate - 0.0002
+          enemySpeed = enemySpeed + 0.01
+        end
+      end
+      --check if out of screen
+      if b.Position.x < 0 or b.Position.x > 600 or b.Position.y < 0 or b.Position.y > 600 then
+        table.remove(bullets,bi)
+      end
+    end
 end
 function love.load()
 end
 
 function love.draw()
-  pause_dialog = false
+  --[[
+    pause_dialog = false
   if pause_dialog then
     -- draw pause screen
     love.graphics.setColor(255, 255, 255, math.random(64,192))
@@ -119,6 +164,11 @@ function love.draw()
   else
   love.graphics.setColor(255, 255, 255, 192)
   love.graphics.draw(bg,player.Position.x/8-600,player.Position.y/8-600,0,4,4,0,0)
+  ]]
   love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
-  end
+  for i,v in pairs(bullets) do
+      cur = (round(socket.gettime() * 10) + i) % 5
+      curimage = MissileImage
+      love.graphics.draw(curimage,bulletquad[cur],v.Position.x,v.Position.y,v.Direction,BulletScale,BulletScale,BulletOffset,BulletOffset)
+    end
 end
