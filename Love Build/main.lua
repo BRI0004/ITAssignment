@@ -66,6 +66,7 @@ local topscore = 0
 local playerHealth = 100
 
 local score = 0
+<<<<<<< HEAD
 local bg = love.graphics.newImage("assets/title.png")
 -- functions for Game
 function round(num, idp)
@@ -73,6 +74,9 @@ function round(num, idp)
   return math.floor(num * mult + 0.5) / mult
 end
 
+=======
+local bg = love.graphics.newImage("assets/bg.png")
+>>>>>>> 8f26906fdb71403bc5a0d24e96560a805fcf0c18
 
 -----------------------------------------------
 function love.keypressed(key)
@@ -111,6 +115,7 @@ function love.update(dt)
     else
       playerSpeed = 100
     end
+<<<<<<< HEAD
     if love.keyboard.isDown("z") then
       if bulletTimer > playerShootRate then
         bulletTimer = 0
@@ -143,13 +148,21 @@ for bi,b in pairs(bullets) do
         table.remove(bullets,bi)
       end
     end
+=======
+    
+>>>>>>> 8f26906fdb71403bc5a0d24e96560a805fcf0c18
 end
 function love.load()
 end
 
 function love.draw()
+<<<<<<< HEAD
   --[[
     pause_dialog = false
+=======
+    --[[
+  pause_dialog = false
+>>>>>>> 8f26906fdb71403bc5a0d24e96560a805fcf0c18
   if pause_dialog then
     -- draw pause screen
     love.graphics.setColor(255, 255, 255, math.random(64,192))
@@ -162,8 +175,10 @@ function love.draw()
   elseif song_select_dialog then
   --------
   else
+    ]]
   love.graphics.setColor(255, 255, 255, 192)
   love.graphics.draw(bg,player.Position.x/8-600,player.Position.y/8-600,0,4,4,0,0)
+<<<<<<< HEAD
   ]]
   love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
   for i,v in pairs(bullets) do
@@ -171,4 +186,10 @@ function love.draw()
       curimage = MissileImage
       love.graphics.draw(curimage,bulletquad[cur],v.Position.x,v.Position.y,v.Direction,BulletScale,BulletScale,BulletOffset,BulletOffset)
     end
+=======
+  love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
+  love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
+  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
+>>>>>>> 8f26906fdb71403bc5a0d24e96560a805fcf0c18
 end
