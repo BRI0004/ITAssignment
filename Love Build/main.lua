@@ -18,7 +18,7 @@ menu_dialog = not menu_dialog
 local drawPlayerHitBox = false
 math.randomseed(os.time())
 local player = {
- Position = {x = 100, y = 100}
+ Position = {x = 200, y = 500}
 }
 -- defining images and variables for player
 local titleImage = love.graphics.newImage("assets/title.png")
@@ -45,6 +45,8 @@ local bulletScale = 0.05
 local bulletOffset = 50
 local bulletTimer = 0
 local playerHitBoxImage = playerBullets[3]
+
+local spellCard = {}
 
 -- enemies and such
 local enemies = {}
@@ -90,9 +92,9 @@ end
 
 
 function love.update(dt)
-  print(#bullets)
   -- update shooting rate timer
   bulletTimer = bulletTimer + dt
+  score = score + dt
   --print(bulletTimer)
   --if not pause_dialog and not menu_dialog and not song_select_dialog then
   -- make player move
@@ -116,14 +118,20 @@ function love.update(dt)
       drawPlayerHitBox = false
     end
     if love.keyboard.isDown("z") then
-      print("aaaaaaa")
       if bulletTimer > playerShootRate then
         bulletTimer = 0
         local Bullet = {
-          Position = {x = player.Position.x, y = player.Position.y},
+          Position = {x = player.Position.x, y = player.Position.y}
         }
-        print("help")
         table.insert(bullets,Bullet)
+      end
+    end
+    if love.keyboard.isDown("z") then
+      if not playerSpellCardInProgress then
+          local spellcard = {
+              Position = {x = player.Position.x, y = player.Position.y}
+          }
+          table.insert(spellCard,spellcard)
       end
     end
 --------------------------------------------------------------------------
@@ -167,4 +175,21 @@ function love.draw()
   if drawPlayerHitBox then
     love.graphics.draw(playerHitBoxImage,player.Position.x,player.Position.y,0,0.1,0.1,50,50)
   end
+
+  -- UI ELEMENTS, DRAWN ON TOP OF all
+  function drawGameUI()
+    fmr = "assets/fmr.ttf"
+    love.graphics.draw(playerImage,0,0,0,21,3,0,0)
+    --score
+    love.graphics.setNewFont(fmr, 20)
+    love.graphics.print("Score: ".. topscore ,20, 20, 0, 1, 1)
+    love.graphics.setNewFont(fmr, 25)
+    love.graphics.print(round(score,5), 20, 40)
+    --song and difficulty
+    love.graphics.setNewFont(fmr, 20)
+    love.graphics.print("Song\ntest\ntest", 200, 20)
+    love.graphics.print("BPM\nbpmdesu", 300, 20)
+    love.graphics.print("Length\n1:23\n2:34",450,20)
+     end
+  drawGameUI()
 end
