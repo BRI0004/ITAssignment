@@ -109,10 +109,10 @@ function love.update(dt)
       player.Position.x = player.Position.x + playerSpeed * dt
     end
     if love.keyboard.isDown("lshift") then
-      playerSpeed = 150
+      playerSpeed = 500
       drawPlayerHitBox = true
     else
-      playerSpeed = 300
+      playerSpeed = 1000
       drawPlayerHitBox = false
     end
     if love.keyboard.isDown("z") then

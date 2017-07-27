@@ -48,7 +48,7 @@ function scene:create( event )
         freemode_songRect:setStrokeColor( 1,1,1 )
         scrollView:insert(freemode_songRect)
         local path = i
-        local file, errorString = io.open( i .. ".txt", "r" )
+        local file, errorString = io.open( "songs/" ..  i .. ".txt", "r" )
          
         if not file then
             -- Error occurred; output the cause
