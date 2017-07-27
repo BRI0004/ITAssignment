@@ -15,6 +15,8 @@ local playerSpeed = 300
 local playerShootRate = 0.1
 local playerSpellCardRate = 10
 local spellCardTimer = 10
+local speakRate = 5
+globalTimer = 0
 song_select_dialog = not song_select_dialog
 menu_dialog = not menu_dialog
 local drawPlayerHitBox = false
@@ -77,7 +79,8 @@ local score = 0
 -- functions for Game
 function dialogue(a)
     local addtospeech = {
-        text = a
+        text = a,
+        
     }
     table.insert(speech,addtospeech)
 end
@@ -113,7 +116,7 @@ end
 
 
 function love.update(dt)
-    print(#spellCard)
+  --update cron timer
   -- update shooting rate timer
   bulletTimer = bulletTimer + dt
   spellCardTimer = spellCardTimer + dt
@@ -150,7 +153,11 @@ function love.update(dt)
       end
     end
     if love.keyboard.isDown("x") then
-        dialogue("jlsadfnj  sda sadasdf dafs dsaffasdf asdf sadf  nannaianiani aninasdiofnaios dnfaosdjfioajsdi ofjasdiofjai sodjfioasdjfioa sjdfioajsdiofj asdiofjaiosdjfio asdjfioasdjf oijsdoiajfi oasjd")
+        dialogue("1  sda sadasdf dafs dsaffasdf asdf sadf  nannaianiani aninasdiofnaios dnfaosdjfioajsdi ofjasdiofjai sodjfioasdjfioa sjdfioajsdiofj asdiofjaiosdjfio asdjfioasdjf oijsdoiajfi oasjd")
+        dialogue("2  sda sadasdf dafs dsaffasdf asdf sadf  nannaianiani aninasdiofnaios dnfaosdjfioajsdi ofjasdiofjai sodjfioasdjfioa sjdfioajsdiofj asdiofjaiosdjfio asdjfioasdjf oijsdoiajfi oasjd")
+        dialogue("3  sda sadasdf dafs dsaffasdf asdf sadf  nannaianiani aninasdiofnaios dnfaosdjfioajsdi ofjasdiofjai sodjfioasdjfioa sjdfioajsdiofj asdiofjaiosdjfio asdjfioasdjf oijsdoiajfi oasjd")
+        dialogue("4  sda sadasdf dafs dsaffasdf asdf sadf  nannaianiani aninasdiofnaios dnfaosdjfioajsdi ofjasdiofjai sodjfioasdjfioa sjdfioajsdiofj asdiofjaiosdjfio asdjfioasdjf oijsdoiajfi oasjd")
+        dialogue("5  sda sadasdf dafs dsaffasdf asdf sadf  nannaianiani aninasdiofnaios dnfaosdjfioajsdi ofjasdiofjai sodjfioasdjfioa sjdfioajsdiofj asdiofjaiosdjfio asdjfioasdjf oijsdoiajfi oasjd")
       if spellCardTimer > playerSpellCardRate  then
           spellCardTimer = 0
           local spellcard = {
@@ -192,6 +199,13 @@ for bi,b in pairs(spellCard) do
         print(bi)
         table.remove(spellCard,1)
     end
+if speech[1] ~= nil then
+    local speechRate = speechRate + dt
+    if speechRate > speakRate then
+        speechRate = 0
+        table.remove(speech,1)
+    end
+end
 end
 
 end
@@ -216,20 +230,13 @@ function love.draw()
   if drawPlayerHitBox then
     love.graphics.draw(playerHitBoxImage,player.Position.x,player.Position.y,0,0.1,0.1,50,50)
   end
-  if speech then
-      for i,v in pairs(speech) do
-          love.graphics.draw(transblack, 50, 768-200, 0, 18, 3, 0, 0, -0.02, 0)
-          local time1 = socket.gettime() + 5
-          love.graphics.printf(v.text, 60, 768-180, 16*50, "left", 0)
-          if time1 < socket.gettime() then
-              table.remove(v)
-              speech = nil
-          end
-      end
+  if speech[1] ~= nil then
+    love.graphics.draw(transblack, 50, 768-200, 0, 18, 3, 0, 0, -0.02, 0)
+    love.graphics.printf(speech[1].text, 60, 768-180, 16*50, "left", 0) 
   end
   -- UI ELEMENTS, DRAWN ON TOP OF all
   function drawGameUI()
-    fmr = "assets/fmr.ttf"
+    fmr = "assets/AlteHaasGroteskRegular.ttf"
     love.graphics.draw(playerImage,0,0,0,21,3,0,0)
     --score
     love.graphics.setNewFont(fmr, 20)
