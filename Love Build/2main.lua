@@ -20,7 +20,6 @@ local speakRate = 2
 local speechRate = 0
 isDialogue = false
 globalTimer = 0
-menu_dialog = not menu_dialog
 local drawPlayerHitBox = false
 math.randomseed(os.time())
 local player = {

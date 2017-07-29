@@ -2,7 +2,7 @@ local composer = require( "composer" )
 h = display.contentHeight
 w = display.contentWidth
 -- Code to initialize your app
-main_background = display.newImageRect( "images/mainmenubg.png", w, h )
+main_background = display.newImageRect( "images/bg.jpg", w, h )
 main_background.x = w/2
 main_background.y = h/2
 main_background:toBack()
