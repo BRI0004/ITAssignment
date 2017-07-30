@@ -16,8 +16,10 @@ local playerSpeed = 300
 local playerShootRate = 0.1
 local playerSpellCardRate = 10
 local spellCardTimer = 10
-local speakRate = 2
+local speakRate = 3
 local speechRate = 0
+local playerFlashTime = 0.5
+local playerIsShow = true
 isDialogue = false
 globalTimer = 0
 local drawPlayerHitBox = false
@@ -39,6 +41,7 @@ local powerImage = love.graphics.newImage("assets/title.png")
 local enemyBullets = {}
 local bullets = {}
 local spells = {}
+local boss = {}
 spells[0] = love.graphics.newImage("assets/spell1.png")
 local playerBullets = {}
 -- offset x by 48 each quad
@@ -62,8 +65,9 @@ local enemies = {}
 local enemyImage = {}
 enemyImage[1] = love.graphics.newImage("assets/enemy1.png")
 enemyImage[2] = love.graphics.newImage("assets/title.png")
+enemyImage[10] = love.graphics.newImage("assets/boss1.png")
 -- .... for more enemies
-local enemyScale = {x = 1, y = 1}
+local enemyScale = {x = 0.5, y = 0.5}
 -- setting offsets and size for each image
 local enemyOffset = {}
 local enemySize = {}
@@ -138,44 +142,47 @@ function love.update(dt)
     --print(bulletTimer)
     --if not pause_dialog and not menu_dialog and not song_select_dialog then
     -- make player move
-    if love.keyboard.isDown("up") and player.Position.y > 0 then
-        player.Position.y = player.Position.y - playerSpeed * dt
-    end
-    if love.keyboard.isDown("down") and player.Position.y < 768 then
-        player.Position.y = player.Position.y + playerSpeed * dt
-    end
-    if love.keyboard.isDown("left") and player.Position.x > 0 then
-        player.Position.x = player.Position.x - playerSpeed * dt
-    end
-    if love.keyboard.isDown("right") and  player.Position.y < 1024 then
-        player.Position.x = player.Position.x + playerSpeed * dt
-    end
-    if love.keyboard.isDown("lshift") then
-        playerSpeed = 150
-        drawPlayerHitBox = true
-    else
-        playerSpeed = 300
-        drawPlayerHitBox = false
-    end
-    if love.keyboard.isDown("z") then
-        if bulletTimer > playerShootRate then
-            bulletTimer = 0
-            local Bullet = {
-                Position = {x = player.Position.x, y = player.Position.y}
-            }
-            table.insert(bullets,Bullet)
+    if not isDialogue then
+        if love.keyboard.isDown("up") and player.Position.y > 0 then
+            player.Position.y = player.Position.y - playerSpeed * dt
         end
-    end
-    if love.keyboard.isDown("x") then
-        if spellCardTimer > playerSpellCardRate  then
-            spellCardTimer = 0
-            local spellcard = {
-                Position = {x = player.Position.x, y = player.Position.y},
-                Rotation = 0,
-                Scale = 0.5,
-                spawnTime = {time = socket.gettime()}
-            }
-            table.insert(spellCard,spellcard)
+        if love.keyboard.isDown("down") and player.Position.y < 768 then
+            player.Position.y = player.Position.y + playerSpeed * dt
+        end
+        if love.keyboard.isDown("left") and player.Position.x > 0 then
+            player.Position.x = player.Position.x - playerSpeed * dt
+        end
+        if love.keyboard.isDown("right") and  player.Position.y < 1024 then
+            player.Position.x = player.Position.x + playerSpeed * dt
+        end
+        if love.keyboard.isDown("lshift") then
+            playerSpeed = 150
+            drawPlayerHitBox = true
+        else
+            playerSpeed = 300
+            drawPlayerHitBox = false
+        end
+
+        if love.keyboard.isDown("z") then
+            if bulletTimer > playerShootRate then
+                bulletTimer = 0
+                local Bullet = {
+                    Position = {x = player.Position.x, y = player.Position.y}
+                }
+                table.insert(bullets,Bullet)
+            end
+        end
+        if love.keyboard.isDown("x") then
+            if spellCardTimer > playerSpellCardRate  then
+                spellCardTimer = 0
+                local spellcard = {
+                    Position = {x = player.Position.x, y = player.Position.y},
+                    Rotation = 0,
+                    Scale = 0.5,
+                    spawnTime = {time = socket.gettime()}
+                }
+                table.insert(spellCard,spellcard)
+            end
         end
     end
     if love.keyboard.isDown("c") then
@@ -183,21 +190,50 @@ function love.update(dt)
     end
     if love.keyboard.isDown("v") then
         local enemyAdd = {
-            Position = { x = love.math.random(100,800), y = 100},
+            Position = { x = love.math.random(100,800), y = 200},
             health = 10,
             sprite = 1,
-            pause = false,
+            Direction = math.pi/2,
+            Type = 1,
         }
         table.insert(enemies,enemyAdd)
+    end
+    if love.keyboard.isDown("b") then
+        local enemyAdd = {
+            Position = { x = love.math.random(100,800), y = 200},
+            health = 10,
+            sprite = 1,
+            Direction = math.pi/2,
+            Type = 2,
+        }
+        table.insert(enemies,enemyAdd)
+    end
+    if love.keyboard.isDown("n") then
+        if not bossTimer then bossTimer = socket.gettime() end
+        if bossTimer + 3 < socket.gettime() then
+            local bossAdd = {
+                Position = { x = love.math.random(100,800), y = 300},
+                health = 1000,
+                sprite = 10,
+                Direction = math.pi/2,
+                Type = 1,
+            }
+            table.insert(boss,bossAdd)
+            bossTimer = socket.gettime()
+        end
     end
     --------------------------------------------------------------------------
 
     -- making bullets move and checking if enemy collision using simple detection
     for i, v in pairs(enemies) do
         if not v.pause then
-            v.Position.y = v.Position.y + 100*dt
+            v.Position.y = v.Position.y + (math.sin(v.Direction)*dt*enemySpeed)
+            v.Position.x = v.Position.x + (math.cos(v.Direction)*dt*enemySpeed)
         end
-        if v.Position.y < 200 and v.Position.y > 190 and not v.hasPaused then
+        if v.Position.x < 0 or v.Position.x > 1024 or v.Position.y < 5 or v.Position.y > 768 then
+            table.remove(enemies,i)
+        end
+        if v.Position.y < 250 and v.Position.y > 245 and not v.hasPaused then
             v.pause = true
             if not v.pauseTime then v.pauseTime = socket.gettime() end
             if socket.gettime() - v.pauseTime > 3 then v.pause = false v.hasPaused = true end
@@ -205,6 +241,44 @@ function love.update(dt)
                 v.hasFired = true
                 enemyShoot(1,v)
             end
+        end
+        if v.hasPaused and v.Type == 1 then
+            if not v.turnTime then v.turnTime = socket.gettime() end
+
+            if v.Direction ~= math.pi and socket.gettime() > v.turnTime + 0.05 then
+                v.Direction = v.Direction - v.Direction * math.pi/64
+                v.turnTime = socket.gettime()
+            end
+        end
+        if v.hasPaused and v.Type == 2 then
+            if not v.turnTime then v.turnTime = socket.gettime() end
+            if v.Direction < (math.pi) and socket.gettime() > v.turnTime + 0.05 then
+                v.Direction = v.Direction + math.pi/64
+                v.turnTime = socket.gettime()
+            end
+        end
+    end
+    for bi,b in pairs(boss) do
+        if not b.pause then
+        b.Position.y = b.Position.y + (math.sin(b.Direction)*dt*enemySpeed)
+        b.Position.x = b.Position.x + (math.cos(b.Direction)*dt*enemySpeed)
+    end
+        if b.health < 0 then
+            b.health = 0
+            table.remove(boss,bi)
+        end
+        if b.Type == 1 then
+            if not b.Dialogue1Complete then
+                isDialogue = true
+                dialogue("...: 'Hello Yotsuba'")
+                dialogue("...: 'My name is steve and you are an intruder to our world'")
+                dialogue("steve: 'I need to stop you before you realise who you are'")
+                dialogue("Yotsuba: 'I...I don't understand!?'")
+                dialogue("steve: 'No matter, all you need to know is death'")
+                b.Dialogue1Complete = true
+            end
+            if b.Position.y > 305 then
+        end
         end
     end
     for bi,b in pairs(bullets) do
@@ -221,18 +295,34 @@ function love.update(dt)
                 score = score + 100
             end
         end
+        for ei,e in pairs(boss) do
+            distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
+            if distance < ((50+bulletSize/2)*0.3) then
+                e.health = e.health - 5
+                if e.health < 0 then
+                    e.health = 0
+                    table.remove(boss,ei)
+                    boss1death()
+                end
+                table.remove(bullets,bi)
+                score = score + 100
+            end
+        end
         --check if out of screen
         if b.Position.x < 0 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
             table.remove(bullets,bi)
         end
     end
     for bi,b in pairs(enemyBullets) do
-        local bulletSpeedMod = 100
+        local bulletSpeedMod = 50
         b.Position.y = b.Position.y + (math.sin(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
         b.Position.x = b.Position.x + (math.cos(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
         local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
         if distance < ((10+bulletSize/2)*enemyScale.x) then
             print("ded")
+        end
+        if b.Position.x < 0 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
+            table.remove(enemyBullets,bi)
         end
     end
     for bi,b in pairs(spellCard) do
@@ -244,8 +334,7 @@ function love.update(dt)
         for ei,e in pairs(enemies) do
             distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
             if distance < ((enemySize[e.sprite]/2+(b.Scale*50))*enemyScale.x) then
-
-                e.health = e.health - 99999999999
+                e.health = e.health - 10
                 if e.health < 0 then
                     e.health = 0
                     table.remove(enemies,ei)
@@ -274,7 +363,23 @@ end
 function love.draw()
     love.graphics.setColor(255, 255, 255, 192)
     love.graphics.draw(bg,player.Position.x/8-600,player.Position.y/8-600,0,4,4,0,0)
-    love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
+    ----------------- doesnt work ?????
+    -- flash player
+    if not isDialogue then
+        love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
+    else
+        if not playerFlashCur then playerFlashCur = socket.gettime() end
+        if playerFlashCur + playerFlashTime < socket.gettime() then
+            print("111")
+            if playerIsShow then playerIsShow = false elseif not playerIsShow then playerIsShow = true end
+            playerFlashCur = socket.gettime()
+        end
+        print(playerIsShow)
+        if playerIsShow == true then
+            love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
+        end
+    end
+
     for i,v in pairs(bullets) do
         love.graphics.draw(playerBullets[0],v.Position.x,v.Position.y,v.Direction,0.3,0.3,50,50)
     end
@@ -286,6 +391,9 @@ function love.draw()
     end
     for i, v in pairs(enemyBullets) do
         love.graphics.draw(playerBullets[3],v.Position.x,v.Position.y,v.Direction,0.3,0.3,50,50)
+    end
+    for i, v in pairs(boss) do
+        love.graphics.draw(enemyImage[v.sprite],v.Position.x,v.Position.y,v.Direction,0.3,0.3,50,50)
     end
     --love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
     --love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
@@ -306,16 +414,17 @@ function love.draw()
         love.graphics.setNewFont(fmr, 20)
         love.graphics.print("Score: ".. topscore ,20, 20, 0, 1, 1)
         love.graphics.setNewFont(fmr, 25)
-        love.graphics.print(round(score,5), 20, 40)
+        love.graphics.print(round(score,0), 20, 40)
         --song and difficulty
         love.graphics.setNewFont(fmr, 20)
         love.graphics.print("Song\nZUN\nUN Owen Was Her", 200, 20)
         love.graphics.print("BPM\n152", 300, 20)
         love.graphics.print("Length\n1:23\n4:18",450,20)
     end
-    --drawGameUI()
+    drawGameUI()
 end
 dialogue("Yotsuba awakes from the ruins.")
 dialogue("She sees a large enemy in the corner of her eye.")
 dialogue("Yotsuba: 'What is it? What is happening?'")
 dialogue("Yotsuba : '...Why can I shoot bullets with my arm?'")
+isDialogue = true
