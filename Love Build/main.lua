@@ -4,7 +4,7 @@ h = 768
 w = 1024
 require("socket")
 print(socket.gettime())
-love.window.setTitle("blyat")
+love.window.setTitle("Bullet Heaven")
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
@@ -157,7 +157,7 @@ function enemyShoot(pattern, object)
     if pattern == 10 then
         print("logging")
         angle = 0
-        for j = 1, 5 do
+        for j = 1, 1 do
             angle = angle + j*10
         for i = 1, 32 do
             local Bullet = {
@@ -335,12 +335,12 @@ function love.update(dt)
                 dialogue("steve: ''")
                 b.Dialogue1Complete = true
             end
-            if b.Position.y > 305 and b.Position.y < 300 and not b.hasPaused1 then
+            if b.Position.y < 305 and b.Position.y > 300 and not b.hasPaused1 then
                 b.pause = true
                 if not b.pauseTime then b.pauseTime = socket.gettime() end
-                if socket.gettime() - b.pauseTime > 3 then b.pause = false b.hasPaused1 = true end
-                if (socket.gettime() - b.pauseTime) > 1.5 and not b.hasFired1 then
-                    v.hasFired1 = true
+                if socket.gettime() - b.pauseTime > 3 and not isDialogue then b.hasPaused1 = true end
+                if (socket.gettime() - b.pauseTime) > 1.5 and not b.hasFired1 and not isDialogue then
+                    b.hasFired1 = true
                     enemyShoot(10,b)
                 end
             end
