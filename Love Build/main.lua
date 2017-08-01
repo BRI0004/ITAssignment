@@ -432,7 +432,7 @@ function love.update(dt)
 end
 function love.draw()
     love.graphics.setColor(255, 255, 255, 192)
-    love.graphics.draw(bg,player.Position.x/8-600,player.Position.y/8-600,0,4,4,0,0)
+    love.graphics.draw(bg,(player.Position.x+300)/4,(player.Position.y+400)/4,0,1,1,bg:getWidth()/2,bg:getHeight()/2)
     ----------------- doesnt work ?????
     -- flash player
     --if not isDialogue then
@@ -502,7 +502,7 @@ end
 drawGameUI()
 end
 dialogue("Yotsuba awakes from the ruins.")
-dialogue("She sees a large enemy in the corner of her eye.")
-dialogue("Yotsuba: 'What is it? What is happening?'")
+dialogue("She sees a large bulge in the corner of her eye.")
+dialogue("Yotsuba: 'owo what's this?'")
 dialogue("Yotsuba : '...Why can I shoot bullets with my arm?'")
 isDialogue = true
