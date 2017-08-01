@@ -38,7 +38,7 @@ local transblack = love.graphics.newImage("assets/transparentplayer.png")
 -- iamges for boosters
 local scoreImage = love.graphics.newImage("assets/title.png")
 local powerImage = love.graphics.newImage("assets/title.png")
-
+local bossHealthBar = love.graphics.newImage("assets/healthBar.png")
 -- images for bullets
 local enemyBullets = {}
 local bullets = {}
@@ -383,7 +383,7 @@ function love.update(dt)
         b.Position.y = b.Position.y + (math.sin(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
         b.Position.x = b.Position.x + (math.cos(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
         local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
-        if distance < ((10+bulletSize/2)*enemyScale.x) then
+        if distance < 10 then
             print("ded")
         end
         if b.Position.x < 0 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
@@ -470,6 +470,7 @@ for i, v in pairs(enemyBullets) do
 end
 for i, v in pairs(boss) do
     love.graphics.draw(enemyImage[v.sprite],v.Position.x,v.Position.y,v.Direction,0.3,0.3,50,50)
+    love.graphics.draw(bossHealthBar, 10, 150, 0, boss[1].health/100, 0.2)
 end
 --love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
 --love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
@@ -486,7 +487,7 @@ end
 function drawGameUI()
     fmr = "assets/AlteHaasGroteskRegular.ttf"
     love.graphics.draw(playerImage,0,0,0,21,3,0,0)
-    --score
+    --scorez
     love.graphics.setNewFont(fmr, 20)
     love.graphics.print("Score: ".. topscore ,20, 20, 0, 1, 1)
     love.graphics.setNewFont(fmr, 25)
@@ -502,7 +503,7 @@ end
 drawGameUI()
 end
 dialogue("Yotsuba awakes from the ruins.")
-dialogue("She sees a large bulge in the corner of her eye.")
+dialogue("She sees a large enemy in the corner of her eye.")
 dialogue("Yotsuba: 'owo what's this?'")
 dialogue("Yotsuba : '...Why can I shoot bullets with my arm?'")
 isDialogue = true
