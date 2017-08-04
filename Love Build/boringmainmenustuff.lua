@@ -1,3 +1,4 @@
+mpos,mduration = 0,0
 love.mousepressed = function(x, y, button)
 	if menu_dialog then
 		state.mainmenu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
@@ -54,42 +55,10 @@ function loadthestuff()
 			update = function(dt)
 				state.common.gui:update(dt)
 				state.freemode_menu.gui:update(dt)
-				list:update(dt)
-				if list:isdoublec() then
-		            mselected=list:getselected()
-		            source = love.audio.newSource(dir.."/"..list:getfusion(mselected))
-		            love.audio.stop()
-		            source:play()
-		            mduration=source:getDuration(unit)
-		            mpos=source:tell(unit)
-		        end
-				if source and source:isPlaying() then
-		            mpos=source:tell(unit)
-		        elseif source and not source:isPlaying() then
-		            local count = list:getcount()
-		            if random then
-		                mselected=(math.random(count))
-		                list:setselected(mselected)
-		                source = love.audio.newSource(dir.."/"..list:getfusion(mselected))
-		                source:play()
-		            else
-		                if mselected+1<=count then
-		                    mselected=mselected+1
-		                    list:setselected(mselected)
-		                    source = love.audio.newSource(dir.."/"..list:getfusion(mselected))
-		                    source:play()
-		                else
-		                    mselected=1
-		                    list:setselected(mselected)
-		                    source = love.audio.newSource(dir.."/"..list:getfusion(mselected))
-		                    source:play()
-		                end
-		            end
-		            mduration=source:getDuration(unit)
-		        end
-
 		        list:update(dt)
-				print(source:isPlaying())
+				if source and source:isPlaying() then
+					mpos=source:tell(unit)
+				end
 			end,
 			draw = function()
 				-- ui elements
@@ -101,18 +70,7 @@ function loadthestuff()
 				love.graphics.rectangle("line", 95, 50, 450, 200)
 				love.graphics.setNewFont(ffont,25)
 				love.graphics.printf("If you can see this something has gone wrong; art placeholder", 105, 60 ,400)
-
-				-- list of songs
 				list:draw()
-
-		        if source and source:isPlaying() then
-		            love.graphics.setColor(list.fcolor)
-		            nowp("Now Playing "..list:concat(mselected))
-		        end
-		        love.graphics.setColor(list.fcolor)
-
-		        list:draw()
-
 			end,
 			load = function()
 				print("desued")
@@ -134,60 +92,28 @@ function loadthestuff()
 				list:newprop(tlist)
 				dir="songs/audio"
 		        img="songs/img"
-		        files = list:enudir(dir,".mp3 .wav .ogg .wma")
+		        files = list:enudir(dir,".mp3 .wav .ogg")
 				if files then
 		            for i, mus in ipairs(files) do
 		                mus=dir.."/"..mus
 		                list:additem(list:getfilename(mus),list:getfileext(mus))
 		            end
 		        end
+
 				function love.keypressed(key)
-			        local selected = list:getselected()
-					if key == "escape" then
-						freemode_menu = false
-						menu_dialog = true
-					end
-			        if key == "return" or key == "kpenter" then
-						--[[
-			            source = love.audio.newSource(dir.."/"..list:getfusion(selected))
-			            love.audio.stop()
-			            source:play()
-			            mduration=source:getDuration(unit)
-			            mselected=selected
+				    local selected = list:getselected()
+					if key == "return" or key == "kpenter" then
+						print(list:getfusion(selected))
+						source = love.audio.newSource("songs/audio/"..list:getfusion(selected), "stream")
+						print(selected)
 						love.audio.play(source)
+						source:play()
+						mduration=source:getDuration(unit)
+						mselected = selected
 						freemode_menu = false
 						game_dialog = true
-						]]
-						love.audio.stop()
-						mselected=selected
-						print(selected, mselected)
-						print("logging")
-						print(list:getfusion(selected))
-						source = love.audio.newSource(dir.."/"..list:getfusion(selected),"stream")
-						mduration = source:getDuration(unit)
-						love.audio.play(source)
-			        end
-			        list:key(key)
-			    end
-				if list:maxn() and list:maxn()>=4 then
-		            list:autosize(true)
-		        end
-
-		        if list:maxn() then
-		            mselected=1
-		            source = love.audio.newSource(dir.."/"..list:getfusion(mselected))
-		            source:play()
-		            mduration=source:getDuration(unit)
-		        end
-				function nowp(str)
-				    local width = font:getWidth(str)*4
-				    local height = font:getHeight(str)*4
-				    if (play_x+width)>20 then
-				        play_x=play_x-3
-				    else
-				        play_x=list.gw-20
 				    end
-				    love.graphics.print(str, play_x, 20,0,4,4)
+				    list:key(key)
 				end
 			end,
 		},
@@ -207,19 +133,6 @@ function loadthestuff()
 			gui = gui(),
 			update = function(dt)
 
-				if source and source:isPlaying() then
-					mpos=source:tell(unit)
-				end
-				print(source, 'is sause')
-				print(source:isPlaying())
-				if list:isdoublec() then
-		            mselected=list:getselected()
-		            source = love.audio.newSource(dir.."/"..list:getfusion(mselected))
-		            love.audio.stop()
-		            source:play()
-		            mduration=source:getDuration(unit)
-		            mpos=source:tell(unit)
-		        end
 			end,
 			draw = function()
 

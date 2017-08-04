@@ -139,16 +139,15 @@ function round(num, idp)
     local mult = 10^(idp or 0)
     return math.floor(num * mult + 0.5) / mult
 end
-function SecondsToClock(seconds)
-    local seconds = tonumber(seconds)
-
-    if seconds <= 0 then
-        return "00:00:00";
+function sectotime(sec,milliseconds)
+    local h,m,s=0,0,0
+    h=math.floor(sec/3600)%60
+    m=math.floor(sec/60)%60
+    s=sec%60
+    if milliseconds then
+        return sec and string.format("%02i:%02i:%.1f",h,m,s) or "00:00:00.0"
     else
-        hours = string.format("%02.f", math.floor(seconds/3600));
-        mins = string.format("%02.f", math.floor(seconds/60 - (hours*60)));
-        secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60));
-        return hours..":"..mins..":"..secs
+        return sec and string.format("%02i:%02i:%02i",h,m,s) or "00:00:00"
     end
 end
 function enemyShoot(pattern, object)
@@ -210,7 +209,7 @@ function love.update(dt)
     end
     -- update shooting rate timer
     if game_dialog then
-        currenttime = SecondsToClock(dt)
+        currenttime = sectotime(dt)
         bulletTimer = bulletTimer + dt
         spellCardTimer = spellCardTimer + dt
         score = score + dt
@@ -523,8 +522,9 @@ function love.draw()
             love.graphics.print("Song\nZUN\n"..mselected, 200, 20)
             love.graphics.print("BPM\n152", 300, 20)
             love.graphics.print("Length",450,20)
-            love.graphics.print("\n"..tostring(mpos),450,20)
-            love.graphics.print("\n\n"..mduration,450,20)
+            print(mpos)
+            love.graphics.print("\n"..sectotime(mpos),450,20)
+            love.graphics.print("\n\n"..sectotime(mduration),450,20)
         end
         drawGameUI()
     end
