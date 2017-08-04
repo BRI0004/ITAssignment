@@ -139,7 +139,7 @@ function round(num, idp)
     local mult = 10^(idp or 0)
     return math.floor(num * mult + 0.5) / mult
 end
-function sectotime(sec,milliseconds)
+function sectotime(sec)
     local h,m,s=0,0,0
     h=math.floor(sec/3600)%60
     m=math.floor(sec/60)%60

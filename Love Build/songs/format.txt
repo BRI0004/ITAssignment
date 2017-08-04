@@ -1,0 +1,2 @@
+overlay .png is 450 x 200
+bg .png is 800 x 600
