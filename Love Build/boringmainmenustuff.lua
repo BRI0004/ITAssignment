@@ -40,7 +40,6 @@ function loadthestuff()
 					state.mainmenu.gui:feedback("Free Mode Selected")
 					menu_dialog = false
 					freemode_menu = true
-					print(freemode_menu)
 				end
 				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 450, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				marathonModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
@@ -51,28 +50,39 @@ function loadthestuff()
 		},
 		----------------------------------------------------------------------------------------------------------------
 		freemode_menu={
-			gui = gui(),
 			update = function(dt)
-				state.common.gui:update(dt)
-				state.freemode_menu.gui:update(dt)
 		        list:update(dt)
-				if source and source:isPlaying() then
-					mpos=source:tell(unit)
-				end
+				listselected = list:getselected()
+
 			end,
 			draw = function()
 				-- ui elements
-				state.freemode_menu.gui:draw()
+				--draw bg at the back
+				if images["bg"][currentFileNameWoExt] ~= nil then
+					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(800/images["bg"][currentFileNameWoExt]:getWidth()),(images["bg"][currentFileNameWoExt]:getWidth()/600))
+					end
+				end
 				love.graphics.setColor(255,255,255,255)
 
 				love.graphics.setNewFont(ffont,60)
 				love.graphics.printf("Song Select", 95, 250,500)
 				love.graphics.rectangle("line", 95, 50, 450, 200)
 				love.graphics.setNewFont(ffont,25)
-				love.graphics.printf("If you can see this something has gone wrong; art placeholder", 105, 60 ,400)
+				love.graphics.printf("overlay.png missing", 105, 60 ,400)
+				if images["overlay"][currentFileNameWoExt] ~= nil then
+					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
+						love.graphics.draw(images["overlay"][currentFileNameWoExt], 95, 50, 0)
+					end
+				end
 				list:draw()
 			end,
 			load = function()
+				images = {
+					bg = {},
+					overlay = {}
+				}
+				maps = {}
 				print("desued")
 				local tlist={
 					x=550, y=50,
@@ -101,17 +111,38 @@ function loadthestuff()
 		        end
 
 				function love.keypressed(key)
-				    local selected = list:getselected()
+					if freemode_menu then
+				    listselected = list:getselected()
+					currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
+					if images["overlay"][currentFileNameWoExt] == nil then
+						if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
+				    		images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
+						else
+							print("file " .."songs/img/"..currentFileNameWoExt.."/overlay.png".." expected")
+						end
+					end
+					if images["bg"][currentFileNameWoExt] == nil then
+						if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+				    		images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
+						else
+							print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
+						end
+					end
 					if key == "return" or key == "kpenter" then
-						print(list:getfusion(selected))
-						source = love.audio.newSource("songs/audio/"..list:getfusion(selected), "stream")
-						print(selected)
+						if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+							chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+							local result = chunk() -- execute the chunk
+						else
+							love.window.showMessageBox("Error", "No Map Found")
+						end
+						source = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
 						love.audio.play(source)
 						source:play()
 						mduration=source:getDuration(unit)
-						mselected = selected
+						mlistselected = listselected
 						freemode_menu = false
 						game_dialog = true
+					end
 				    end
 				    list:key(key)
 				end
@@ -132,7 +163,12 @@ function loadthestuff()
 		game_play = {
 			gui = gui(),
 			update = function(dt)
-
+				if source and source:isPlaying() then
+					mpos=source:tell(unit)
+				end
+				for i, v in pairs(maps[currentFileNameWoExt].chart) do
+					-- read chart file here
+				end
 			end,
 			draw = function()
 

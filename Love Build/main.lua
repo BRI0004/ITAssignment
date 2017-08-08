@@ -35,7 +35,8 @@ menu_dialog = true
 game_dialog = false
 freemode_menu = false
 
-
+local musicOverlay = {}
+local musicBg = {}
 local exp = {}
 local playerShootBulletOffset = 20
 -- defining images and variables for player
@@ -209,7 +210,7 @@ function love.update(dt)
     end
     -- update shooting rate timer
     if game_dialog then
-        currenttime = sectotime(dt)
+        state.game_play.update(dt)
         bulletTimer = bulletTimer + dt
         spellCardTimer = spellCardTimer + dt
         score = score + dt
@@ -217,7 +218,6 @@ function love.update(dt)
         --if not pause_dialog and not menu_dialog and not freemode_song_select_dialog then
         -- make player move
         if not isDialogue then
-            state.game_play.update(dt)
             if love.keyboard.isDown("up") and player.Position.y > 0 then
                 player.Position.y = player.Position.y - playerSpeed * dt
             end
@@ -468,6 +468,7 @@ function love.draw()
     end
 
     if game_dialog then
+        state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)
         love.graphics.draw(bg,(player.Position.x+300)/4,(player.Position.y+400)/4,0,1,1,bg:getWidth()/2,bg:getHeight()/2)
         ----------------- doesnt work ?????
@@ -519,10 +520,9 @@ function love.draw()
             love.graphics.print(round(score,0), 20, 40)
             --song and difficulty
             love.graphics.setNewFont(fmr, 20)
-            love.graphics.print("Song\nZUN\n"..mselected, 200, 20)
-            love.graphics.print("BPM\n152", 300, 20)
+            love.graphics.print("Song\n"..maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 200, 20)
+            love.graphics.print("BPM\n"..maps[currentFileNameWoExt].metadata.BPM, 300, 20)
             love.graphics.print("Length",450,20)
-            print(mpos)
             love.graphics.print("\n"..sectotime(mpos),450,20)
             love.graphics.print("\n\n"..sectotime(mduration),450,20)
         end
