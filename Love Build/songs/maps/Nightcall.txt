@@ -1,11 +1,11 @@
 maps["Nightcall"] = {
 	metadata = {
 		artist = 'Kavinsky',
-		BPM = '91',
+		BPM = '91'
 	}
 	chart = {
-	'0' = 'spawn1',
-	'0.5' = 'spawn1',
+		'0' = 'spawn1',
+		'0.5' = 'spawn1'
 	}
 }
 

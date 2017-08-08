@@ -3,9 +3,9 @@
 h = 768
 w = 1024
 require("socket")
-gui = require("Gspot")
-list = require("listbox")
-require("boringmainmenustuff")
+gui = require("libraries/gspot")
+list = require("libraries/listbox")
+require("mainmenu")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
 -- initial variables
