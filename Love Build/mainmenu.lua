@@ -103,45 +103,63 @@ function loadthestuff()
 				dir="songs/audio"
 		        img="songs/img"
 		        files = list:enudir(dir,".mp3 .wav .ogg")
-				if files then
+						if files then
 		            for i, mus in ipairs(files) do
 		                mus=dir.."/"..mus
 		                list:additem(list:getfilename(mus),list:getfileext(mus))
 		            end
 		        end
+						previewStartTime = 30
 				function love.keypressed(key)
 					if freemode_menu then
 						if key == "down" then
-							listselected = list:getselected() + 1
-							currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
-							-- in process of converting to wave library
-							if previewSource ~= nil then
-								love.audio.stop()
+							if list:getselected() ~= list:getcount() then
+								listselected = list:getselected() + 1
+								currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
+								if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+									chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+									local result = chunk() -- execute the chunk
+								end
+
+
+								if previewSource ~= nil then
+									love.audio.stop()
+								end
+								previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
+								love.audio.play(previewSource)
+								--[[
+								if maps[currentFileNameWoExt].metadata.previewStart == nil then
+									previewStartTime = 30
+								else
+									previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
+								end
+								]]
+								previewSource:seek(30,"seconds")
+								love.audio.setVolume(0.2)
 							end
-							previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
-							love.audio.play(previewSource)
-							if maps[currentFileNameWoExt].metadata.previewStart == nil then
-								previewStartTime = 30
-							else
-								previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
-							end
-							previewSource:seek(previewStartTime,"seconds")
-							love.audio.setVolume(0.2)
 						elseif key == "up" then
-							listselected = list:getselected() - 1
-							currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
-							if previewSource ~= nil then
-								love.audio.stop()
+							if list:getselected() ~= 1 then
+								listselected = list:getselected() - 1
+								currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
+								if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+									chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+									local result = chunk() -- execute the chunk
+								end
+								if previewSource ~= nil then
+									love.audio.stop()
+								end
+								previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
+								love.audio.play(previewSource)
+								--[[
+								if maps[currentFileNameWoExt].metadata.previewStart == nil then
+									previewStartTime = 30
+								else
+									previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
+								end
+								]]
+								previewSource:seek(30,"seconds")
+								love.audio.setVolume(0.2)
 							end
-							previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
-							love.audio.play(previewSource)
-							if maps[currentFileNameWoExt].metadata.previewStart == nil then
-								previewStartTime = 30
-							else
-								previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
-							end
-							previewSource:seek(previewStartTime,"seconds")
-							love.audio.setVolume(0.2)
 						end
 						print(listselected)
 						if images["overlay"][currentFileNameWoExt] == nil then
