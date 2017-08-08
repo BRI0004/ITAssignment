@@ -1,7 +1,8 @@
 maps["Nightcall"] = {
 	metadata = {
 		artist = 'Kavinsky',
-		BPM = '91'
+		BPM = '91',
+		previewTime = 
 	}
 	chart = {
 		'0' = 'spawn1',

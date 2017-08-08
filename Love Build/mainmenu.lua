@@ -113,24 +113,37 @@ function loadthestuff()
 					if freemode_menu then
 						if key == "down" then
 							listselected = list:getselected() + 1
+							currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
 							-- in process of converting to wave library
 							if previewSource ~= nil then
-								previewSource:stop()
+								love.audio.stop()
 							end
-							previewSource = wave:newSource("songs/audio/"..list:getfusion(listselected), "stream")
-							previewSource:play()
-							previewSource:setVolume(0.2)
+							previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
+							love.audio.play(previewSource)
+							if maps[currentFileNameWoExt].metadata.previewStart == nil then
+								previewStartTime = 30
+							else
+								previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
+							end
+							previewSource:seek(previewStartTime,"seconds")
+							love.audio.setVolume(0.2)
 						elseif key == "up" then
 							listselected = list:getselected() - 1
+							currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
 							if previewSource ~= nil then
-								previewSource:stop()
+								love.audio.stop()
 							end
-							previewSource = wave:newSource("songs/audio/"..list:getfusion(listselected), "stream")
-							previewSource:play()
-							previewSource:setVolume(0.2)
+							previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
+							love.audio.play(previewSource)
+							if maps[currentFileNameWoExt].metadata.previewStart == nil then
+								previewStartTime = 30
+							else
+								previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
+							end
+							previewSource:seek(previewStartTime,"seconds")
+							love.audio.setVolume(0.2)
 						end
 						print(listselected)
-						currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
 						if images["overlay"][currentFileNameWoExt] == nil then
 							if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
 				    		images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
