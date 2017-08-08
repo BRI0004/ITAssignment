@@ -1,0 +1,11 @@
+maps["Alien"] = {
+	metadata = {
+		artist = 'Maximum the Hormone',
+		BPM = 276,
+		previewTime = 32,
+	},
+	chart = {
+	},
+}
+
+return maps["Alien"]

@@ -1,0 +1,11 @@
+maps["The Big Black"] = {
+	metadata = {
+		artist = 'The Quick Brown Fox',
+		BPM = 360,
+		previewTime = 18,
+	},
+	chart = {
+	},
+}
+
+return maps["The Big Black"]

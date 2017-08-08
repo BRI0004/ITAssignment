@@ -1,0 +1,11 @@
+maps["Over the Fullereneshift"] = {
+	metadata = {
+		artist = 'DJ Sharpnel',
+		BPM = 203.9,
+		previewTime = 185,
+	},
+	chart = {
+	},
+}
+
+return maps["Over the Fullereneshift"]

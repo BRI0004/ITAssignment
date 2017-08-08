@@ -1,10 +1,11 @@
 maps["I Do Not Like Speed"] = {
 	metadata = {
 		artist = 'Mergel',
-		BPM = '210',
-		previewStart = '226',
+		BPM = 210,
+		previewTime = 226,
 	},
-	chart = {},
+	chart = {
+	},
 }
 
 return maps["I Do Not Like Speed"]

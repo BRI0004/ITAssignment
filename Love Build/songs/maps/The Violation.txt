@@ -1,0 +1,11 @@
+maps["The Violation"] = {
+	metadata = {
+		artist = 'Fleshgod Apocalypse',
+		BPM = 270,
+		previewTime = 55,
+	},
+	chart = {
+	},
+}
+
+return maps["The Violation"]

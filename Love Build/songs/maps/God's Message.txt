@@ -1,0 +1,11 @@
+maps["God's Message"] = {
+	metadata = {
+		artist = 'Shirou Sagisu',
+		BPM = 166,
+		previewTime = 71,
+	},
+	chart = {
+	},
+}
+
+return maps["God's Message"]

@@ -1,0 +1,11 @@
+maps["Flowering Night Fever"] = {
+	metadata = {
+		artist = 'UNDEAD CORPORATION',
+		BPM = 270,
+		previewTime = 122,
+	},
+	chart = {
+	},
+}
+
+return maps["Flowering Night Fever"]

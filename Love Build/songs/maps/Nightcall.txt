@@ -2,10 +2,9 @@ maps["Nightcall"] = {
 	metadata = {
 		artist = 'Kavinsky',
 		BPM = '91',
-		previewTime = '30',
+		previewTime = 11,
 	},
 	chart = {
-	desu = 1+2
 	},
 }
 

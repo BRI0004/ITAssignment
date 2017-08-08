@@ -1,0 +1,11 @@
+maps["Heaven's Fall"] = {
+	metadata = {
+		artist = 'Helblinde',
+		BPM = 200,
+		previewTime = 102,
+	},
+	chart = {
+	},
+}
+
+return maps["Heaven's Fall"]

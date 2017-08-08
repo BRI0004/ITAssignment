@@ -1,0 +1,11 @@
+maps["Wings (NuLogic Remix)"] = {
+	metadata = {
+		artist = 'Birdy',
+		BPM = 174,
+		previewTime = 222,
+	},
+	chart = {
+	},
+}
+
+return maps["Wings (NuLogic Remix)"]

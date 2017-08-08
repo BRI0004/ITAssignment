@@ -1,0 +1,11 @@
+maps["Tech Noir"] = {
+	metadata = {
+		artist = 'GUNSHIP',
+		BPM = 86,
+		previewTime = 0,
+	},
+	chart = {
+	},
+}
+
+return maps["Tech Noir"]

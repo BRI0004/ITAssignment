@@ -109,7 +109,7 @@ function loadthestuff()
 		                list:additem(list:getfilename(mus),list:getfileext(mus))
 		            end
 		        end
-						previewStartTime = 30
+				
 				function love.keypressed(key)
 					if freemode_menu then
 						if key == "down" then
@@ -134,7 +134,7 @@ function loadthestuff()
 									previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
 								end
 								]]
-								previewSource:seek(30,"seconds")
+								previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
 								love.audio.setVolume(0.2)
 							end
 						elseif key == "up" then
@@ -157,7 +157,7 @@ function loadthestuff()
 									previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
 								end
 								]]
-								previewSource:seek(30,"seconds")
+								previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
 								love.audio.setVolume(0.2)
 							end
 						end

@@ -1,0 +1,11 @@
+maps["Speed of Link"] = {
+	metadata = {
+		artist = 'antiPLUR',
+		BPM = 285,
+		previewTime = 84,
+	},
+	chart = {
+	},
+}
+
+return maps["Speed of Link"]

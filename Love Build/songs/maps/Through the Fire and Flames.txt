@@ -1,0 +1,11 @@
+maps["Through the Fire and Flames"] = {
+	metadata = {
+		artist = 'Dragonforce',
+		BPM = 200,
+		previewTime = 97,
+	},
+	chart = {
+	},
+}
+
+return maps["Through the Fire and Flames"]

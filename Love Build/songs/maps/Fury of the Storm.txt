@@ -1,0 +1,11 @@
+maps["Fury of the Storm"] = {
+	metadata = {
+		artist = 'Dragonforce',
+		BPM = 200,
+		previewTime = 10,
+	},
+	chart = {
+	},
+}
+
+return maps["Fury of the Storm"]

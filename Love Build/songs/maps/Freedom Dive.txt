@@ -1,0 +1,11 @@
+maps["Freedom Dive"] = {
+	metadata = {
+		artist = 'xi',
+		BPM = 222,
+		previewTime = 29,
+	},
+	chart = {
+	},
+}
+
+return maps["Freedom Dive"]

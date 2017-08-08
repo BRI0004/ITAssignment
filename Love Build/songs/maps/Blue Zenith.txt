@@ -1,0 +1,11 @@
+maps["Blue Zenith"] = {
+	metadata = {
+		artist = 'xi',
+		BPM = 200,
+		previewTime = 221,
+	},
+	chart = {
+	},
+}
+
+return maps["Blue Zenith"]

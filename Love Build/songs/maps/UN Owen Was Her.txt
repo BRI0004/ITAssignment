@@ -1,0 +1,11 @@
+maps["UN Owen Was Her"] = {
+	metadata = {
+		artist = 'ZUN',
+		BPM = 156,
+		previewTime = 158,
+	},
+	chart = {
+	},
+}
+
+return maps["UN Owen Was Her"]

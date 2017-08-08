@@ -1,0 +1,11 @@
+maps["Anomaly"] = {
+	metadata = {
+		artist = 'Camellia',
+		BPM = 210,
+		previewTime = 92,
+	},
+	chart = {
+	},
+}
+
+return maps["Anomaly"]

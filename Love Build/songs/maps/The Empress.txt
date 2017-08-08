@@ -1,0 +1,11 @@
+maps["The Empress"] = {
+	metadata = {
+		artist = 'UNDEAD CORPORATION',
+		BPM = 270,
+		previewTime = 28,
+	},
+	chart = {
+	},
+}
+
+return maps["The Empress"]

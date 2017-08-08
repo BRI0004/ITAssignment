@@ -1,0 +1,11 @@
+maps["Running in the 90s"] = {
+	metadata = {
+		artist = 'Initial D',
+		BPM = 158.5,
+		previewTime = 72,
+	},
+	chart = {
+	},
+}
+
+return maps["Running in the 90s"]

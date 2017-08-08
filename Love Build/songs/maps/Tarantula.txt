@@ -1,0 +1,11 @@
+maps["Tarantula"] = {
+	metadata = {
+		artist = 'Pendulum',
+		BPM = 174,
+		previewTime = 49,
+	},
+	chart = {
+	},
+}
+
+return maps["Tarantula"]

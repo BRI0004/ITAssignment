@@ -1,0 +1,11 @@
+maps["C18H27NO3"] = {
+	metadata = {
+		artist = 'Team Grimoire',
+		BPM = 210,
+		previewTime = 215,
+	},
+	chart = {
+	},
+}
+
+return maps["C18H27NO3"]

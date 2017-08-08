@@ -1,0 +1,11 @@
+maps["Ice Angel"] = {
+	metadata = {
+		artist = 'Yooh',
+		BPM = 160,
+		previewTime = 220,
+	},
+	chart = {
+	},
+}
+
+return maps["Ice Angel"]
