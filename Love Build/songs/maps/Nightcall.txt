@@ -4,7 +4,9 @@ maps["Nightcall"] = {
 		BPM = '91',
 		previewTime = '30',
 	},
-	chart = {},
+	chart = {
+	desu = 1+2
+	},
 }
 
 return maps["Nightcall"]

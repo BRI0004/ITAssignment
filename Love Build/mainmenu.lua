@@ -215,9 +215,11 @@ function loadthestuff()
 				if source and source:isPlaying() then
 					mpos=source:tell(unit)
 				end
+				if maps[currentFileNameWoExt].chart ~= nil then
 				for i, v in pairs(maps[currentFileNameWoExt].chart) do
 					-- read chart file here
 				end
+			else love.window.showMessageBox("Error", "No Chart") end
 			end,
 			draw = function()
 
