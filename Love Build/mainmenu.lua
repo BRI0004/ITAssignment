@@ -1,4 +1,5 @@
 mpos,mduration = 0,0
+currentSongBPM = 0
 love.mousepressed = function(x, y, button)
 	if menu_dialog then
 		state.mainmenu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
@@ -14,6 +15,44 @@ ffont = "assets/AlteHaasGroteskRegular.ttf"
 --10:09 pm all work as it did earlier
 gui = require("libraries/Gspot")
 wave = require("libraries/wave")
+function loadBGOverlay()
+	if images["overlay"][currentFileNameWoExt] == nil then
+		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
+		images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
+		else
+			print("file " .."songs/img/"..currentFileNameWoExt.."/overlay.png".." expected")
+		end
+	end
+	if images["bg"][currentFileNameWoExt] == nil then
+		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+		images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
+		else
+		print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
+		end
+	end
+end
+function previewAndSelect()
+	currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
+	if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+		chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+		result = chunk() -- execute the chunk
+	end
+	if previewSource ~= nil then
+		love.audio.stop()
+	end
+	loadBGOverlay()
+	previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
+	love.audio.play(previewSource)
+	--[[
+	if maps[currentFileNameWoExt].metadata.previewStart == nil then
+		previewStartTime = 30
+	else
+		previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
+	end
+	]]
+	previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
+	love.audio.setVolume(0.2)
+end
 function loadthestuff()
 	state = {
 		common = {gui = gui()},
@@ -67,6 +106,7 @@ function loadthestuff()
 				love.graphics.setColor(255,255,255,255)
 				love.graphics.setNewFont(ffont,60)
 				love.graphics.printf("Song Select", 95, 250,500)
+				love.graphics.printf("DONT CLICK THE SCREEN", 0, 0,1000)
 				love.graphics.rectangle("line", 95, 50, 450, 200)
 				love.graphics.setNewFont(ffont,25)
 				love.graphics.printf("overlay.png missing", 105, 60 ,400)
@@ -94,7 +134,7 @@ function loadthestuff()
 					w=400,h=600,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,
-					ismouse = true,
+					ismouse = false,
 					istouch = false,
 					selected = 1,
 
@@ -109,81 +149,31 @@ function loadthestuff()
 		                list:additem(list:getfilename(mus),list:getfileext(mus))
 		            end
 		        end
-				
 				function love.keypressed(key)
 					if freemode_menu then
 						if key == "down" then
 							if list:getselected() ~= list:getcount() then
 								listselected = list:getselected() + 1
-								currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
-								if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
-									chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
-									local result = chunk() -- execute the chunk
-								end
-
-
-								if previewSource ~= nil then
-									love.audio.stop()
-								end
-								previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
-								love.audio.play(previewSource)
-								--[[
-								if maps[currentFileNameWoExt].metadata.previewStart == nil then
-									previewStartTime = 30
-								else
-									previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
-								end
-								]]
-								previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
-								love.audio.setVolume(0.2)
+								previewAndSelect()
 							end
 						elseif key == "up" then
 							if list:getselected() ~= 1 then
 								listselected = list:getselected() - 1
-								currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
-								if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
-									chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
-									local result = chunk() -- execute the chunk
-								end
-								if previewSource ~= nil then
-									love.audio.stop()
-								end
-								previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
-								love.audio.play(previewSource)
-								--[[
-								if maps[currentFileNameWoExt].metadata.previewStart == nil then
-									previewStartTime = 30
-								else
-									previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
-								end
-								]]
-								previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
-								love.audio.setVolume(0.2)
+								previewAndSelect()
 							end
 						end
-						print(listselected)
-						if images["overlay"][currentFileNameWoExt] == nil then
-							if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
-				    		images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
-							else
-								print("file " .."songs/img/"..currentFileNameWoExt.."/overlay.png".." expected")
-							end
-						end
-						if images["bg"][currentFileNameWoExt] == nil then
-							if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
-				    		images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
-							else
-							print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
-							end
-						end
+
+
 
 						if key == "return" or key == "kpenter" then
 							if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
 								chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
-								local result = chunk() -- execute the chunk
+								result = chunk() -- execute the chunk
+								currentSongBPM = maps[currentFileNameWoExt].metadata.BPM
 							else
-								love.window.showMessageBox("Error", "No Map Found")
+								love.window.showMessageBox("Error", "No Data Found")
 							end
+							love.audio.stop()
 							source = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
 							love.audio.play(source)
 							source:play()
@@ -192,8 +182,14 @@ function loadthestuff()
 							freemode_menu = false
 							game_dialog = true
 						end
+						if key == "escape" then
+							freemode_menu = false
+							menu_dialog = true
+							love.audio.stop()
+						end
+						list:key(key)
 					end
-			 	list:key(key)
+
 				end
 			end,
 		},
@@ -212,19 +208,25 @@ function loadthestuff()
 		game_play = {
 			gui = gui(),
 			update = function(dt)
+				BPMtoDTCount = BPMtoDTCount + dt
 				if source and source:isPlaying() then
 					mpos=source:tell(unit)
 				end
-				if maps[currentFileNameWoExt].chart ~= nil then
-				for i, v in pairs(maps[currentFileNameWoExt].chart) do
-					-- read chart file here
-				end
-			else love.window.showMessageBox("Error", "No Chart") end
+			--	if maps[currentFileNameWoExt].chart[1] ~= nil then
+					if BPMtoDTCount > 60/currentSongBPM then
+						BPMtoDTCount = 0
+						ChartLocation = ChartLocation + 1
+						print("Beat",ChartLocation)
+					end
+			--	else print("Error", "No Chart") end
 			end,
 			draw = function()
 
 			end,
 			load = function()
+				BPMtoDTCount = 0
+				ChartLocation = 0
+
 			end,
 		}
 	}

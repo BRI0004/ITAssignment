@@ -5,6 +5,7 @@ w = 1024
 require("socket")
 gui = require("libraries/gspot")
 list = require("libraries/listbox")
+list2 = require("libraries/listbox") -- so we can have 2 lists
 require("mainmenu")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
@@ -402,7 +403,7 @@ function love.update(dt)
                 end
             end
             --check if out of screen
-            if b.Position.x < 0 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
+            if b.Position.x < 5 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
                 table.remove(bullets,bi)
             end
         end
