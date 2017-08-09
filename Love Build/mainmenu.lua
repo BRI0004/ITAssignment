@@ -3,8 +3,6 @@ currentSongBPM = 0
 love.mousepressed = function(x, y, button)
 	if menu_dialog then
 		state.mainmenu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
-	elseif freemode_menu then
-		state.freemode_menu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
 	end
 end
 ffont = "assets/AlteHaasGroteskRegular.ttf"
@@ -166,6 +164,8 @@ function loadthestuff()
 
 
 						if key == "return" or key == "kpenter" then
+							love.audio.stop(previewSource)
+
 							if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
 								chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
 								result = chunk() -- execute the chunk
@@ -215,8 +215,10 @@ function loadthestuff()
 			--	if maps[currentFileNameWoExt].chart[1] ~= nil then
 					if BPMtoDTCount > 60/currentSongBPM then
 						BPMtoDTCount = 0
-						ChartLocation = ChartLocation + 1
+							maps[currentFileNameWoExt].chart[ChartLocation]()
 						print("Beat",ChartLocation)
+						ChartLocation = ChartLocation + 1
+
 					end
 			--	else print("Error", "No Chart") end
 			end,

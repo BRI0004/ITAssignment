@@ -126,14 +126,13 @@ function dialogue(a)
     }
     table.insert(speech,addtospeech)
 end
-function addEnemy(xpos,rof,time,sprite,hp)
-    local enemy = {
-        Position = {x = xpos},
-        rateOfFire = rof,
-        spawnTime = time,
-        Image = sprite,
+function addEnemy(xpos,picture,hp,id)
+    local enemyAdd = {
+        Position = { x = xpos, y = 200},
         health = hp,
-        isSpawned = false
+        sprite = picture,
+        Direction = math.pi/2,
+        Type = id,
     }
     table.insert(enemies,enemy)
 end

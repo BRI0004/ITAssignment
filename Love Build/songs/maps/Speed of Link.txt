@@ -7,5 +7,6 @@ maps["Speed of Link"] = {
 	chart = {
 	},
 }
+maps["Speed of Link"].chart[1] = loadstring("print('nani')")
 
 return maps["Speed of Link"]
