@@ -215,10 +215,15 @@ function loadthestuff()
 			--	if maps[currentFileNameWoExt].chart[1] ~= nil then
 					if BPMtoDTCount > 60/currentSongBPM then
 						BPMtoDTCount = 0
+						--if ChartLocation % 2 == 0 then print(#enemies) addEnemy(400,1,10,2) end
+						if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
 							maps[currentFileNameWoExt].chart[ChartLocation]()
+						else
+							print("no chart for this Beat")
+						end
+
 						print("Beat",ChartLocation)
 						ChartLocation = ChartLocation + 1
-
 					end
 			--	else print("Error", "No Chart") end
 			end,
@@ -228,7 +233,6 @@ function loadthestuff()
 			load = function()
 				BPMtoDTCount = 0
 				ChartLocation = 0
-
 			end,
 		}
 	}
