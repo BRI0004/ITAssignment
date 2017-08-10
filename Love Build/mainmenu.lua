@@ -6,6 +6,7 @@ love.mousepressed = function(x, y, button)
 	end
 end
 ffont = "assets/AlteHaasGroteskRegular.ttf"
+ffontbold = "assets/AlteHaasGroteskBold.ttf"
 --functions for main menu_dialog
 --9:55 thursday the 8th.... i dont understand how classes work propery, hope this works
 --10 pm didnt work
@@ -13,6 +14,9 @@ ffont = "assets/AlteHaasGroteskRegular.ttf"
 --10:09 pm all work as it did earlier
 gui = require("libraries/Gspot")
 wave = require("libraries/wave")
+displayTitleText = 'Alien'
+displaySubtitleText = 'Maximum The Hormone'
+displayBPMText = '276'
 function loadBGOverlay()
 	if images["overlay"][currentFileNameWoExt] == nil then
 		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
@@ -50,6 +54,9 @@ function previewAndSelect()
 	]]
 	previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
 	love.audio.setVolume(0.2)
+	displayTitleText = currentFileNameWoExt
+	displaySubtitleText = maps[currentFileNameWoExt].metadata.artist
+	displayBPMText = maps[currentFileNameWoExt].metadata.BPM
 end
 function loadthestuff()
 	state = {
@@ -102,9 +109,13 @@ function loadthestuff()
 					end
 				end
 				love.graphics.setColor(255,255,255,255)
-				love.graphics.setNewFont(ffont,60)
-				love.graphics.printf("Song Select", 95, 250,500)
-				love.graphics.printf("DONT CLICK THE SCREEN", 0, 0,1000)
+				love.graphics.setNewFont(ffontbold,24)
+				love.graphics.printf("Song Select", 95, 15,500)
+				love.graphics.setNewFont(ffontbold,48)
+				displayTitle = love.graphics.printf(displayTitleText, 95, 250,750)
+				love.graphics.setNewFont(ffont,30)
+				displaySubtitle = love.graphics.printf(displaySubtitleText, 95, 325,375)
+				displayBPM = love.graphics.printf(displayBPMText, 95, 360,375)
 				love.graphics.rectangle("line", 95, 50, 450, 200)
 				love.graphics.setNewFont(ffont,25)
 				love.graphics.printf("overlay.png missing", 105, 60 ,400)
@@ -122,19 +133,20 @@ function loadthestuff()
 				}
 				maps = {}
 				local tlist={
-					x=800, y=60,
+					x=785, y=50,
 					font=love.graphics.setNewFont(ffont, 24),
 					rounded=false,
 					bordercolor={50,50,50}, -- border color RGB (table)
 					selectedcolor={255,255,255}, -- selected color RGB (table)
 					fselectedcolor={0,0,0}, -- font selected color RGB (table)
 					bgcolor={50,50,50},
-					w=400,h=600,showindex=true,
+					w=400,h=620,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,
 					ismouse = false,
 					istouch = false,
 					selected = 1,
+					radius=0,
 
 				}
 				list:newprop(tlist)
