@@ -105,7 +105,7 @@ function loadthestuff()
 				--draw bg at the back
 				if images["bg"][currentFileNameWoExt] ~= nil then
 					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
-						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(800/images["bg"][currentFileNameWoExt]:getWidth()),(images["bg"][currentFileNameWoExt]:getWidth()/600))
+						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
 					end
 				end
 				love.graphics.setColor(255,255,255,255)
