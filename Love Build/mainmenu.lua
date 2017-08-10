@@ -263,7 +263,7 @@ function loadthestuff()
 
 					print("Beat",ChartLocation)
 					ChartLocation = ChartLocation + 1
-				end
+				end--
 			end,
 			draw = function()
 
