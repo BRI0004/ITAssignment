@@ -94,7 +94,7 @@ quad[13] = love.graphics.newQuad(64,192,64,64,256,256)
 quad[14] = love.graphics.newQuad(128,192,64,64,256,256)
 quad[15] = love.graphics.newQuad(192,192,64,64,256,256)
 -- enemies and such
-local enemies = {}
+enemies = {}
 --enemy image array
 local enemyImage = {}
 enemyImage[1] = love.graphics.newImage("assets/enemy1.png")
@@ -128,13 +128,13 @@ function dialogue(a)
 end
 function addEnemy(xpos,picture,hp,id)
     local enemyAdd = {
-        Position = { x = xpos, y = 200},
-        health = hp,
-        sprite = picture,
+        Position = { x = love.math.random(100,800), y = 200},
+        health = 10,
+        sprite = 1,
         Direction = math.pi/2,
-        Type = id,
+        Type = 1,
     }
-    table.insert(enemies,enemy)
+    table.insert(enemies,enemyAdd)
 end
 function round(num, idp)
     local mult = 10^(idp or 0)
