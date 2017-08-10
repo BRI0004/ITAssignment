@@ -8,14 +8,14 @@ maps["Speed of Link"] = {
 	},
 }
 maps["Speed of Link"].chart[1] = loadstring("return addEnemy(400,1,10,2)")
-maps["Speed of Link"].chart[2] = loadstring("return addEnemy(400,1,10,2)")
 maps["Speed of Link"].chart[3] = loadstring("return addEnemy(400,1,10,2)")
-maps["Speed of Link"].chart[4] = loadstring("return addEnemy(400,1,10,2)")
 maps["Speed of Link"].chart[5] = loadstring("return addEnemy(400,1,10,2)")
-maps["Speed of Link"].chart[6] = loadstring("return addEnemy(800,1,10,2)")
-maps["Speed of Link"].chart[7] = loadstring("return addEnemy(800,1,10,2)")
-maps["Speed of Link"].chart[8] = loadstring("return addEnemy(800,1,10,2)")
-maps["Speed of Link"].chart[9] = loadstring("return addEnemy(800,1,10,2)")
-maps["Speed of Link"].chart[10] = loadstring("return addEnemy(800,1,10,2)")
+maps["Speed of Link"].chart[7] = loadstring("return addEnemy(400,1,10,2)")
+maps["Speed of Link"].chart[9] = loadstring("return addEnemy(400,1,10,2)")
+maps["Speed of Link"].chart[13] = loadstring("return addEnemy(800,1,10,2)")
+maps["Speed of Link"].chart[15] = loadstring("return addEnemy(800,1,10,2)")
+maps["Speed of Link"].chart[17] = loadstring("return addEnemy(800,1,10,2)")
+maps["Speed of Link"].chart[19] = loadstring("return addEnemy(800,1,10,2)")
+maps["Speed of Link"].chart[21] = loadstring("return addEnemy(800,1,10,2)")
 
 return maps["Speed of Link"]
