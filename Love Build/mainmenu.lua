@@ -217,6 +217,31 @@ function loadthestuff()
 
 			end,
 		},
+		story_mode_select = {
+			gui = gui(),
+			update = function(dt)
+
+			end,
+			draw = function()
+
+			end,
+			load = function()
+				local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 250, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				storyModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.mainmenu.gui:feedback("Story Mode Selected")
+				end
+				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 350, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.mainmenu.gui:feedback("Free Mode Selected")
+					menu_dialog = false
+					freemode_menu = true
+				end
+				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 450, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				marathonModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.mainmenu.gui:feedback("Marathon Mode Selected")
+				end
+			end,
+		},
 		game_play = {
 			gui = gui(),
 			update = function(dt)
