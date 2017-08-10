@@ -128,11 +128,11 @@ function dialogue(a)
 end
 function addEnemy(xpos,picture,hp,id)
     local enemyAdd = {
-        Position = { x = love.math.random(100,800), y = 200},
-        health = 10,
-        sprite = 1,
+        Position = { x = xpos, y = 100},
+        health = hp,
+        sprite = picture,
         Direction = math.pi/2,
-        Type = 1,
+        Type = id,
     }
     table.insert(enemies,enemyAdd)
 end
@@ -214,6 +214,7 @@ function love.update(dt)
         bulletTimer = bulletTimer + dt
         spellCardTimer = spellCardTimer + dt
         score = score + dt
+        enemySpeed = maps[currentFileNameWoExt].metadata.BPM
         --print(bulletTimer)
         --if not pause_dialog and not menu_dialog and not freemode_song_select_dialog then
         -- make player move

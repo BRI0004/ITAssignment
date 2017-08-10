@@ -20,16 +20,16 @@ displayBPMText = '276'
 function loadBGOverlay()
 	if images["overlay"][currentFileNameWoExt] == nil then
 		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
-		images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
+			images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
 		else
 			print("file " .."songs/img/"..currentFileNameWoExt.."/overlay.png".." expected")
 		end
 	end
 	if images["bg"][currentFileNameWoExt] == nil then
 		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
-		images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
+			images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
 		else
-		print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
+			print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
 		end
 	end
 end
@@ -47,16 +47,16 @@ function previewAndSelect()
 	love.audio.play(previewSource)
 	--[[
 	if maps[currentFileNameWoExt].metadata.previewStart == nil then
-		previewStartTime = 30
-	else
-		previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
-	end
-	]]
-	previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
-	love.audio.setVolume(0.2)
-	displayTitleText = currentFileNameWoExt
-	displaySubtitleText = maps[currentFileNameWoExt].metadata.artist
-	displayBPMText = maps[currentFileNameWoExt].metadata.BPM
+	previewStartTime = 30
+else
+previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
+end
+]]
+previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
+love.audio.setVolume(0.2)
+displayTitleText = currentFileNameWoExt
+displaySubtitleText = maps[currentFileNameWoExt].metadata.artist
+displayBPMText = maps[currentFileNameWoExt].metadata.BPM
 end
 function loadthestuff()
 	state = {
@@ -96,7 +96,7 @@ function loadthestuff()
 		----------------------------------------------------------------------------------------------------------------
 		freemode_menu={
 			update = function(dt)
-		        list:update(dt)
+				list:update(dt)
 				listselected = list:getselected()
 
 			end,
@@ -151,14 +151,14 @@ function loadthestuff()
 				}
 				list:newprop(tlist)
 				dir="songs/audio"
-		        img="songs/img"
-		        files = list:enudir(dir,".mp3 .wav .ogg")
-						if files then
-		            for i, mus in ipairs(files) do
-		                mus=dir.."/"..mus
-		                list:additem(list:getfilename(mus),list:getfileext(mus))
-		            end
-		        end
+				img="songs/img"
+				files = list:enudir(dir,".mp3 .wav .ogg")
+				if files then
+					for i, mus in ipairs(files) do
+						mus=dir.."/"..mus
+						list:additem(list:getfilename(mus),list:getfileext(mus))
+					end
+				end
 				function love.keypressed(key)
 					if freemode_menu then
 						if key == "down" then
@@ -224,20 +224,21 @@ function loadthestuff()
 				if source and source:isPlaying() then
 					mpos=source:tell(unit)
 				end
-			--	if maps[currentFileNameWoExt].chart[1] ~= nil then
-					if BPMtoDTCount > 60/currentSongBPM then
-						BPMtoDTCount = 0
-						--if ChartLocation % 2 == 0 then print(#enemies) addEnemy(400,1,10,2) end
-						if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
-							maps[currentFileNameWoExt].chart[ChartLocation]()
-						else
-							print("no chart for this Beat")
-						end
-
-						print("Beat",ChartLocation)
-						ChartLocation = ChartLocation + 1
+				if mpos + 1 > mduration then
+					love.audio.stop()
+				end
+				if BPMtoDTCount > 60/currentSongBPM then
+					BPMtoDTCount = 0
+					--if ChartLocation % 2 == 0 then print(#enemies) addEnemy(400,1,10,2) end
+					if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
+						maps[currentFileNameWoExt].chart[ChartLocation]()
+					else
+						print("no chart for this Beat")
 					end
-			--	else print("Error", "No Chart") end
+
+					print("Beat",ChartLocation)
+					ChartLocation = ChartLocation + 1
+				end
 			end,
 			draw = function()
 
