@@ -29,7 +29,7 @@ globalTimer = 0
 local drawPlayerHitBox = false
 math.randomseed(os.time())
 local player = {
-    Position = {x = 300, y = 300}
+    Position = {x = 640, y = 360}
 }
 
 menu_dialog = true
@@ -471,7 +471,7 @@ function love.draw()
     if game_dialog then
         state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)
-        love.graphics.draw(bg,(player.Position.x+300)/4,(player.Position.y+400)/4,0,1,1,bg:getWidth()/2,bg:getHeight()/2)
+        love.graphics.draw(bg,(player.Position.x+640)/8,(player.Position.y+360)/8,0,1,1,bg:getWidth()/2,bg:getHeight()/2)
         ----------------- doesnt work ?????
 
         love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
@@ -512,15 +512,18 @@ function love.draw()
         end
         -- UI ELEMENTS, DRAWN ON TOP OF all
         function drawGameUI()
-            fmr = "assets/AlteHaasGroteskRegular.ttf"
-            love.graphics.draw(playerImage,0,0,0,21,3,0,0)
+			ffont = "assets/AlteHaasGroteskRegular.ttf"
+			ffontbold = "assets/AlteHaasGroteskBold.ttf"
+			love.graphics.setColor(0, 0, 0)
+			love.graphics.rectangle( "fill", 0, 0, 1280, 120)
             --scorez
-            love.graphics.setNewFont(fmr, 20)
+			love.graphics.setColor(255,255,255)
+            love.graphics.setNewFont(ffontbold, 20)
             love.graphics.print("Score: ".. topscore ,20, 20, 0, 1, 1)
-            love.graphics.setNewFont(fmr, 25)
+            love.graphics.setNewFont(ffont, 25)
             love.graphics.print(round(score,0), 20, 40)
             --song and difficulty
-            love.graphics.setNewFont(fmr, 20)
+            love.graphics.setNewFont(ffontbold, 20)
             love.graphics.print("Song\n"..maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 200, 20)
             love.graphics.print("BPM\n"..maps[currentFileNameWoExt].metadata.BPM, 300, 20)
             love.graphics.print("Length",450,20)
