@@ -69,9 +69,9 @@ function loadthestuff()
 			end,
 			draw = function()
 				state.mainmenu.gui:draw()
-				love.graphics.setNewFont(ffont,80)
+				love.graphics.setNewFont(ffontbold,120)
 				love.graphics.setColor(255,255,255,255)
-				love.graphics.printf("Bullet Heaven", 95, 100,500)
+				love.graphics.printf("Bullet Heaven", 95, 70 ,1000)
 				love.graphics.setNewFont(ffont,24)
 				love.graphics.printf("A game by Liam Bridge and Matthew Low", 100, 200,800)
 			end,
@@ -85,6 +85,8 @@ function loadthestuff()
 					state.mainmenu.gui:feedback("Free Mode Selected")
 					menu_dialog = false
 					freemode_menu = true
+					listselected = 1
+					previewAndSelect()
 				end
 				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 450, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				marathonModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
@@ -127,6 +129,7 @@ function loadthestuff()
 				list:draw()
 			end,
 			load = function()
+
 				images = {
 					bg = {},
 					overlay = {}
@@ -136,10 +139,10 @@ function loadthestuff()
 					x=785, y=50,
 					font=love.graphics.setNewFont(ffont, 24),
 					rounded=false,
-					bordercolor={50,50,50}, -- border color RGB (table)
+					bordercolor={60,60,60}, -- border color RGB (table)
 					selectedcolor={255,255,255}, -- selected color RGB (table)
 					fselectedcolor={0,0,0}, -- font selected color RGB (table)
-					bgcolor={50,50,50},
+					bgcolor={60,60,60},
 					w=400,h=620,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,
@@ -201,7 +204,6 @@ function loadthestuff()
 						end
 						list:key(key)
 					end
-
 				end
 			end,
 		},
