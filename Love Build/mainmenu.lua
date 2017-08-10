@@ -17,6 +17,8 @@ wave = require("libraries/wave")
 displayTitleText = 'Alien'
 displaySubtitleText = 'Maximum The Hormone'
 displayBPMText = '276'
+math.randomseed(os.time())
+randomNumber = math.random(1, 5)
 function loadBGOverlay()
 	if images["overlay"][currentFileNameWoExt] == nil then
 		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
@@ -45,18 +47,11 @@ function previewAndSelect()
 	loadBGOverlay()
 	previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
 	love.audio.play(previewSource)
-	--[[
-	if maps[currentFileNameWoExt].metadata.previewStart == nil then
-	previewStartTime = 30
-else
-previewStartTime = maps[currentFileNameWoExt].metadata.previewStart
-end
-]]
-previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
-love.audio.setVolume(0.2)
-displayTitleText = currentFileNameWoExt
-displaySubtitleText = maps[currentFileNameWoExt].metadata.artist
-displayBPMText = maps[currentFileNameWoExt].metadata.BPM
+	previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
+	love.audio.setVolume(0.2)
+	displayTitleText = currentFileNameWoExt
+	displaySubtitleText = "Artist: ".. maps[currentFileNameWoExt].metadata.artist
+	displayBPMText = "BPM: ".. maps[currentFileNameWoExt].metadata.BPM
 end
 function loadthestuff()
 	state = {
@@ -67,31 +62,35 @@ function loadthestuff()
 				state.common.gui:update(dt)
 				state.mainmenu.gui:update(dt)
 			end,
-			draw = function()
-				state.mainmenu.gui:draw()
-				love.graphics.setNewFont(ffont,80)
-				love.graphics.setColor(255,255,255,255)
-				love.graphics.printf("Bullet Heaven", 95, 100,500)
-				love.graphics.setNewFont(ffont,24)
-				love.graphics.printf("A game by Liam Bridge and Matthew Low", 100, 200,800)
-			end,
 			load = function()
+				backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
 				local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 250, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				storyModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Story Mode Selected")
 				end
-				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 350, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 330, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Free Mode Selected")
 					menu_dialog = false
 					freemode_menu = true
+					listselected = 1
+					previewAndSelect()
 				end
-				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 450, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 410, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				marathonModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Marathon Mode Selected")
 				end
 				print("loaded main menu")
-			end
+			end,
+			draw = function()
+				love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
+				state.mainmenu.gui:draw()
+				love.graphics.setNewFont(ffontbold,120)
+				love.graphics.setColor(255,255,255,255)
+				love.graphics.printf("Bullet Heaven", 95, 70 ,1000)
+				love.graphics.setNewFont(ffont,24)
+				love.graphics.printf("A game by Liam Bridge and Matthew Low", 100, 200,800)
+			end,
 		},
 		----------------------------------------------------------------------------------------------------------------
 		freemode_menu={
@@ -112,10 +111,10 @@ function loadthestuff()
 				love.graphics.setNewFont(ffontbold,24)
 				love.graphics.printf("Song Select", 95, 15,500)
 				love.graphics.setNewFont(ffontbold,48)
-				displayTitle = love.graphics.printf(displayTitleText, 95, 250,750)
+				displayTitle = love.graphics.printf(displayTitleText, 95, 270,750)
 				love.graphics.setNewFont(ffont,30)
-				displaySubtitle = love.graphics.printf(displaySubtitleText, 95, 325,375)
-				displayBPM = love.graphics.printf(displayBPMText, 95, 360,375)
+				displaySubtitle = love.graphics.printf(displaySubtitleText, 95, 325,500)
+				displayBPM = love.graphics.printf(displayBPMText, 95, 360,500)
 				love.graphics.rectangle("line", 95, 50, 450, 200)
 				love.graphics.setNewFont(ffont,25)
 				love.graphics.printf("overlay.png missing", 105, 60 ,400)
@@ -127,6 +126,7 @@ function loadthestuff()
 				list:draw()
 			end,
 			load = function()
+
 				images = {
 					bg = {},
 					overlay = {}
@@ -136,10 +136,10 @@ function loadthestuff()
 					x=785, y=50,
 					font=love.graphics.setNewFont(ffont, 24),
 					rounded=false,
-					bordercolor={50,50,50}, -- border color RGB (table)
+					bordercolor={60,60,60}, -- border color RGB (table)
 					selectedcolor={255,255,255}, -- selected color RGB (table)
 					fselectedcolor={0,0,0}, -- font selected color RGB (table)
-					bgcolor={50,50,50},
+					bgcolor={60,60,60},
 					w=400,h=620,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,
@@ -201,7 +201,6 @@ function loadthestuff()
 						end
 						list:key(key)
 					end
-
 				end
 			end,
 		},
