@@ -35,6 +35,7 @@ local player = {
 menu_dialog = true
 game_dialog = false
 freemode_menu = false
+story_mode_select_menu = false
 
 local musicOverlay = {}
 local musicBg = {}
@@ -201,12 +202,16 @@ loadthestuff()
 state.mainmenu.load()
 state.freemode_menu.load()
 state.game_play.load()
+state.story_mode_select.load()
 function love.update(dt)
     if menu_dialog then
         state.mainmenu.update(dt)
     end
     if freemode_song_select_dialog then
-        state.freemode_menu.update()
+        state.freemode_menu.update(dt)
+    end
+    if story_mode_select_menu then
+        state.story_mode_select.update(dt)
     end
     -- update shooting rate timer
     if game_dialog then
@@ -467,7 +472,9 @@ function love.draw()
     if freemode_menu then
         state.freemode_menu.draw()
     end
-
+    if story_mode_select_menu then
+        state.story_mode_select.draw()
+    end
     if game_dialog then
         state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)

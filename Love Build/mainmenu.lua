@@ -4,6 +4,9 @@ love.mousepressed = function(x, y, button)
 	if menu_dialog then
 		state.mainmenu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
 	end
+	if story_mode_select_menu then
+		state.story_mode_select.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
+	end
 end
 ffont = "assets/AlteHaasGroteskRegular.ttf"
 ffontbold = "assets/AlteHaasGroteskBold.ttf"
@@ -67,6 +70,8 @@ function loadthestuff()
 				local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 250, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				storyModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Story Mode Selected")
+					menu_dialog = false
+					story_mode_select_menu = true
 				end
 				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 330, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
@@ -120,7 +125,7 @@ function loadthestuff()
 				love.graphics.printf("overlay.png missing", 105, 60 ,400)
 				if images["overlay"][currentFileNameWoExt] ~= nil then
 					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
-						love.graphics.draw(images["overlay"][currentFileNameWoExt], 95, 50, 0)
+						love.graphics.draw(images["overlay"][currentFileNameWoExt], 95, 50, 0,(450/images["overlay"][currentFileNameWoExt]:getWidth()),(200/images["overlay"][currentFileNameWoExt]:getHeight()))
 					end
 				end
 				list:draw()
@@ -219,26 +224,42 @@ function loadthestuff()
 		story_mode_select = {
 			gui = gui(),
 			update = function(dt)
-
+				state.common.gui:update(dt)
+				state.story_mode_select.gui:update(dt)
 			end,
 			draw = function()
-
+				love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
+				state.story_mode_select.gui:draw()
+				love.graphics.draw(blacksquare, 116, 76, 0, 4, 1.5)
 			end,
 			load = function()
-				local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 250, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				storyModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.mainmenu.gui:feedback("Story Mode Selected")
+				local group1Button = state.story_mode_select.gui:button('', {x = 100, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				group1Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.story_mode_select.gui:feedback("Story Mode Selected")
+					print("dezu")
 				end
-				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 350, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.mainmenu.gui:feedback("Free Mode Selected")
-					menu_dialog = false
-					freemode_menu = true
+				local group2Button = state.story_mode_select.gui:button('Group 2', {x = 456, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				group2Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.story_mode_select.gui:feedback("Free Mode Selected")
 				end
-				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 450, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				marathonModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.mainmenu.gui:feedback("Marathon Mode Selected")
+				local group3Button = state.story_mode_select.gui:button('Group 3', {x = 812, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				group3Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.story_mode_select.gui:feedback("Marathon Mode Selected")
 				end
+				local group4Button = state.story_mode_select.gui:button('Group 4', {x = 100, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				group4Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.story_mode_select.gui:feedback("Story Mode Selected")
+					print("dezu")
+				end
+				local group5Button = state.story_mode_select.gui:button('Group 5', {x = 456, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				group5Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.story_mode_select.gui:feedback("Free Mode Selected")
+				end
+				local group6Button = state.story_mode_select.gui:button('Group 6', {x = 812, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				group6Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+					state.story_mode_select.gui:feedback("Marathon Mode Selected")
+				end
+				blacksquare = love.graphics.newImage("assets/player.png")
 			end,
 		},
 		game_play = {
