@@ -1,5 +1,18 @@
 mpos,mduration = 0,0
 currentSongBPM = 0
+--[[
+talk to minster herring
+require("libraries/sqlite3");
+db = sqlite3.open("AllScores.db")
+print(love.filesystem.exists("AllScores.db"))
+current_dir=io.popen"cd":read'*l'
+
+if db then
+	db:close()
+else
+	print("NO db")
+end
+]]
 love.mousepressed = function(x, y, button)
 	if menu_dialog then
 		state.mainmenu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
@@ -221,6 +234,62 @@ function loadthestuff()
 
 			end,
 		},
+		score_show={
+			gui = gui(),
+			update = function(dt)
+
+			end,
+			draw = function()
+				if images["bg"][currentFileNameWoExt] ~= nil then
+					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
+					else
+						love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
+					end
+				else
+					love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
+				end
+				love.graphics.setNewFont(ffont,24)
+				love.graphics.printf("Song "..currentFileNameWoExt.." cleared!", 100,150,9999)
+				love.graphics.printf('scoreTableText', 100,100,999)
+				love.graphics.setNewFont(ffontbold,24)
+				love.graphics.printf("Final Score: "..finalScore..'%', 100,200,9999)
+
+			end,
+			load = function()
+				local scoreTableText = ''
+				backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
+				--scoring system
+				local a = #maps[currentFileNameWoExt].chart
+				local b = mduration
+				maxScore = a*2*100 + b
+				local rank = score/maxScore * 100
+				finalScore = round(rank,2)
+
+				--[[
+				function updateScoreTable(map)
+					db = sqlite3.open("profiles/AllScores.db")
+					local SELECT = "SELECT name,score FROM highscores WHERE map='"..map.."' ORDER BY score LIMIT 8;"
+					for table in db:nrows(SELECT) do
+						scoreTableText = scoreTableText .. "/n" .. table.name .. '  ' .. table.score
+						print(scoreTableText)
+					end
+					db:close()
+				end
+
+				function addScore(playerName,mapScore,map)
+					db = sqlite3.open("profiles/AllScores.db")
+					if db then
+						local ADD = "INSERT INTO highscores(name,score,map) VALUES('"..playerName.."',"..mapScore..",'"..map.."');"
+						db:execute(ADD)
+						updateScoreTable(map)
+					end
+					db:close()
+				end
+				updateScoreTable("Steve",696969,"AAA test")
+				]]
+			end,
+		},
 		story_mode_select = {
 			gui = gui(),
 			update = function(dt)
@@ -271,6 +340,11 @@ function loadthestuff()
 				end
 				if mpos + 1 > mduration then
 					love.audio.stop()
+					game_dialog = false
+					game_over_state = true
+					state.score_show.load()
+					score_show_dialog = true
+					print("Song Ended")
 				end
 				if BPMtoDTCount > 60/currentSongBPM then
 					BPMtoDTCount = 0

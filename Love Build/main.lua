@@ -5,8 +5,8 @@ w = 1024
 require("socket")
 gui = require("libraries/gspot")
 list = require("libraries/listbox")
-list2 = require("libraries/listbox") -- so we can have 2 lists
 require("mainmenu")
+require("libraries/sqlite3");
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
 -- initial variables
@@ -16,7 +16,7 @@ local bulletSpeed = 5
 local enemySpeed = 100
 local playerSize = 64
 local bulletSize = 48
-local playerSpeed = 300
+local playerSpeed = 500
 local playerShootRate = 0.05
 local playerSpellCardRate = 10
 local spellCardTimer = 10
@@ -36,6 +36,7 @@ menu_dialog = true
 game_dialog = false
 freemode_menu = false
 story_mode_select_menu = false
+score_show_dialog = false
 
 local musicOverlay = {}
 local musicBg = {}
@@ -75,25 +76,12 @@ local spellCard = {}
 local explosion = love.graphics.newImage("assets/explosion.png")
 -- quad for explisions
 quad = {}
-quad[0] = love.graphics.newQuad(0,0,64,64,256,256)
-quad[1] = love.graphics.newQuad(64,0,64,64,256,256)
-quad[2] = love.graphics.newQuad(128,0,64,64,256,256)
-quad[3] = love.graphics.newQuad(192,0,64,64,256,256)
-
-quad[4] = love.graphics.newQuad(0,64,64,64,256,256)
-quad[5] = love.graphics.newQuad(64,64,64,64,256,256)
-quad[6] = love.graphics.newQuad(128,64,64,64,256,256)
-quad[7] = love.graphics.newQuad(192,64,64,64,256,256)
-
-quad[8] = love.graphics.newQuad(0,128,64,64,256,256)
-quad[9] = love.graphics.newQuad(64,128,64,64,256,256)
-quad[10] = love.graphics.newQuad(128,128,64,64,256,256)
-quad[11] = love.graphics.newQuad(192,128,64,64,256,256)
-
-quad[12] = love.graphics.newQuad(0,192,64,64,256,256)
-quad[13] = love.graphics.newQuad(64,192,64,64,256,256)
-quad[14] = love.graphics.newQuad(128,192,64,64,256,256)
-quad[15] = love.graphics.newQuad(192,192,64,64,256,256)
+quad[0] = love.graphics.newQuad(0,0,128,128,768,128)
+quad[1] = love.graphics.newQuad(128,0,128,128,768,128)
+quad[2] = love.graphics.newQuad(256,0,128,128,768,128)
+quad[3] = love.graphics.newQuad(384,0,128,128,768,128)
+quad[4] = love.graphics.newQuad(512,0,128,128,768,128)
+quad[5] = love.graphics.newQuad(640,0,128,128,768,128)
 -- enemies and such
 enemies = {}
 --enemy image array
@@ -113,13 +101,22 @@ end
 local speech = {}
 -- timer for enemies
 local enemyTimer = 0
-local topscore = 0
+topscore = 0
 local playerHealth = 100
 local currenttime = ""
-local score = 0
+score = 0
 
 -- menu
 -- functions for Game
+function enemyExplode(ei,e)
+    local kaboom = {
+        x = e.Position.x,
+        y = e.Position.y,
+        sprite = e.sprite,
+        time = socket.gettime()
+    }
+    table.insert(exp,kaboom)
+end
 function dialogue(a)
     local addtospeech = {
         text = a,
@@ -129,7 +126,7 @@ function dialogue(a)
 end
 function addEnemy(xpos,picture,hp,id)
     local enemyAdd = {
-        Position = { x = xpos, y = 100},
+        Position = { x = xpos, y = 50},
         health = hp,
         sprite = picture,
         Direction = math.pi/2,
@@ -213,6 +210,9 @@ function love.update(dt)
     if story_mode_select_menu then
         state.story_mode_select.update(dt)
     end
+    if score_show_dialog then
+        state.score_show.update(dt)
+    end
     -- update shooting rate timer
     if game_dialog then
         state.game_play.update(dt)
@@ -237,11 +237,11 @@ function love.update(dt)
                 player.Position.x = player.Position.x + playerSpeed * dt
             end
             if love.keyboard.isDown("lshift") then
-                playerSpeed = 150
+                playerSpeed = 250
                 drawPlayerHitBox = true
                 playerShootBulletOffset = 10
             else
-                playerSpeed = 300
+                playerSpeed = 500
                 drawPlayerHitBox = false
                 playerShootBulletOffset = 25
             end
@@ -282,7 +282,7 @@ function love.update(dt)
         end
         if love.keyboard.isDown("v") then
             local enemyAdd = {
-                Position = { x = love.math.random(100,800), y = 200},
+                Position = { x = love.math.random(100,800), y = 50},
                 health = 10,
                 sprite = 1,
                 Direction = math.pi/2,
@@ -292,7 +292,7 @@ function love.update(dt)
         end
         if love.keyboard.isDown("b") then
             local enemyAdd = {
-                Position = { x = love.math.random(100,800), y = 200},
+                Position = { x = love.math.random(99,100), y = 50},
                 health = 10,
                 sprite = 1,
                 Direction = math.pi/2,
@@ -322,7 +322,7 @@ function love.update(dt)
                 v.Position.y = v.Position.y + (math.sin(v.Direction)*dt*enemySpeed)
                 v.Position.x = v.Position.x + (math.cos(v.Direction)*dt*enemySpeed)
             end
-            if v.Position.x < 0 or v.Position.x > 1024 or v.Position.y < 5 or v.Position.y > 768 then
+            if v.Position.x < -25 or v.Position.x > 1300 or v.Position.y < -25 or v.Position.y > 740 then
                 table.remove(enemies,i)
             end
             if v.Position.y < 250 and v.Position.y > 245 and not v.hasPaused then
@@ -388,10 +388,11 @@ function love.update(dt)
                     e.health = e.health - 5
                     if e.health < 0 then
                         e.health = 0
+                        enemyExplode(ei,e)
                         table.remove(enemies,ei)
                     end
                     table.remove(bullets,bi)
-                    score = score + 100
+                    score = score + 1000*math.sqrt((mpos/mduration)*100)
                 end
             end
             for ei,e in pairs(boss) do
@@ -404,11 +405,11 @@ function love.update(dt)
                         love.event.quit()
                     end
                     table.remove(bullets,bi)
-                    score = score + 100
+                    score = score + 1000*mpos
                 end
             end
             --check if out of screen
-            if b.Position.x < 5 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
+            if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
                 table.remove(bullets,bi)
             end
         end
@@ -420,7 +421,7 @@ function love.update(dt)
             if distance < 10 then
                 print("ded")
             end
-            if b.Position.x < 0 or b.Position.x > 1024 or b.Position.y < 5 or b.Position.y > 768 then
+            if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
                 table.remove(enemyBullets,bi)
             end
         end
@@ -475,6 +476,9 @@ function love.draw()
     if story_mode_select_menu then
         state.story_mode_select.draw()
     end
+    if score_show_dialog then
+        state.score_show.draw()
+    end
     if game_dialog then
         state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)
@@ -484,11 +488,11 @@ function love.draw()
         love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
         for i,v in pairs(exp) do
             cur = round ( (socket.gettime() - v.time) * 10 )
-            if cur > 15 then
-                cur = 15
+            if cur > 5 then
+                cur = 5
                 table.remove(exp,i)
             end
-            love.graphics.draw(explosion,quad[cur],v.x,v.y,0,v.sprite*.5,v.sprite*.5,32,32)
+            love.graphics.draw(explosion,quad[cur],v.x,v.y,0,v.sprite,v.sprite,64,64)
         end
         for i,v in pairs(bullets) do
             love.graphics.draw(playerBullets[0],v.Position.x,v.Position.y,v.Direction,0.2,0.2,50,50)
@@ -509,7 +513,6 @@ function love.draw()
         --love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
         --love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
         love.graphics.setColor(255, 255, 255, 255)
-        love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
         if drawPlayerHitBox then
             love.graphics.draw(playerHitBoxImage,player.Position.x,player.Position.y,0,0.1,0.1,50,50)
         end
@@ -526,16 +529,15 @@ function love.draw()
             --scorez
 			love.graphics.setColor(255,255,255)
             love.graphics.setNewFont(ffontbold, 20)
-            love.graphics.print("Score: ".. topscore ,20, 20, 0, 1, 1)
+            love.graphics.print("Highscore: ".. topscore ,20, 20, 0, 1, 1)
             love.graphics.setNewFont(ffont, 25)
             love.graphics.print(round(score,0), 20, 40)
             --song and difficulty
             love.graphics.setNewFont(ffontbold, 20)
-            love.graphics.print("Song\n"..maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 200, 20)
-            love.graphics.print("BPM\n"..maps[currentFileNameWoExt].metadata.BPM, 300, 20)
-            love.graphics.print("Length",450,20)
-            love.graphics.print("\n"..sectotime(mpos),450,20)
-            love.graphics.print("\n\n"..sectotime(mduration),450,20)
+            love.graphics.print("Song\n"..maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 400, 20)
+            love.graphics.print("BPM\n"..maps[currentFileNameWoExt].metadata.BPM, 700, 20)
+            love.graphics.print("Length\n"..sectotime(mpos).."\n"..sectotime(mduration),800,20)
+            if score > topscore then topscore = round(score) end
         end
         drawGameUI()
     end
