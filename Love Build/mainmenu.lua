@@ -1,18 +1,6 @@
 mpos,mduration = 0,0
 currentSongBPM = 0
---[[
-talk to minster herring
-require("libraries/sqlite3");
-db = sqlite3.open("AllScores.db")
-print(love.filesystem.exists("AllScores.db"))
-current_dir=io.popen"cd":read'*l'
 
-if db then
-	db:close()
-else
-	print("NO db")
-end
-]]
 love.mousepressed = function(x, y, button)
 	if menu_dialog then
 		state.mainmenu.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
@@ -265,29 +253,8 @@ function loadthestuff()
 				maxScore = a*2*100 + b
 				local rank = score/maxScore * 100
 				finalScore = round(rank,2)
-
-				--[[
-				function updateScoreTable(map)
-					db = sqlite3.open("profiles/AllScores.db")
-					local SELECT = "SELECT name,score FROM highscores WHERE map='"..map.."' ORDER BY score LIMIT 8;"
-					for table in db:nrows(SELECT) do
-						scoreTableText = scoreTableText .. "/n" .. table.name .. '  ' .. table.score
-						print(scoreTableText)
-					end
-					db:close()
-				end
-
-				function addScore(playerName,mapScore,map)
-					db = sqlite3.open("profiles/AllScores.db")
-					if db then
-						local ADD = "INSERT INTO highscores(name,score,map) VALUES('"..playerName.."',"..mapScore..",'"..map.."');"
-						db:execute(ADD)
-						updateScoreTable(map)
-					end
-					db:close()
-				end
-				updateScoreTable("Steve",696969,"AAA test")
-				]]
+				--add highscore here
+				
 			end,
 		},
 		story_mode_select = {

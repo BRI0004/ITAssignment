@@ -5,8 +5,9 @@ w = 1024
 require("socket")
 gui = require("libraries/gspot")
 list = require("libraries/listbox")
+binser = require("libraries/binser")
 require("mainmenu")
-require("libraries/sqlite3");
+require("libraries/TEsound")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
 -- initial variables
@@ -31,7 +32,7 @@ math.randomseed(os.time())
 local player = {
     Position = {x = 640, y = 360}
 }
-
+highscores = {}
 menu_dialog = true
 game_dialog = false
 freemode_menu = false
@@ -195,12 +196,14 @@ function love.keypressed(key)
     end
 end
 
+
 loadthestuff()
 state.mainmenu.load()
 state.freemode_menu.load()
 state.game_play.load()
 state.story_mode_select.load()
 function love.update(dt)
+    TEsound.cleanup()
     if menu_dialog then
         state.mainmenu.update(dt)
     end
@@ -256,6 +259,7 @@ function love.update(dt)
                     local Bullet = {
                         Position = {x = player.Position.x+playerShootBulletOffset, y = player.Position.y - 15}
                     }
+                    TEsound.play("assets/sfx/ATTACK5.wav",{},0.8)
                     table.insert(bullets,Bullet)
                 end
             end
@@ -420,6 +424,7 @@ function love.update(dt)
             local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
             if distance < 10 then
                 print("ded")
+                TEsound.play("assets/sfx/DEAD.wav",{},0.2)
             end
             if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
                 table.remove(enemyBullets,bi)
