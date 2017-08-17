@@ -150,7 +150,7 @@ function sectotime(sec)
         return sec and string.format("%02i:%02i:%02i",h,m,s) or "00:00:00"
     end
 end
-function enemyShoot(pattern, object)
+function enemyShoot(pattern, object, scale)
     if pattern == 1 then
         for i = 1, 3, 1 do
             angle = 0
@@ -163,9 +163,7 @@ function enemyShoot(pattern, object)
             }
             table.insert(enemyBullets,Bullet)
         end
-    end
-    if pattern == 10 then
-        print("logging")
+    elseif pattern == 10 then
         angle = 0
         for j = 1, 1 do
             angle = angle + j*10
@@ -177,6 +175,40 @@ function enemyShoot(pattern, object)
                 table.insert(enemyBullets,Bullet)
             end
         end
+    elseif pattern == 2 then
+        local Bullet = {
+            Position = {x = object.Position.x, y = object.Position.y},
+            Direction = 0
+        }
+        table.insert(enemyBullets,Bullet)
+    elseif pattern == 3 then
+        for i = 1, 1*scale do
+            local Bullet = {
+                Position = {x = object.Position.x + i*2, y = object.Position.y},
+                Direction = math.pi/2
+            }
+            table.insert(enemyBullets,Bullet)
+            local Bullet = {
+                Position = {x = object.Position.x - i*2, y = object.Position.y},
+                Direction = math.pi/2
+            }
+            table.insert(enemyBullets,Bullet)
+        end
+    elseif pattern == 4 then
+        for i = 1, 1*scale do
+            local Bullet = {
+                Position = {x = object.Position.x, y = object.Position.y},
+                Direction = math.pi/2 - i*(math.pi/128)
+            }
+            table.insert(enemyBullets,Bullet)
+            local Bullet = {
+                Position = {x = object.Position.x, y = object.Position.y},
+                Direction = math.pi/2 + i*(math.pi/128)
+            }
+            table.insert(enemyBullets,Bullet)
+        end
+    else
+        print("No Pattern Specified")
     end
 end
 --enemyShoot(10,player)
@@ -265,6 +297,7 @@ function love.update(dt)
             end
             if love.keyboard.isDown("x") then
                 if spellCardTimer > playerSpellCardRate  then
+                    TEsound.play("assets/sfx/SPELLCARD.wav",{},1.5)
                     spellCardTimer = 0
                     local spellcard = {
                         Position = {x = player.Position.x, y = player.Position.y},
@@ -290,7 +323,7 @@ function love.update(dt)
                 health = 10,
                 sprite = 1,
                 Direction = math.pi/2,
-                Type = 1,
+                Type = 3,
             }
             table.insert(enemies,enemyAdd)
         end
@@ -329,7 +362,7 @@ function love.update(dt)
             if v.Position.x < -25 or v.Position.x > 1300 or v.Position.y < -25 or v.Position.y > 740 then
                 table.remove(enemies,i)
             end
-            if v.Position.y < 250 and v.Position.y > 245 and not v.hasPaused then
+            if v.Position.y < 250 and v.Position.y > 245 and not v.hasPaused and v.Type == 1 or v.Type == 2 then
                 v.pause = true
                 if not v.pauseTime then v.pauseTime = socket.gettime() end
                 if socket.gettime() - v.pauseTime > 3 then v.pause = false v.hasPaused = true end
@@ -338,19 +371,28 @@ function love.update(dt)
                     enemyShoot(1,v)
                 end
             end
-            if v.hasPaused and v.Type == 1 then
-                if not v.turnTime then v.turnTime = socket.gettime() end
-
-                if v.Direction ~= math.pi and socket.gettime() > v.turnTime + 0.05 then
-                    v.Direction = v.Direction - v.Direction * math.pi/64
-                    v.turnTime = socket.gettime()
+            if v.hasPaused and v.Type == 1 or v.Type == 2 then
+                if v.Type == 1 then
+                    if not v.turnTime then v.turnTime = socket.gettime() end
+                    if v.Direction ~= math.pi and socket.gettime() > v.turnTime + 0.05 then
+                        v.Direction = v.Direction - v.Direction * math.pi/64
+                        v.turnTime = socket.gettime()
+                    end
+                end
+                if v.Type == 2 then
+                    if not v.turnTime then v.turnTime = socket.gettime() end
+                    if v.Direction < (math.pi) and socket.gettime() > v.turnTime + 0.05 then
+                        v.Direction = v.Direction + math.pi/64
+                        v.turnTime = socket.gettime()
+                    end
                 end
             end
-            if v.hasPaused and v.Type == 2 then
-                if not v.turnTime then v.turnTime = socket.gettime() end
-                if v.Direction < (math.pi) and socket.gettime() > v.turnTime + 0.05 then
-                    v.Direction = v.Direction + math.pi/64
-                    v.turnTime = socket.gettime()
+            if v.Type == 3 then
+                if not v.shootTime then v.shootTime = socket.gettime() end
+                if socket.gettime() > v.shootTime + 1 and not v.hasFired then
+                    print("logging")
+                    enemyShoot(4,v,20)
+                    v.hasFired = true
                 end
             end
         end
@@ -431,9 +473,9 @@ function love.update(dt)
             end
         end
         for bi,b in pairs(spellCard) do
-            b.Rotation = b.Rotation + dt*1.5
-            b.Scale = b.Scale + dt*1.2
-            if socket.gettime() > b.spawnTime.time + 5 then
+            b.Rotation = b.Rotation + dt*2.8
+            b.Scale = b.Scale + dt*5.5
+            if socket.gettime() > b.spawnTime.time + 2.5 then
                 table.remove(spellCard,1)
             end
             for ei,e in pairs(enemies) do
@@ -527,12 +569,12 @@ function love.draw()
         end
         -- UI ELEMENTS, DRAWN ON TOP OF all
         function drawGameUI()
-			ffont = "assets/AlteHaasGroteskRegular.ttf"
-			ffontbold = "assets/AlteHaasGroteskBold.ttf"
-			love.graphics.setColor(0, 0, 0)
-			love.graphics.rectangle( "fill", 0, 0, 1280, 120)
+            ffont = "assets/AlteHaasGroteskRegular.ttf"
+            ffontbold = "assets/AlteHaasGroteskBold.ttf"
+            love.graphics.setColor(0, 0, 0)
+            love.graphics.rectangle( "fill", 0, 0, 1280, 120)
             --scorez
-			love.graphics.setColor(255,255,255)
+            love.graphics.setColor(255,255,255)
             love.graphics.setNewFont(ffontbold, 20)
             love.graphics.print("Highscore: ".. topscore ,20, 20, 0, 1, 1)
             love.graphics.setNewFont(ffont, 25)
