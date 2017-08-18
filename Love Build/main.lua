@@ -151,7 +151,7 @@ function sectotime(sec)
     end
 end
 function enemyShoot(pattern, object, scale)
-    if pattern == 1 then
+    if pattern == 1 then -- shoots 3 in /|\
         for i = 1, 3, 1 do
             angle = 0
             if i == 1 then angle = (7.5*math.pi)/6 end
@@ -163,7 +163,7 @@ function enemyShoot(pattern, object, scale)
             }
             table.insert(enemyBullets,Bullet)
         end
-    elseif pattern == 10 then
+    elseif pattern == 10 then -- shoots a circle
         angle = 0
         for j = 1, 1 do
             angle = angle + j*10
@@ -175,13 +175,13 @@ function enemyShoot(pattern, object, scale)
                 table.insert(enemyBullets,Bullet)
             end
         end
-    elseif pattern == 2 then
+    elseif pattern == 2 then -- shoots a straight line
         local Bullet = {
             Position = {x = object.Position.x, y = object.Position.y},
             Direction = 0
         }
         table.insert(enemyBullets,Bullet)
-    elseif pattern == 3 then
+    elseif pattern == 3 then -- shoots a flat line -----
         for i = 1, 1*scale do
             local Bullet = {
                 Position = {x = object.Position.x + i*2, y = object.Position.y},
@@ -194,7 +194,7 @@ function enemyShoot(pattern, object, scale)
             }
             table.insert(enemyBullets,Bullet)
         end
-    elseif pattern == 4 then
+    elseif pattern == 4 then --shoots an arc
         for i = 1, 1*scale do
             local Bullet = {
                 Position = {x = object.Position.x, y = object.Position.y},

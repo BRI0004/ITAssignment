@@ -73,12 +73,14 @@ function loadthestuff()
 					state.mainmenu.gui:feedback("Story Mode Selected")
 					menu_dialog = false
 					story_mode_select_menu = true
+					freemode_menu = false
 				end
 				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 330, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Free Mode Selected")
 					menu_dialog = false
 					freemode_menu = true
+					story_mode_select_menu = false
 					listselected = 1
 					previewAndSelect()
 				end
@@ -166,6 +168,13 @@ function loadthestuff()
 					end
 				end
 				function love.keypressed(key)
+					if story_mode_select_menu then
+						if key == "escape" then
+							menu_dialog = true
+							story_mode_select_menu = false
+							love.audio.stop()
+						end
+					end
 					if freemode_menu then
 						if key == "down" then
 							if list:getselected() ~= list:getcount() then
@@ -225,9 +234,12 @@ function loadthestuff()
 		score_show={
 			gui = gui(),
 			update = function(dt)
+				state.score_show.gui:update(dt)
 
 			end,
 			draw = function()
+				state.score_show.gui:draw()
+
 				if images["bg"][currentFileNameWoExt] ~= nil then
 					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
 						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
@@ -242,7 +254,6 @@ function loadthestuff()
 				love.graphics.printf('scoreTableText', 100,100,999)
 				love.graphics.setNewFont(ffontbold,24)
 				love.graphics.printf("Final Score: "..finalScore..'%', 100,200,9999)
-
 			end,
 			load = function()
 				local scoreTableText = ''
@@ -254,7 +265,17 @@ function loadthestuff()
 				local rank = score/maxScore * 100
 				finalScore = round(rank,2)
 				--add highscore here
-				
+				--put things in here to get player name
+				--[[
+				input = gui:input('Chat', {64, love.graphics.getHeight() - 32, 256, gui.style.unit})
+				input.keydelay = 500 -- these two are set by default for input elements, same as doing love.setKeyRepeat(element.keydelay, element.keyrepeat) but Gspot will return to current keyrepeat state when it loses focus
+				input.keyrepeat = 200 -- keyrepeat is used as default keydelay value if not assigned as above. use element.keyrepeat = false to disable repeating
+				input.done = function(this) -- Gspot calls element:done() when you hit enter while element has focus. override this behaviour with element.done = false
+					gui:feedback('I say '..this.value)
+					this.value = ''
+					this.Gspot:unfocus()
+				end
+				]]
 			end,
 		},
 		story_mode_select = {
@@ -266,35 +287,54 @@ function loadthestuff()
 			draw = function()
 				love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
 				state.story_mode_select.gui:draw()
-				love.graphics.draw(blacksquare, 116, 76, 0, 4, 1.5)
+				love.graphics.draw(group1, 116, 66, 0, 0.9, 0.9)
+				love.graphics.draw(group2, 472, 66, 0, 0.9, 0.9)
+				love.graphics.draw(group3, 828, 66, 0, 0.9, 0.9)
+				love.graphics.draw(group4, 116, 422, 0, 0.9, 0.9)
+				love.graphics.draw(group5, 472, 422, 0, 0.9, 0.9)
+				love.graphics.draw(group6, 828, 422, 0, 0.9, 0.9)
+
+
 			end,
 			load = function()
+				group1 = love.graphics.newImage("assets/groups/group1.png")
 				local group1Button = state.story_mode_select.gui:button('', {x = 100, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				group1Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.story_mode_select.gui:feedback("Story Mode Selected")
 					print("dezu")
 				end
+				group2 = love.graphics.newImage("assets/groups/group2.png")
+
 				local group2Button = state.story_mode_select.gui:button('Group 2', {x = 456, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				group2Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.story_mode_select.gui:feedback("Free Mode Selected")
 				end
+				group3 = love.graphics.newImage("assets/groups/group3.png")
+
 				local group3Button = state.story_mode_select.gui:button('Group 3', {x = 812, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				group3Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.story_mode_select.gui:feedback("Marathon Mode Selected")
 				end
+				group4 = love.graphics.newImage("assets/groups/group4.png")
+
 				local group4Button = state.story_mode_select.gui:button('Group 4', {x = 100, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				group4Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.story_mode_select.gui:feedback("Story Mode Selected")
 					print("dezu")
 				end
+				group5 = love.graphics.newImage("assets/groups/group5.png")
+
 				local group5Button = state.story_mode_select.gui:button('Group 5', {x = 456, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				group5Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.story_mode_select.gui:feedback("Free Mode Selected")
 				end
+				group6 = love.graphics.newImage("assets/groups/group6.png")
+
 				local group6Button = state.story_mode_select.gui:button('Group 6', {x = 812, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				group6Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.story_mode_select.gui:feedback("Marathon Mode Selected")
 				end
+
 				blacksquare = love.graphics.newImage("assets/player.png")
 			end,
 		},
@@ -315,7 +355,6 @@ function loadthestuff()
 				end
 				if BPMtoDTCount > 60/currentSongBPM then
 					BPMtoDTCount = 0
-					--if ChartLocation % 2 == 0 then print(#enemies) addEnemy(400,1,10,2) end
 					if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
 						maps[currentFileNameWoExt].chart[ChartLocation]()
 					else
