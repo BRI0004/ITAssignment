@@ -8,13 +8,14 @@ list = require("libraries/listbox")
 binser = require("libraries/binser")
 require("mainmenu")
 require("libraries/TEsound")
+require("libraries/noobhub")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
 local bulletSpeed = 5
-local enemySpeed = 100
+enemySpeed = 100
 local playerSize = 64
 local bulletSize = 48
 local playerSpeed = 500
@@ -33,19 +34,27 @@ local player = {
     Position = {x = 640, y = 360}
 }
 highscores = {}
+multiplayer_menu = false
 menu_dialog = true
 game_dialog = false
 freemode_menu = false
 story_mode_select_menu = false
 score_show_dialog = false
+group = {}
+loadedGroup = 0
+-- load story song list
+storySongsLoad = love.filesystem.load("assets/groups/storySongs.txt" ) -- load the chunk
+result = storySongsLoad() -- execute the chunk
 
+print(group[1].song[1])
+print(group[1].dialogs[1][1])
 local musicOverlay = {}
 local musicBg = {}
 local exp = {}
 local playerShootBulletOffset = 20
 -- defining images and variables for player
 local titleImage = love.graphics.newImage("assets/title.png")
-local playerImage = love.graphics.newImage("assets/player.png")
+local playerImage = love.graphics.newImage("assets/Yotsuba.png")
 local playerScale = {x = 1, y = 1}
 local playerOffset = {x = playerImage:getWidth()/2,y = playerImage:getHeight()/2}
 local transblack = love.graphics.newImage("assets/transparentplayer.png")
@@ -234,6 +243,8 @@ state.mainmenu.load()
 state.freemode_menu.load()
 state.game_play.load()
 state.story_mode_select.load()
+state.multiplayer.load()
+state.multiplayermenu.load()
 function love.update(dt)
     TEsound.cleanup()
     if menu_dialog then
@@ -247,6 +258,12 @@ function love.update(dt)
     end
     if score_show_dialog then
         state.score_show.update(dt)
+    end
+    if multiplayer_menu then
+        state.multiplayermenu.update(dt)
+    end
+    if multiplayer_game then
+        state.multiplayer.update(dt)
     end
     -- update shooting rate timer
     if game_dialog then
@@ -526,6 +543,12 @@ function love.draw()
     if score_show_dialog then
         state.score_show.draw()
     end
+    if multiplayer_menu then
+        state.multiplayermenu.draw()
+    end
+    if multiplayer_game then
+        state.multiplayer.draw()
+    end
     if game_dialog then
         state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)
@@ -589,7 +612,3 @@ function love.draw()
         drawGameUI()
     end
 end
-dialogue("Yotsuba awakes from the ruins.")
-dialogue("She sees a large enemy in the corner of her eye.")
-dialogue("Yotsuba: 'owo what's this?'")
-dialogue("Yotsuba : '...Why can I shoot bullets with my arm?'")

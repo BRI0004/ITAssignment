@@ -3,6 +3,7 @@ maps["AAA test"] = {
 		artist = 'Test',
 		BPM = 312,
 		previewTime = 1,
+		offset = 0
 	},
 	chart = {
 	},

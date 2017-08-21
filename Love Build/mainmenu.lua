@@ -9,6 +9,7 @@ love.mousepressed = function(x, y, button)
 		state.story_mode_select.gui:mousepress(x, y, button) -- pretty sure you want to register mouse events
 	end
 end
+
 ffont = "assets/AlteHaasGroteskRegular.ttf"
 ffontbold = "assets/AlteHaasGroteskBold.ttf"
 --functions for main menu_dialog
@@ -38,6 +39,20 @@ function loadBGOverlay()
 			print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
 		end
 	end
+end
+function multiplayerServerIP()
+	local input = gui:input('Chat', {64, love.graphics.getHeight() - 32, 256, gui.style.unit})
+	input.keyrepeat = true -- this is the default anyway
+	input.done = function(this) -- Gspot calls element:done() when you hit enter while element has focus. override this behaviour with element.done = false
+		gui:feedback('I say '..this.value)
+		this.value = ''
+		this.Gspot:unfocus()
+	end
+	local button = gui:button('Speak', {input.pos.w + gui.style.unit, 0, 200, gui.style.unit}, input) -- attach a button
+	button.click = function(this)
+		this.parent:done()
+	end
+
 end
 function previewAndSelect()
 	currentFileNameWoExt = string.sub(list:getfusion(listselected),1,string.len(list:getfusion(listselected))-4)
@@ -74,6 +89,7 @@ function loadthestuff()
 					menu_dialog = false
 					story_mode_select_menu = true
 					freemode_menu = false
+					story_mode = true
 				end
 				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 330, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
@@ -84,10 +100,15 @@ function loadthestuff()
 					listselected = 1
 					previewAndSelect()
 				end
-				local marathonModeButton = state.mainmenu.gui:button('Marathon Mode', {x = 100, y = 410, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				-- doesnt work bye
+				--[[
+				local marathonModeButton = state.mainmenu.gui:button('Multiplayer Mode', {x = 100, y = 410, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				marathonModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.mainmenu.gui:feedback("Marathon Mode Selected")
+					state.mainmenu.gui:feedback("Multiplayer Mode Selected")
+					menu_dialog = false
+					multiplayer_menu = true
 				end
+				]]
 				print("loaded main menu")
 			end,
 			draw = function()
@@ -105,6 +126,7 @@ function loadthestuff()
 			update = function(dt)
 				list:update(dt)
 				listselected = list:getselected()
+				print("nani")
 
 			end,
 			draw = function()
@@ -168,6 +190,22 @@ function loadthestuff()
 					end
 				end
 				function love.keypressed(key)
+					if multiplayer_menu then
+						if multiplayer_menu then
+								if key == "down" then
+									if list:getselected() ~= list:getcount() then
+										listselected = list:getselected() + 1
+										previewAndSelect()
+									end
+								elseif key == "up" then
+									if list:getselected() ~= 1 then
+										listselected = list:getselected() - 1
+										previewAndSelect()
+									end
+								end
+						end
+					end
+
 					if story_mode_select_menu then
 						if key == "escape" then
 							menu_dialog = true
@@ -175,206 +213,286 @@ function loadthestuff()
 							love.audio.stop()
 						end
 					end
-					if freemode_menu then
-						if key == "down" then
-							if list:getselected() ~= list:getcount() then
-								listselected = list:getselected() + 1
-								previewAndSelect()
-							end
-						elseif key == "up" then
-							if list:getselected() ~= 1 then
-								listselected = list:getselected() - 1
-								previewAndSelect()
+
+							if freemode_menu then
+								if key == "down" then
+									if list:getselected() ~= list:getcount() then
+										listselected = list:getselected() + 1
+										previewAndSelect()
+									end
+								elseif key == "up" then
+									if list:getselected() ~= 1 then
+										listselected = list:getselected() - 1
+										previewAndSelect()
+									end
+								end
+
+
+
+								if key == "return" or key == "kpenter" then
+									love.audio.stop(previewSource)
+
+									if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+										chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+										result = chunk() -- execute the chunk
+										currentSongBPM = maps[currentFileNameWoExt].metadata.BPM
+									else
+										love.window.showMessageBox("Error", "No Data Found")
+									end
+									love.audio.stop()
+									source = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
+									love.audio.play(source)
+									source:play()
+									mduration=source:getDuration(unit)
+									mlistselected = listselected
+									freemode_menu = false
+									game_dialog = true
+								end
+								if key == "escape" then
+									freemode_menu = false
+									menu_dialog = true
+									love.audio.stop()
+								end
+								list:key(key)
 							end
 						end
+						end,
+				},
+				example={
+					gui = gui(),
+					update = function(dt)
 
+					end,
+					draw = function()
 
+					end,
+					load = function()
 
-						if key == "return" or key == "kpenter" then
-							love.audio.stop(previewSource)
+					end,
+				},
+				multiplayer = {
+					gui = gui(),
+					update = function(dt)
 
-							if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
-								chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
-								result = chunk() -- execute the chunk
-								currentSongBPM = maps[currentFileNameWoExt].metadata.BPM
+					end,
+					draw = function()
+
+					end,
+					load = function()
+
+					end,
+				},
+				multiplayermenu = {
+					gui = gui(),
+					update = function(dt)
+						state.freemode_menu.update(dt)
+					end,
+					draw = function()
+						state.freemode_menu.draw()
+						love.graphics.print("multiplayer menu testo",100,100)
+					end,
+					load = function()
+						state.freemode_menu.load()
+						--multiplayerServerIP()
+					end,
+				},
+				score_show={
+					gui = gui(),
+					update = function(dt)
+						state.score_show.gui:update(dt)
+
+					end,
+					draw = function()
+						state.score_show.gui:draw()
+
+						if images["bg"][currentFileNameWoExt] ~= nil then
+							if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+								love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
 							else
-								love.window.showMessageBox("Error", "No Data Found")
+								love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
 							end
-							love.audio.stop()
-							source = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
-							love.audio.play(source)
-							source:play()
-							mduration=source:getDuration(unit)
-							mlistselected = listselected
-							freemode_menu = false
-							game_dialog = true
+						else
+							love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
 						end
-						if key == "escape" then
-							freemode_menu = false
-							menu_dialog = true
-							love.audio.stop()
-						end
-						list:key(key)
+						love.graphics.setNewFont(ffont,24)
+						love.graphics.printf("Song "..currentFileNameWoExt.." cleared!", 100,150,9999)
+						love.graphics.printf('scoreTableText', 100,100,999)
+						love.graphics.setNewFont(ffontbold,24)
+						love.graphics.printf("Final Score: "..finalScore..'%', 100,200,9999)
+					end,
+					load = function()
+						local scoreTableText = ''
+						backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
+						--scoring system
+						local a = #maps[currentFileNameWoExt].chart
+						local b = mduration
+						maxScore = a*2*100 + b
+						local rank = score/maxScore * 100
+						finalScore = round(rank,2)
+						--add highscore here
+						--put things in here to get player name
+						--[[
+						input = gui:input('Chat', {64, love.graphics.getHeight() - 32, 256, gui.style.unit})
+						input.keydelay = 500 -- these two are set by default for input elements, same as doing love.setKeyRepeat(element.keydelay, element.keyrepeat) but Gspot will return to current keyrepeat state when it loses focus
+						input.keyrepeat = 200 -- keyrepeat is used as default keydelay value if not assigned as above. use element.keyrepeat = false to disable repeating
+						input.done = function(this) -- Gspot calls element:done() when you hit enter while element has focus. override this behaviour with element.done = false
+						gui:feedback('I say '..this.value)
+						this.value = ''
+						this.Gspot:unfocus()
 					end
-				end
-			end,
-		},
-		example={
-			gui = gui(),
-			update = function(dt)
-
-			end,
-			draw = function()
-
-			end,
-			load = function()
-
-			end,
-		},
-		score_show={
-			gui = gui(),
-			update = function(dt)
-				state.score_show.gui:update(dt)
-
-			end,
-			draw = function()
-				state.score_show.gui:draw()
-
-				if images["bg"][currentFileNameWoExt] ~= nil then
-					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
-						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
-					else
-						love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
-					end
-				else
+					]]
+				end,
+			},
+			story_mode_select = {
+				gui = gui(),
+				update = function(dt)
+					state.common.gui:update(dt)
+					state.story_mode_select.gui:update(dt)
+				end,
+				draw = function()
 					love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
-				end
-				love.graphics.setNewFont(ffont,24)
-				love.graphics.printf("Song "..currentFileNameWoExt.." cleared!", 100,150,9999)
-				love.graphics.printf('scoreTableText', 100,100,999)
-				love.graphics.setNewFont(ffontbold,24)
-				love.graphics.printf("Final Score: "..finalScore..'%', 100,200,9999)
-			end,
-			load = function()
-				local scoreTableText = ''
-				backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
-				--scoring system
-				local a = #maps[currentFileNameWoExt].chart
-				local b = mduration
-				maxScore = a*2*100 + b
-				local rank = score/maxScore * 100
-				finalScore = round(rank,2)
-				--add highscore here
-				--put things in here to get player name
-				--[[
-				input = gui:input('Chat', {64, love.graphics.getHeight() - 32, 256, gui.style.unit})
-				input.keydelay = 500 -- these two are set by default for input elements, same as doing love.setKeyRepeat(element.keydelay, element.keyrepeat) but Gspot will return to current keyrepeat state when it loses focus
-				input.keyrepeat = 200 -- keyrepeat is used as default keydelay value if not assigned as above. use element.keyrepeat = false to disable repeating
-				input.done = function(this) -- Gspot calls element:done() when you hit enter while element has focus. override this behaviour with element.done = false
-					gui:feedback('I say '..this.value)
-					this.value = ''
-					this.Gspot:unfocus()
-				end
-				]]
-			end,
-		},
-		story_mode_select = {
-			gui = gui(),
-			update = function(dt)
-				state.common.gui:update(dt)
-				state.story_mode_select.gui:update(dt)
-			end,
-			draw = function()
-				love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
-				state.story_mode_select.gui:draw()
-				love.graphics.draw(group1, 116, 66, 0, 0.9, 0.9)
-				love.graphics.draw(group2, 472, 66, 0, 0.9, 0.9)
-				love.graphics.draw(group3, 828, 66, 0, 0.9, 0.9)
-				love.graphics.draw(group4, 116, 422, 0, 0.9, 0.9)
-				love.graphics.draw(group5, 472, 422, 0, 0.9, 0.9)
-				love.graphics.draw(group6, 828, 422, 0, 0.9, 0.9)
+					state.story_mode_select.gui:draw()
+					love.graphics.draw(group1, 116, 66, 0, 0.9, 0.9)
+					love.graphics.draw(group2, 472, 66, 0, 0.9, 0.9)
+					love.graphics.draw(group3, 828, 66, 0, 0.9, 0.9)
+					love.graphics.draw(group4, 116, 422, 0, 0.9, 0.9)
+					love.graphics.draw(group5, 472, 422, 0, 0.9, 0.9)
+					love.graphics.draw(group6, 828, 422, 0, 0.9, 0.9)
 
 
-			end,
-			load = function()
-				group1 = love.graphics.newImage("assets/groups/group1.png")
-				local group1Button = state.story_mode_select.gui:button('', {x = 100, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				group1Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.story_mode_select.gui:feedback("Story Mode Selected")
-					print("dezu")
-				end
-				group2 = love.graphics.newImage("assets/groups/group2.png")
+				end,
+				load = function()
+					function playGroupSong()
+						if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+							chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+							result = chunk() -- execute the chunk
+							currentSongBPM = maps[currentFileNameWoExt].metadata.BPM
+						else
+							love.window.showMessageBox("Error", "No Data Found")
+						end
+						love.audio.stop()
+						source = love.audio.newSource("songs/audio/"..currentFileNameWoExt..".mp3", "stream")
+						love.audio.play(source)
+						source:play()
+						if maps[currentFileNameWoExt].metadata.offset ~=  nil then
+							BPMtoDTCount = 0 - maps[currentFileNameWoExt].metadata.offset
+						else
+							BPMtoDTCount = 0
+						end
+						mduration=source:getDuration(unit)
+						story_mode_select_menu = false
+						game_dialog = true
 
-				local group2Button = state.story_mode_select.gui:button('Group 2', {x = 456, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				group2Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.story_mode_select.gui:feedback("Free Mode Selected")
-				end
-				group3 = love.graphics.newImage("assets/groups/group3.png")
-
-				local group3Button = state.story_mode_select.gui:button('Group 3', {x = 812, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				group3Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.story_mode_select.gui:feedback("Marathon Mode Selected")
-				end
-				group4 = love.graphics.newImage("assets/groups/group4.png")
-
-				local group4Button = state.story_mode_select.gui:button('Group 4', {x = 100, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				group4Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.story_mode_select.gui:feedback("Story Mode Selected")
-					print("dezu")
-				end
-				group5 = love.graphics.newImage("assets/groups/group5.png")
-
-				local group5Button = state.story_mode_select.gui:button('Group 5', {x = 456, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				group5Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.story_mode_select.gui:feedback("Free Mode Selected")
-				end
-				group6 = love.graphics.newImage("assets/groups/group6.png")
-
-				local group6Button = state.story_mode_select.gui:button('Group 6', {x = 812, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
-				group6Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-					state.story_mode_select.gui:feedback("Marathon Mode Selected")
-				end
-
-				blacksquare = love.graphics.newImage("assets/player.png")
-			end,
-		},
-		game_play = {
-			gui = gui(),
-			update = function(dt)
-				BPMtoDTCount = BPMtoDTCount + dt
-				if source and source:isPlaying() then
-					mpos=source:tell(unit)
-				end
-				if mpos + 1 > mduration then
-					love.audio.stop()
-					game_dialog = false
-					game_over_state = true
-					state.score_show.load()
-					score_show_dialog = true
-					print("Song Ended")
-				end
-				if BPMtoDTCount > 60/currentSongBPM then
-					BPMtoDTCount = 0
-					if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
-						maps[currentFileNameWoExt].chart[ChartLocation]()
-					else
-						print("no chart for this Beat")
 					end
+					storyCurrentSong = 1
+					group1 = love.graphics.newImage("assets/groups/group1.png")
+					local group1Button = state.story_mode_select.gui:button('', {x = 100, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+					group1Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+						state.story_mode_select.gui:feedback("Story Mode Selected")
+						loadedGroup = 1
+						currentFileNameWoExt = group[loadedGroup].song[1]
+						playGroupSong()
+					end
+					group2 = love.graphics.newImage("assets/groups/group2.png")
 
-					print("Beat",ChartLocation)
-					ChartLocation = ChartLocation + 1
-				end--
-			end,
-			draw = function()
+					local group2Button = state.story_mode_select.gui:button('Group 2', {x = 456, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+					group2Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+						state.story_mode_select.gui:feedback("Free Mode Selected")
+						loadedGroup = 2
+						currentFileNameWoExt = group[loadedGroup].song[1]
 
-			end,
-			load = function()
-				BPMtoDTCount = 0
-				ChartLocation = 0
-			end,
+					end
+					group3 = love.graphics.newImage("assets/groups/group3.png")
+
+					local group3Button = state.story_mode_select.gui:button('Group 3', {x = 812, y = 50, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+					group3Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+						state.story_mode_select.gui:feedback("Marathon Mode Selected")
+						loadedGroup = 3
+						currentFileNameWoExt = group[loadedGroup].song[1]
+
+					end
+					group4 = love.graphics.newImage("assets/groups/group4.png")
+
+					local group4Button = state.story_mode_select.gui:button('Group 4', {x = 100, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+					group4Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+						state.story_mode_select.gui:feedback("Story Mode Selected")
+						loadedGroup = 4
+						currentFileNameWoExt = group[loadedGroup].song[1]
+
+					end
+					group5 = love.graphics.newImage("assets/groups/group5.png")
+
+					local group5Button = state.story_mode_select.gui:button('Group 5', {x = 456, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+					group5Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+						state.story_mode_select.gui:feedback("Free Mode Selected")
+						loadedGroup = 5
+						currentFileNameWoExt = group[loadedGroup].song[1]
+
+					end
+					group6 = love.graphics.newImage("assets/groups/group6.png")
+
+					local group6Button = state.story_mode_select.gui:button('Group 6', {x = 812, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+					group6Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
+						state.story_mode_select.gui:feedback("Marathon Mode Selected")
+						loadedGroup = 6
+						currentFileNameWoExt = group[loadedGroup].song[1]
+
+					end
+					blacksquare = love.graphics.newImage("assets/black.png")
+				end,
+			},
+			game_play = {
+				gui = gui(),
+				update = function(dt)
+					BPMtoDTCount = BPMtoDTCount + dt
+					if source and source:isPlaying() then
+						mpos=source:tell(unit)
+					end
+					if mpos + 1 > mduration then
+						if not story_mode  then
+							love.audio.stop()
+							game_dialog = false
+							game_over_state = true
+							state.score_show.load()
+							score_show_dialog = true
+							print("Song Ended")
+						else
+							print(storyCurrentSong)
+							storyCurrentSong = storyCurrentSong + 1
+							currentFileNameWoExt = group[loadedGroup].song[storyCurrentSong]
+							print(storyCurrentSong, currentFileNameWoExt)
+							love.audio.stop()
+							source = love.audio.newSource("songs/audio/"..currentFileNameWoExt..".mp3", "stream")
+							love.audio.play(source)
+							print("Story next song")
+							BPMtoDTCount = 0
+							ChartLocation = 0
+							enemySpeed = maps[currentFileNameWoExt].metadata.BPM
+
+						end
+						if BPMtoDTCount > 60/currentSongBPM then
+							BPMtoDTCount = 0
+							if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
+								maps[currentFileNameWoExt].chart[ChartLocation]()
+							else
+								print("no chart for this Beat")
+							end
+
+							print("Beat",ChartLocation)
+							ChartLocation = ChartLocation + 1
+						end
+					end
+					end,
+				draw = function()
+
+				end,
+				load = function()
+					BPMtoDTCount = 0
+					ChartLocation = 0
+				end,
+			}
 		}
-	}
 
-end
+	end
 
--- functoins for free mode
+	-- functoins for free mode

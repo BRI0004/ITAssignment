@@ -1,0 +1,16 @@
+group[1] = {
+ song = {
+	},
+ dialogs={
+	}
+}
+group[1].song[1] = "AAA test"
+group[1].song[2] = "Tech Noir"
+group[1].song[3] = "Nightcall"
+group[1].dialogs[1] = {
+"Yotsuba awakes from the ruins.",
+"She sees a large enemy in the corner of her eye.",
+"Yotsuba: 'owo what's this?'",
+"Yotsuba : '...Why can I shoot bullets with my arm?'"
+}
+return group[1]
