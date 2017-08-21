@@ -3,6 +3,7 @@ maps["Speed of Link"] = {
 		artist = 'antiPLUR',
 		BPM = 285,
 		previewTime = 84,
+		offset = 0.972,
 	},
 	chart = {
 	},

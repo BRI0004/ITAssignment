@@ -247,6 +247,11 @@ function loadthestuff()
 									mlistselected = listselected
 									freemode_menu = false
 									game_dialog = true
+									if maps[currentFileNameWoExt].metadata.offset ~=  nil then
+										BPMtoDTCount = 0 - maps[currentFileNameWoExt].metadata.offset
+									else
+										BPMtoDTCount = 0
+									end
 								end
 								if key == "escape" then
 									freemode_menu = false
@@ -457,10 +462,8 @@ function loadthestuff()
 							score_show_dialog = true
 							print("Song Ended")
 						else
-							print(storyCurrentSong)
 							storyCurrentSong = storyCurrentSong + 1
 							currentFileNameWoExt = group[loadedGroup].song[storyCurrentSong]
-							print(storyCurrentSong, currentFileNameWoExt)
 							love.audio.stop()
 							source = love.audio.newSource("songs/audio/"..currentFileNameWoExt..".mp3", "stream")
 							love.audio.play(source)
@@ -469,6 +472,7 @@ function loadthestuff()
 							ChartLocation = 0
 							enemySpeed = maps[currentFileNameWoExt].metadata.BPM
 
+						end
 						end
 						if BPMtoDTCount > 60/currentSongBPM then
 							BPMtoDTCount = 0
@@ -481,7 +485,7 @@ function loadthestuff()
 							print("Beat",ChartLocation)
 							ChartLocation = ChartLocation + 1
 						end
-					end
+
 					end,
 				draw = function()
 
