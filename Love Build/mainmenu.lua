@@ -156,13 +156,8 @@ function loadthestuff() -- main function with all stuff in it
 					overlay = {}
 				}
 				maps = {}
-<<<<<<< HEAD
 				local tlist={
 					x=800, y=0,
-=======
-				local tlist={ -- code for listbox lib
-					x=785, y=50,
->>>>>>> df087d16d525a31cc696bf2a7a6ea0e315f27098
 					font=love.graphics.setNewFont(ffont, 24),
 					rounded=false,
 					bordercolor={60,60,60}, -- border color RGB (table)
