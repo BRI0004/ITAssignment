@@ -163,14 +163,14 @@ function loadthestuff()
 				}
 				maps = {}
 				local tlist={
-					x=785, y=50,
+					x=800, y=0,
 					font=love.graphics.setNewFont(ffont, 24),
 					rounded=false,
 					bordercolor={60,60,60}, -- border color RGB (table)
 					selectedcolor={255,255,255}, -- selected color RGB (table)
 					fselectedcolor={0,0,0}, -- font selected color RGB (table)
 					bgcolor={60,60,60},
-					w=400,h=620,showindex=true,
+					w=480,h=720,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,
 					ismouse = false,
