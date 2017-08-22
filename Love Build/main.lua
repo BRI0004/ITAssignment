@@ -341,7 +341,7 @@ function love.update(dt)
                 health = 10,
                 sprite = 1,
                 Direction = math.pi/2,
-                Type = 3,
+                Type = 1,
             }
             table.insert(enemies,enemyAdd)
         end
