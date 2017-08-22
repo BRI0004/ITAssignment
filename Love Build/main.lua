@@ -289,11 +289,11 @@ function love.update(dt)
                 player.Position.x = player.Position.x + playerSpeed * dt
             end
             if love.keyboard.isDown("lshift") then
-                playerSpeed = 250
+                playerSpeed = 500
                 drawPlayerHitBox = true
                 playerShootBulletOffset = 10
             else
-                playerSpeed = 500
+				playerSpeed = 1000
                 drawPlayerHitBox = false
                 playerShootBulletOffset = 25
             end
@@ -603,7 +603,7 @@ function love.draw()
             love.graphics.setNewFont(ffont, 25)
             love.graphics.print(round(score,0), 20, 40)
             --song and difficulty
-            love.graphics.setNewFont(ffontbold, 20)
+            love.graphics.setNewFont(ffont, 20)
             love.graphics.print("Song\n"..maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 400, 20)
             love.graphics.print("BPM\n"..maps[currentFileNameWoExt].metadata.BPM, 700, 20)
             love.graphics.print("Length\n"..sectotime(mpos).."\n"..sectotime(mduration),800,20)
