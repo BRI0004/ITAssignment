@@ -13,4 +13,13 @@ group[1].dialogs[1] = {
 "Yotsuba: 'owo what's this?'",
 "Yotsuba : '...Why can I shoot bullets with my arm?'"
 }
-return group[1]
+group[1].dialogs[2] = {
+"...: 'Hello Yotsuba'",
+"...: 'My name is steve and you are an intruder to our world'",
+"steve: 'I need to stop you before you realise who you are'",
+"Yotsuba: 'I...I don't understand!?'",
+"steve: ''",
+}
+for i=1, #group, 1 do
+return group[i]
+end

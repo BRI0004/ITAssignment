@@ -128,6 +128,7 @@ function enemyExplode(ei,e)
     table.insert(exp,kaboom)
 end
 function dialogue(a)
+    isDialogue = true
     local addtospeech = {
         text = a,
 
@@ -423,15 +424,13 @@ function love.update(dt)
                 table.remove(boss,bi)
             end
             if b.Type == 1 then
+                --[[
                 if not b.Dialogue1Complete then
                     isDialogue = true
-                    dialogue("...: 'Hello Yotsuba'")
-                    dialogue("...: 'My name is steve and you are an intruder to our world'")
-                    dialogue("steve: 'I need to stop you before you realise who you are'")
-                    dialogue("Yotsuba: 'I...I don't understand!?'")
-                    dialogue("steve: ''")
+
                     b.Dialogue1Complete = true
                 end
+                ]]
                 if b.Position.y < 305 and b.Position.y > 300 and not b.hasPaused1 then
                     b.pause = true
                     if not b.pauseTime then b.pauseTime = socket.gettime() end
