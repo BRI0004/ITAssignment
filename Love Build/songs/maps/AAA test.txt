@@ -1,11 +1,14 @@
 maps["AAA test"] = {
 	metadata = {
 		artist = 'Test',
-		BPM = 312,
+		BPM = 60,
 		previewTime = 1,
 		offset = 0
 	},
 	chart = {
+	},
+	charthalf = {
+
 	},
 }
 

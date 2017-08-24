@@ -6,6 +6,7 @@ maps["Blue Zenith"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Blue Zenith"]

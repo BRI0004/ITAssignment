@@ -6,6 +6,7 @@ maps["Running in the 90s"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Running in the 90s"]

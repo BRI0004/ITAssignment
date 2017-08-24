@@ -6,6 +6,7 @@ maps["I Do Not Like Speed"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["I Do Not Like Speed"]

@@ -6,6 +6,7 @@ maps["Ice Angel"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Ice Angel"]

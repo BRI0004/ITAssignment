@@ -6,6 +6,7 @@ maps["Wings (NuLogic Remix)"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Wings (NuLogic Remix)"]

@@ -5,6 +5,7 @@ maps["Nightcall"] = {
 		previewTime = 11,
 	},
 	chart = {},
+	charthalf = {},
 }
 
 return maps["Nightcall"]

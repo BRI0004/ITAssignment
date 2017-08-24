@@ -6,6 +6,7 @@ maps["Through the Fire and Flames"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Through the Fire and Flames"]

@@ -6,6 +6,7 @@ maps["God's Message"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["God's Message"]

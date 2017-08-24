@@ -6,6 +6,7 @@ maps["UN Owen Was Her"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["UN Owen Was Her"]

@@ -441,6 +441,7 @@ function loadthestuff() -- main function with all stuff in it
 				gui = gui(),
 				update = function(dt)
 					BPMtoDTCount = BPMtoDTCount + dt
+					halfBPMtoDTCount = halfBPMtoDTCount + dt
 					if source and source:isPlaying() then
 						mpos=source:tell(unit)
 					end
@@ -454,44 +455,61 @@ function loadthestuff() -- main function with all stuff in it
 							print("Song Ended") -- show scores and stuff
 						else -- if on story mode
 							storyCurrentSong = storyCurrentSong + 1 -- increment story song number
-							currentFileNameWoExt = group[loadedGroup].song[storyCurrentSong] -- resets song name to use file system
-							if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
-								chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
-								result = chunk() -- execute the code within file, returning the map and metadata for game
-								currentSongBPM = maps[currentFileNameWoExt].metadata.BPM
+							if storyCurrentSong > #group[loadedGroup].song then -- if last song
+								print("song list over")
+								love.audio.stop()
+								game_dialog = false
+								game_over_state = true
+								state.score_show.load()
+								score_show_dialog = true
 							else
-								love.window.showMessageBox("Error", "No Data Found") -- debug
+								currentFileNameWoExt = group[loadedGroup].song[storyCurrentSong] -- resets song name to use file system
+								if love.filesystem.exists("songs/maps/"..currentFileNameWoExt..".txt") then
+									chunk = love.filesystem.load("songs/maps/"..currentFileNameWoExt..".txt" ) -- load the chunk
+									result = chunk() -- execute the code within file, returning the map and metadata for game
+									currentSongBPM = maps[currentFileNameWoExt].metadata.BPM
+								else
+									love.window.showMessageBox("Error", "No Data Found") -- debug
+								end
+								love.audio.stop() -- stops any other audio
+								source = love.audio.newSource("songs/audio/"..currentFileNameWoExt..".mp3", "stream") -- starts song
+								love.audio.play(source)
+								print("Story next song") -- debug
+								BPMtoDTCount = 0
+								ChartLocation = 0 -- reset vars
+								enemySpeed = maps[currentFileNameWoExt].metadata.BPM
+								mduration=source:getDuration(unit) -- reset vars
+								for i = 1, #group[loadedGroup].dialogs[storyCurrentSong], 1 do -- run story dialog
+									print(group[loadedGroup].dialogs[storyCurrentSong][i])
+									dialogue(group[loadedGroup].dialogs[storyCurrentSong][i])
+								end
 							end
-							love.audio.stop() -- stops any other audio
-							source = love.audio.newSource("songs/audio/"..currentFileNameWoExt..".mp3", "stream") -- starts song
-							love.audio.play(source)
-							print("Story next song") -- debug
-							BPMtoDTCount = 0
-							ChartLocation = 0 -- reset vars
-							enemySpeed = maps[currentFileNameWoExt].metadata.BPM
-							mduration=source:getDuration(unit) -- reset vars
-							for i = 1, #group[loadedGroup].dialogs[storyCurrentSong], 1 do -- run story dialog
-								print(group[loadedGroup].dialogs[storyCurrentSong][i])
-								dialogue(group[loadedGroup].dialogs[storyCurrentSong][i])
-							end
-
-
 						end
-						end
-						if BPMtoDTCount > 60/currentSongBPM then
-							BPMtoDTCount = 0
-							-- every beat of the song execute code from the loaded text file
-							if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
-								maps[currentFileNameWoExt].chart[ChartLocation]() -- checks if code exists then executes it, see chart file to look
+					end
+					if halfBPMtoDTCount > 30/currentSongBPM then
+						halfBPMtoDTCount = 0
+						if currentHalfBeat % 2 == 0 then -- check if half beat
+							if maps[currentFileNameWoExt].charthalf[ChartLocation] ~= nil then
+								maps[currentFileNameWoExt].charthalf[ChartLocation]() -- checks if code exists then executes it, see chart file to look
 							else
-								print("no chart for this Beat") -- debug
+								--print("no half chart for this Beat") -- debug
 							end
-
-							print("Beat",ChartLocation) -- shows beat and counter
-							ChartLocation = ChartLocation + 1 -- increment
+							print("HalfBeat", ChartLocation)
 						end
-
-					end,
+						currentHalfBeat = currentHalfBeat + 1
+					end
+					if BPMtoDTCount > 60/currentSongBPM then
+						BPMtoDTCount = 0
+						-- every beat of the song execute code from the loaded text file
+						if maps[currentFileNameWoExt].chart[ChartLocation] ~= nil then
+							maps[currentFileNameWoExt].chart[ChartLocation]() -- checks if code exists then executes it, see chart file to look
+						else
+							--print("no chart for this Beat") -- debug
+						end
+						print("Beat",ChartLocation) -- shows beat and counter
+						ChartLocation = ChartLocation + 1 -- increment
+					end
+				end,
 				draw = function()
 
 				end,
@@ -499,6 +517,8 @@ function loadthestuff() -- main function with all stuff in it
 					-- this section resets variables on load
 					BPMtoDTCount = 0
 					ChartLocation = 0
+					halfBPMtoDTCount = 0
+					currentHalfBeat = 0
 				end,
 			}
 		}

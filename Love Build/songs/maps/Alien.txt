@@ -6,6 +6,7 @@ maps["Alien"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Alien"]

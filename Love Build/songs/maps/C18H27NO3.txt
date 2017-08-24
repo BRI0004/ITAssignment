@@ -6,6 +6,9 @@ maps["C18H27NO3"] = {
 	},
 	chart = {
 	},
+	charthalf = {
+
+	},
 }
 
 return maps["C18H27NO3"]
