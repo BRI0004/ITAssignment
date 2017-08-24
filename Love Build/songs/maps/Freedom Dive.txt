@@ -6,6 +6,7 @@ maps["Freedom Dive"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Freedom Dive"]

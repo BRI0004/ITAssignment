@@ -6,6 +6,7 @@ maps["Over the Fullereneshift"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Over the Fullereneshift"]

@@ -6,6 +6,7 @@ maps["Flowering Night Fever"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Flowering Night Fever"]

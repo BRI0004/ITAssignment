@@ -8,6 +8,7 @@ maps["Zero Risk Syndrome"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 maps["Zero Risk Syndrome"].chart[0] = loadstring("return addEnemy(540,1,10,3)")

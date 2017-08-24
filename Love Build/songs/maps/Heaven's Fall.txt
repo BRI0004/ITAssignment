@@ -6,6 +6,7 @@ maps["Heaven's Fall"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Heaven's Fall"]

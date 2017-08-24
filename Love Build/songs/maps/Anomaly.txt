@@ -6,6 +6,7 @@ maps["Anomaly"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Anomaly"]

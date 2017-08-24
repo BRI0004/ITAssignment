@@ -6,6 +6,7 @@ maps["Fury of the Storm"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Fury of the Storm"]

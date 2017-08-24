@@ -6,6 +6,7 @@ maps["Tech Noir"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["Tech Noir"]

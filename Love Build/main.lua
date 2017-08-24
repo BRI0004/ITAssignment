@@ -53,14 +53,11 @@ local musicBg = {}
 local exp = {}
 local playerShootBulletOffset = 20
 -- defining images and variables for player
-local titleImage = love.graphics.newImage("assets/title.png")
 local playerImage = love.graphics.newImage("assets/Yotsuba.png")
 local playerScale = {x = 1, y = 1}
 local playerOffset = {x = playerImage:getWidth()/2,y = playerImage:getHeight()/2}
 local transblack = love.graphics.newImage("assets/transparentplayer.png")
 -- iamges for boosters
-local scoreImage = love.graphics.newImage("assets/title.png")
-local powerImage = love.graphics.newImage("assets/title.png")
 local bossHealthBar = love.graphics.newImage("assets/healthBar.png")
 -- images for bullets
 local enemyBullets = {}
@@ -97,7 +94,7 @@ enemies = {}
 --enemy image array
 local enemyImage = {}
 enemyImage[1] = love.graphics.newImage("assets/enemy1.png")
-enemyImage[2] = love.graphics.newImage("assets/title.png")
+enemyImage[2] = love.graphics.newImage("assets/enemy1.png")
 enemyImage[10] = love.graphics.newImage("assets/boss1.png")
 -- .... for more enemies
 local enemyScale = {x = 0.5, y = 0.5}
@@ -272,7 +269,9 @@ function love.update(dt)
         bulletTimer = bulletTimer + dt
         spellCardTimer = spellCardTimer + dt
         score = score + dt
-        enemySpeed = maps[currentFileNameWoExt].metadata.enemySpeed
+        if maps[currentFileNameWoExt].metadata.enemySpeed ~= nil then
+            enemySpeed = maps[currentFileNameWoExt].metadata.enemySpeed
+        end
         --print(bulletTimer)
         --if not pause_dialog and not menu_dialog and not freemode_song_select_dialog then
         -- make player move
@@ -309,7 +308,7 @@ function love.update(dt)
                     local Bullet = {
                         Position = {x = player.Position.x+playerShootBulletOffset, y = player.Position.y - 15}
                     }
-                    TEsound.play("assets/sfx/ATTACK5.wav",{},0.8)
+                    TEsound.play("assets/sfx/ATTACK5.wav",{},0.5)
                     table.insert(bullets,Bullet)
                 end
             end
@@ -341,7 +340,7 @@ function love.update(dt)
                 health = 10,
                 sprite = 1,
                 Direction = math.pi/2,
-                Type = 3,
+                Type = 1,
             }
             table.insert(enemies,enemyAdd)
         end

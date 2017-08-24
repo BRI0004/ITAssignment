@@ -6,6 +6,7 @@ maps["The Big Black"] = {
 	},
 	chart = {
 	},
+		charthalf = {},
 }
 
 return maps["The Big Black"]
