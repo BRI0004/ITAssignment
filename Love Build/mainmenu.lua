@@ -1,5 +1,8 @@
 mpos,mduration = 0,0
 currentSongBPM = 0
+desu = {1,2,3,4,5,6,7,8}
+binser.writeFile("profile.txt",desu)
+desu = binser.writeFile("profile.txt")
 
 love.mousepressed = function(x, y, button)
 	if menu_dialog then
@@ -322,9 +325,20 @@ function loadthestuff() -- main function with all stuff in it
 						maxScore = a*2*100 + b
 						local rank = score/maxScore * 100
 						finalScore = round(rank,2) -- rando scoring system
+						--[[
+						highScoreTable = {123412}
+						local str = binser.serialize(highScoreTable)
+						love.filesystem.write('profile.txt', str)
+						if love.filesystem.exists( 'profiles/profile.txt' ) then
+							save = love.filesystem.load( 'profiles/profile.txt' )
+						end
+						local highScoreTable = binser.deserialize(save)
+						table.insert(highScoreTable, score)
+						local str = binser.serialize(highScoreTable)
+						love.filesystem.write('profiles/profile.txt', str)
 						--add highscore here
 						--put things in here to get player name
-						--[[
+
 						input = gui:input('Chat', {64, love.graphics.getHeight() - 32, 256, gui.style.unit})
 						input.keydelay = 500 -- these two are set by default for input elements, same as doing love.setKeyRepeat(element.keydelay, element.keyrepeat) but Gspot will return to current keyrepeat state when it loses focus
 						input.keyrepeat = 200 -- keyrepeat is used as default keydelay value if not assigned as above. use element.keyrepeat = false to disable repeating

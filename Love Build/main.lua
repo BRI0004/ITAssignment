@@ -33,6 +33,7 @@ math.randomseed(os.time())
 local player = {
     Position = {x = 640, y = 360}
 }
+local bossTime = 35
 highscores = {}
 multiplayer_menu = false
 menu_dialog = true
@@ -269,6 +270,7 @@ function love.update(dt)
         bulletTimer = bulletTimer + dt
         spellCardTimer = spellCardTimer + dt
         score = score + dt
+        bossTime = bossTime - dt
         if maps[currentFileNameWoExt].metadata.enemySpeed ~= nil then
             enemySpeed = maps[currentFileNameWoExt].metadata.enemySpeed
         end
@@ -279,13 +281,13 @@ function love.update(dt)
             if love.keyboard.isDown("up") and player.Position.y > 0 then
                 player.Position.y = player.Position.y - playerSpeed * dt
             end
-            if love.keyboard.isDown("down") and player.Position.y < 768 then
+            if love.keyboard.isDown("down") and player.Position.y < 720 then
                 player.Position.y = player.Position.y + playerSpeed * dt
             end
             if love.keyboard.isDown("left") and player.Position.x > 0 then
                 player.Position.x = player.Position.x - playerSpeed * dt
             end
-            if love.keyboard.isDown("right") and  player.Position.y < 1024 then
+            if love.keyboard.isDown("right") and  player.Position.x < 1280 then
                 player.Position.x = player.Position.x + playerSpeed * dt
             end
             if love.keyboard.isDown("lshift") then
@@ -356,10 +358,10 @@ function love.update(dt)
         end
         if love.keyboard.isDown("n") then
             if not bossTimer then bossTimer = socket.gettime() end
-            if bossTimer + 3 < socket.gettime() then
+            if bossTimer + 1 < socket.gettime() then
                 local bossAdd = {
                     Position = { x = love.math.random(100,800), y = 100},
-                    health = 1000,
+                    health = 5000,
                     sprite = 10,
                     Direction = math.pi/2,
                     Type = 1,
@@ -423,14 +425,7 @@ function love.update(dt)
                 table.remove(boss,bi)
             end
             if b.Type == 1 then
-                --[[
-                if not b.Dialogue1Complete then
-                    isDialogue = true
-
-                    b.Dialogue1Complete = true
-                end
-                ]]
-                if b.Position.y < 305 and b.Position.y > 300 and not b.hasPaused1 then
+                if b.Position.y > 300 and not b.hasPaused1 then
                     b.pause = true
                     if not b.pauseTime then b.pauseTime = socket.gettime() end
                     if socket.gettime() - b.pauseTime > 3 and not isDialogue then b.hasPaused1 = true end
@@ -587,6 +582,9 @@ function love.draw()
         if isDialogue then
             love.graphics.draw(transblack, 50, 768-200, 0, 18, 3, 0, 0, -0.02, 0)
             love.graphics.printf(speech[currentDialogueNumber].text, 60, 768-180, 16*50, "left", 0)
+        end
+        if boss[1] ~= nil then
+            love.graphics.printf(tostring(round(bossTime)), 1200, 550, 999)
         end
         -- UI ELEMENTS, DRAWN ON TOP OF all
         function drawGameUI()
