@@ -408,9 +408,9 @@ function love.update(dt)
             end
             if v.Type == 3 then
                 if not v.shootTime then v.shootTime = socket.gettime() end
-                if socket.gettime() > v.shootTime + 1 and not v.hasFired then
+                if socket.gettime() > v.shootTime + 0.3 and not v.hasFired then
                     print("logging")
-                    enemyShoot(4,v,20)
+                    enemyShoot(4,v,10)
                     v.hasFired = true
                 end
             end
