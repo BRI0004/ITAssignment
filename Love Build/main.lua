@@ -15,6 +15,7 @@ love.window.setTitle("Bullet Heaven")
 local currentDialogueNumber = 1
 local playernum = 1
 local bulletSpeed = 5
+moveMod = 40
 enemySpeed = 100
 local playerSize = 64
 local bulletSize = 48
@@ -33,7 +34,7 @@ math.randomseed(os.time())
 local player = {
     Position = {x = 640, y = 360}
 }
-local bossTime = 35
+local bossTime = 45
 highscores = {}
 multiplayer_menu = false
 menu_dialog = true
@@ -43,6 +44,7 @@ story_mode_select_menu = false
 score_show_dialog = false
 group = {}
 loadedGroup = 0
+specialBullets = {}
 -- load story song list
 storySongsLoad = love.filesystem.load("assets/groups/storySongs.txt" ) -- load the chunk
 result = storySongsLoad() -- execute the chunk
@@ -215,6 +217,23 @@ function enemyShoot(pattern, object, scale)
             }
             table.insert(enemyBullets,Bullet)
         end
+    elseif pattern == 11 then
+        angle = 0
+        bulletcolour = round(math.random(1, 4),1)
+        for j = 1, 1 do
+            angle = angle + j*10
+            for i = 1, 32 do
+                local Bullet = {
+                    Position = {x = object.Position.x, y = object.Position.y},
+                    Direction = angle + i*(math.pi/16),
+                    Type = 11,
+                    Colour = bulletcolour,
+                    initDir = angle + i*(math.pi/16),
+                }
+                table.insert(specialBullets,Bullet)
+            end
+        end
+    elseif pattern == 12 then
     else
         print("No Pattern Specified")
     end
@@ -270,9 +289,18 @@ function love.update(dt)
         bulletTimer = bulletTimer + dt
         spellCardTimer = spellCardTimer + dt
         score = score + dt
-        bossTime = bossTime - dt
+        if boss[1] ~= nil then
+            bossTime = bossTime - dt
+        end
         if maps[currentFileNameWoExt].metadata.enemySpeed ~= nil then
             enemySpeed = maps[currentFileNameWoExt].metadata.enemySpeed
+        end
+        if bossTime > 0 or boss[1] ~= nil then
+            if boss[1] ~= nil then
+                -- stage failed
+            else
+                -- boss passed
+            end
         end
         --print(bulletTimer)
         --if not pause_dialog and not menu_dialog and not freemode_song_select_dialog then
@@ -361,7 +389,7 @@ function love.update(dt)
             if bossTimer + 1 < socket.gettime() then
                 local bossAdd = {
                     Position = { x = love.math.random(100,800), y = 100},
-                    health = 5000,
+                    health = 2500,
                     sprite = 10,
                     Direction = math.pi/2,
                     Type = 1,
@@ -408,9 +436,9 @@ function love.update(dt)
             end
             if v.Type == 3 then
                 if not v.shootTime then v.shootTime = socket.gettime() end
-                if socket.gettime() > v.shootTime + 0.3 and not v.hasFired then
+                if socket.gettime() > v.shootTime + 1 and not v.hasFired then
                     print("logging")
-                    enemyShoot(4,v,10)
+                    enemyShoot(4,v,20)
                     v.hasFired = true
                 end
             end
@@ -425,14 +453,31 @@ function love.update(dt)
                 table.remove(boss,bi)
             end
             if b.Type == 1 then
+
                 if b.Position.y > 300 and not b.hasPaused1 then
                     b.pause = true
                     if not b.pauseTime then b.pauseTime = socket.gettime() end
                     if socket.gettime() - b.pauseTime > 3 and not isDialogue then b.hasPaused1 = true end
                     if (socket.gettime() - b.pauseTime) > 1.5 and not b.hasFired1 and not isDialogue then
                         b.hasFired1 = true
-                        enemyShoot(10,b)
+                        enemyShoot(11,b)
                     end
+                end
+                if b.hasFired1 then
+                    if not b.moveTime then b.moveTime = socket.gettime() end
+                    b.Position.x = b.Position.x + dt*moveMod
+                    print(moveMod)
+                    if b.Position.x < 100 then
+                        moveMod = 40
+                        print("Switch Dir")
+                    elseif b.Position.x > 1100 then
+                        moveMod = -40
+                        print("Switch Dir")
+                    end
+                    if round(socket.gettime() - b.moveTime, 2) % 2 == 0 then
+                        enemyShoot(11,b)
+                    end
+
                 end
             end
         end
@@ -480,6 +525,32 @@ function love.update(dt)
             end
             if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
                 table.remove(enemyBullets,bi)
+            end
+        end
+        for bi,b in pairs(specialBullets) do
+            local bulletSpeedMod = 20
+            b.Position.y = b.Position.y + (math.sin(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
+            b.Position.x = b.Position.x + (math.cos(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
+            local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
+            if distance < 10 then
+                print("ded")
+                TEsound.play("assets/sfx/DEAD.wav",{},0.2)
+            end
+            if b.Position.x < -205 or b.Position.x > 1500 or b.Position.y < -225 or b.Position.y > 940 then
+                table.remove(specialBullets,bi)
+            end
+            if b.Type == 11 then
+                if bullettimer == nil then bullettimer = 0 else bullettimer = bullettimer + dt end
+                bulletSpeedMod = bulletSpeedMod - dt
+                if bullettimer > 3 and not b.phase1 then
+                    b.phase1 = true
+                end
+                if b.phase1 and not b.phase2 then
+                    b.Direction = b.Direction + dt*1.5
+                end
+                if b.Direction > b.initDir + 10*math.pi then
+                    b.phase2 = true
+                end
             end
         end
         for bi,b in pairs(spellCard) do
@@ -569,9 +640,12 @@ function love.draw()
         for i, v in pairs(enemyBullets) do
             love.graphics.draw(playerBullets[3],v.Position.x,v.Position.y,v.Direction,0.2,0.2,50,50)
         end
+        for i, v in pairs(specialBullets) do
+            love.graphics.draw(playerBullets[v.Colour],v.Position.x,v.Position.y,v.Direction,0.2,0.2,50,50)
+        end
         for i, v in pairs(boss) do
             love.graphics.draw(enemyImage[v.sprite],v.Position.x,v.Position.y,v.Direction,0.3,0.3,50,50)
-            love.graphics.draw(bossHealthBar, 10, 150, 0, boss[1].health/100, 0.2)
+            love.graphics.draw(bossHealthBar, 10, 150, 0, boss[1].health/200, 0.2)
         end
         --love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
         --love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
