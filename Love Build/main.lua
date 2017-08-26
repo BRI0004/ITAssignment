@@ -431,7 +431,7 @@ function love.update(dt)
             if v.Position.x < -25 or v.Position.x > 1300 or v.Position.y < -25 or v.Position.y > 740 then
                 table.remove(enemies,i)
             end
-            if v.Position.y < 250 and v.Position.y > 245 and not v.hasPaused and v.Type == 1 or v.Type == 2 then
+            if v.Position.y > 250 and not v.hasPaused and (v.Type == 1 or v.Type == 2) then
                 v.pause = true
                 if not v.pauseTime then v.pauseTime = socket.gettime() end
                 if socket.gettime() - v.pauseTime > 3 then v.pause = false v.hasPaused = true end
@@ -440,7 +440,7 @@ function love.update(dt)
                     enemyShoot(1,v)
                 end
             end
-            if v.hasPaused and v.Type == 1 or v.Type == 2 then
+            if v.hasPaused and (v.Type == 1 or v.Type == 2) then
                 if v.Type == 1 then
                     if not v.turnTime then v.turnTime = socket.gettime() end
                     if v.Direction ~= math.pi and socket.gettime() > v.turnTime + 0.05 then
@@ -488,7 +488,6 @@ function love.update(dt)
                 if b.hasFired1 then
                     if not b.moveTime then b.moveTime = socket.gettime() end
                     b.Position.x = b.Position.x + dt*moveMod
-                    print(moveMod)
                     if b.Position.x < 100 then
                         moveMod = 40
                         print("Switch Dir")
@@ -496,7 +495,8 @@ function love.update(dt)
                         moveMod = -40
                         print("Switch Dir")
                     end
-                    if round(socket.gettime() - b.moveTime, 2) % 4 == 0 then
+                    print(round(socket.gettime() - b.moveTime))
+                    if bossTime % 4 == 0 then
                         enemyShoot(12,b)
                     end
 
