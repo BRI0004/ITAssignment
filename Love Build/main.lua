@@ -11,7 +11,7 @@ require("libraries/TEsound")
 require("libraries/noobhub")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
-love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
+-- love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
@@ -339,13 +339,13 @@ function love.update(dt)
                     local Bullet = {
                         Position = {x = player.Position.x+playerShootBulletOffset, y = player.Position.y - 15}
                     }
-                    TEsound.play("assets/sfx/ATTACK5.wav",{},0.5)
+                    TEsound.play("assets/sfx/ATTACK5.wav",{},0.2)
                     table.insert(bullets,Bullet)
                 end
             end
             if love.keyboard.isDown("x") then
                 if spellCardTimer > playerSpellCardRate  then
-                    TEsound.play("assets/sfx/SPELLCARD.wav",{},1.5)
+                    TEsound.play("assets/sfx/SPELLCARD.wav",{},0.5)
                     spellCardTimer = 0
                     local spellcard = {
                         Position = {x = player.Position.x, y = player.Position.y},
@@ -522,7 +522,7 @@ function love.update(dt)
             local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
             if distance < 10 then
                 print("ded")
-                TEsound.play("assets/sfx/DEAD.wav",{},0.2)
+                TEsound.play("assets/sfx/DEAD.wav",{},0.1)
             end
             if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
                 table.remove(enemyBullets,bi)
@@ -535,7 +535,7 @@ function love.update(dt)
             local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
             if distance < 10 then
                 print("ded")
-                TEsound.play("assets/sfx/DEAD.wav",{},0.2)
+                TEsound.play("assets/sfx/DEAD.wav",{},0.1)
             end
             if b.Position.x < -205 or b.Position.x > 1500 or b.Position.y < -225 or b.Position.y > 940 then
                 table.remove(specialBullets,bi)
@@ -669,15 +669,21 @@ function love.draw()
             love.graphics.rectangle( "fill", 0, 0, 1280, 120)
             --scorez
             love.graphics.setColor(255,255,255)
-            love.graphics.setNewFont(ffontbold, 20)
+            love.graphics.setNewFont(ffontbold, 16)
             love.graphics.print("Highscore: ".. topscore ,20, 20, 0, 1, 1)
-            love.graphics.setNewFont(ffont, 25)
-            love.graphics.print(round(score,0), 20, 40)
+            love.graphics.setNewFont(ffont, 24)
+            love.graphics.print(round(score,0), 20, 36)
             --song and difficulty
-            love.graphics.setNewFont(ffont, 20)
-            love.graphics.print("Song\n"..maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 400, 20)
-            love.graphics.print("BPM\n"..maps[currentFileNameWoExt].metadata.BPM, 700, 20)
-            love.graphics.print("Length\n"..sectotime(mpos).."\n"..sectotime(mduration),800,20)
+            love.graphics.setNewFont(ffont, 16)
+			love.graphics.print("Song", 400,20)
+			love.graphics.print("BPM", 700,20)
+			love.graphics.print("Length", 800,20)
+			love.graphics.setNewFont(ffontbold, 24)
+            love.graphics.print(maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 400, 36)
+            love.graphics.print(sectotime(mpos).."\n"..sectotime(mduration),800,36)
+			love.graphics.setNewFont(ffontbold, 40)
+			love.graphics.print(maps[currentFileNameWoExt].metadata.BPM, 700, 36)
+			-- if the score is the highscore then set them to be the same.
             if score > topscore then topscore = round(score) end
         end
         drawGameUI()

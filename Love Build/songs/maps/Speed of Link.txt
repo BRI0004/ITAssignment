@@ -1,29 +1,17 @@
+-- STATUS: Complete
+-- CHART TYPE: Manual
+
 maps["Speed of Link"] = {
 	metadata = {
 		artist = 'antiPLUR',
 		BPM = 300,
 		previewTime = 76.8,
 		offset = 0.8,
-		enemySpeed = 300,
+		enemySpeed = 250,
 	},
-	chart = {
-	},
-		charthalf = {},
+	chart = {},
+	charthalf = {},
 }
-
---[[
-5 - Intro
-71
-138
-204
-271
-338 - Main Part of Song
-370
-387
-448
-508 - Ending
-]]
-
 maps["Speed of Link"].chart[0] = loadstring("return addEnemy(400,1,10,4)")
 maps["Speed of Link"].chart[4] = loadstring("return addEnemy(1280-400,1,10,4)")
 maps["Speed of Link"].chart[8] = loadstring("return addEnemy(400,1,10,4)")
@@ -284,14 +272,283 @@ maps["Speed of Link"].chart[381] = loadstring("return addEnemy(600,1,10,3)")
 maps["Speed of Link"].chart[382] = loadstring("return addEnemy(700,1,10,3)")
 maps["Speed of Link"].chart[383] = loadstring("return addEnemy(800,1,10,3)")
 
-maps["Speed of Link"].charthalf[368] = loadstring("return addEnemy(50,1,10,3)")
-maps["Speed of Link"].charthalf[369] = loadstring("return addEnemy(150,1,10,3)")
-maps["Speed of Link"].charthalf[370] = loadstring("return addEnemy(250,1,10,3)")
-maps["Speed of Link"].charthalf[371] = loadstring("return addEnemy(350,1,10,3)")
-maps["Speed of Link"].charthalf[372] = loadstring("return addEnemy(450,1,10,3)")
-maps["Speed of Link"].charthalf[373] = loadstring("return addEnemy(550,1,10,3)")
-maps["Speed of Link"].charthalf[374] = loadstring("return addEnemy(650,1,10,3)")
-maps["Speed of Link"].charthalf[375] = loadstring("return addEnemy(750,1,10,3)")
+maps["Speed of Link"].charthalf[376] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[377] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[378] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[379] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[380] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[381] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[382] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[383] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[384] = loadstring("return addEnemy(100,1,10,3)")
+maps["Speed of Link"].chart[385] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[386] = loadstring("return addEnemy(300,1,10,3)")
+maps["Speed of Link"].chart[387] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[388] = loadstring("return addEnemy(500,1,10,3)")
+maps["Speed of Link"].chart[389] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[390] = loadstring("return addEnemy(700,1,10,3)")
+maps["Speed of Link"].chart[391] = loadstring("return addEnemy(800,1,10,3)")
+
+maps["Speed of Link"].charthalf[384] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[385] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[386] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[387] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[388] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[389] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[390] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[391] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[392] = loadstring("return addEnemy(100,1,10,3)")
+maps["Speed of Link"].chart[393] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[394] = loadstring("return addEnemy(300,1,10,3)")
+maps["Speed of Link"].chart[395] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[396] = loadstring("return addEnemy(500,1,10,3)")
+maps["Speed of Link"].chart[397] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[398] = loadstring("return addEnemy(700,1,10,3)")
+maps["Speed of Link"].chart[399] = loadstring("return addEnemy(800,1,10,3)")
+
+maps["Speed of Link"].charthalf[392] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[393] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[394] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[395] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[396] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[397] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[398] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[399] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[400] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[401] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[402] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[403] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[404] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[405] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[406] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[407] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[400] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[401] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[402] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[403] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[404] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[405] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[406] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[407] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[408] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[409] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[410] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[411] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[412] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[413] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[414] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[415] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[408] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[409] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[410] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[411] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[412] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[413] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[414] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[415] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[416] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[417] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[418] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[419] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[420] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[421] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[422] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[423] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[416] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[417] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[418] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[419] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[420] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[421] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[422] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[423] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[424] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[425] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[426] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[427] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[428] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[429] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[430] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[431] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[424] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[425] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[426] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[427] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[428] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[429] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[430] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[431] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[432] = loadstring("return addEnemy(100,1,10,3)")
+maps["Speed of Link"].chart[433] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[434] = loadstring("return addEnemy(300,1,10,3)")
+maps["Speed of Link"].chart[435] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[436] = loadstring("return addEnemy(500,1,10,3)")
+maps["Speed of Link"].chart[437] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[438] = loadstring("return addEnemy(700,1,10,3)")
+maps["Speed of Link"].chart[439] = loadstring("return addEnemy(800,1,10,3)")
+
+maps["Speed of Link"].charthalf[432] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[433] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[434] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[435] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[436] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[437] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[438] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[439] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[440] = loadstring("return addEnemy(100,1,10,3)")
+maps["Speed of Link"].chart[441] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[442] = loadstring("return addEnemy(300,1,10,3)")
+maps["Speed of Link"].chart[443] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[444] = loadstring("return addEnemy(500,1,10,3)")
+maps["Speed of Link"].chart[445] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[446] = loadstring("return addEnemy(700,1,10,3)")
+maps["Speed of Link"].chart[447] = loadstring("return addEnemy(800,1,10,3)")
+
+maps["Speed of Link"].charthalf[440] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[441] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[442] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[443] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[444] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[445] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[446] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[447] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[448] = loadstring("return addEnemy(100,1,10,3)")
+maps["Speed of Link"].chart[449] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[450] = loadstring("return addEnemy(300,1,10,3)")
+maps["Speed of Link"].chart[451] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[452] = loadstring("return addEnemy(500,1,10,3)")
+maps["Speed of Link"].chart[453] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[454] = loadstring("return addEnemy(700,1,10,3)")
+maps["Speed of Link"].chart[455] = loadstring("return addEnemy(800,1,10,3)")
+
+maps["Speed of Link"].charthalf[448] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[449] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[450] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[451] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[452] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[453] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[454] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[455] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[456] = loadstring("return addEnemy(100,1,10,3)")
+maps["Speed of Link"].chart[457] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[458] = loadstring("return addEnemy(300,1,10,3)")
+maps["Speed of Link"].chart[459] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[460] = loadstring("return addEnemy(500,1,10,3)")
+maps["Speed of Link"].chart[461] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[462] = loadstring("return addEnemy(700,1,10,3)")
+maps["Speed of Link"].chart[463] = loadstring("return addEnemy(800,1,10,3)")
+
+maps["Speed of Link"].charthalf[456] = loadstring("return addEnemy(50,1,10,3)")
+maps["Speed of Link"].charthalf[457] = loadstring("return addEnemy(150,1,10,3)")
+maps["Speed of Link"].charthalf[458] = loadstring("return addEnemy(250,1,10,3)")
+maps["Speed of Link"].charthalf[459] = loadstring("return addEnemy(350,1,10,3)")
+maps["Speed of Link"].charthalf[460] = loadstring("return addEnemy(450,1,10,3)")
+maps["Speed of Link"].charthalf[461] = loadstring("return addEnemy(550,1,10,3)")
+maps["Speed of Link"].charthalf[462] = loadstring("return addEnemy(650,1,10,3)")
+maps["Speed of Link"].charthalf[463] = loadstring("return addEnemy(750,1,10,3)")
+
+maps["Speed of Link"].chart[464] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[465] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[466] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[467] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[468] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[469] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[470] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[471] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[464] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[465] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[466] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[467] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[468] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[469] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[470] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[471] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[472] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[473] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[474] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[475] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[476] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[477] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[478] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[479] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[472] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[473] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[474] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[475] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[476] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[477] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[478] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[479] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[480] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[481] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[482] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[483] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[484] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[485] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[486] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[487] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[480] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[481] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[482] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[483] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[484] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[485] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[486] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[487] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[488] = loadstring("return addEnemy(1280-100,1,10,4)")
+maps["Speed of Link"].chart[489] = loadstring("return addEnemy(1280-200,1,10,4)")
+maps["Speed of Link"].chart[490] = loadstring("return addEnemy(1280-300,1,10,4)")
+maps["Speed of Link"].chart[491] = loadstring("return addEnemy(1280-400,1,10,4)")
+maps["Speed of Link"].chart[492] = loadstring("return addEnemy(1280-500,1,10,4)")
+maps["Speed of Link"].chart[493] = loadstring("return addEnemy(1280-600,1,10,4)")
+maps["Speed of Link"].chart[494] = loadstring("return addEnemy(1280-700,1,10,4)")
+maps["Speed of Link"].chart[495] = loadstring("return addEnemy(1280-800,1,10,4)")
+
+maps["Speed of Link"].charthalf[488] = loadstring("return addEnemy(1280-50,1,10,4)")
+maps["Speed of Link"].charthalf[489] = loadstring("return addEnemy(1280-150,1,10,4)")
+maps["Speed of Link"].charthalf[490] = loadstring("return addEnemy(1280-250,1,10,4)")
+maps["Speed of Link"].charthalf[491] = loadstring("return addEnemy(1280-350,1,10,4)")
+maps["Speed of Link"].charthalf[492] = loadstring("return addEnemy(1280-450,1,10,4)")
+maps["Speed of Link"].charthalf[493] = loadstring("return addEnemy(1280-550,1,10,4)")
+maps["Speed of Link"].charthalf[494] = loadstring("return addEnemy(1280-650,1,10,4)")
+maps["Speed of Link"].charthalf[495] = loadstring("return addEnemy(1280-750,1,10,4)")
+
+maps["Speed of Link"].chart[499] = loadstring("return addEnemy(200,1,10,3)")
+maps["Speed of Link"].chart[503] = loadstring("return addEnemy(400,1,10,3)")
+maps["Speed of Link"].chart[507] = loadstring("return addEnemy(600,1,10,3)")
+maps["Speed of Link"].chart[511] = loadstring("return addEnemy(800,1,10,3)")
+maps["Speed of Link"].chart[515] = loadstring("return addEnemy(1280-200,1,10,3)")
+maps["Speed of Link"].chart[519] = loadstring("return addEnemy(1280-400,1,10,3)")
+maps["Speed of Link"].chart[523] = loadstring("return addEnemy(1280-600,1,10,3)")
+maps["Speed of Link"].chart[527] = loadstring("return addEnemy(1280-800,1,10,3)")
+maps["Speed of Link"].chart[532] = loadstring("return addEnemy(640,1,10,3)")
+maps["Speed of Link"].chart[537] = loadstring("return addEnemy(640,1,10,4)")
+maps["Speed of Link"].chart[542] = loadstring("return addEnemy(640,1,10,3)")
+maps["Speed of Link"].chart[547] = loadstring("return addEnemy(640,1,10,4)")
+maps["Speed of Link"].chart[552] = loadstring("return addEnemy(640,1,10,3)")
+maps["Speed of Link"].chart[557] = loadstring("return addEnemy(640,1,10,4)")
+maps["Speed of Link"].chart[562] = loadstring("return addEnemy(640,1,10,3)")
+maps["Speed of Link"].chart[567] = loadstring("return addEnemy(640,1,10,4)")
 
 
 return maps["Speed of Link"]

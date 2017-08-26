@@ -1,12 +1,21 @@
+-- STATUS: Complete
+-- CHART TYPE: Randomized
+
 maps["The Empress"] = {
 	metadata = {
 		artist = 'UNDEAD CORPORATION',
-		BPM = 270,
+		BPM = 283.5,
 		previewTime = 28,
+		offset = 28.6,
+		enemySpeed = 350,
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+
+for i=0,1026 do
+	maps["The Empress"].chart[i] = loadstring("return addEnemy(math.random(350,1280-350),1,10,4)")
+end
 
 return maps["The Empress"]
