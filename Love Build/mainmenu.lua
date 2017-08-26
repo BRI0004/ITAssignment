@@ -31,10 +31,10 @@ function loadBGOverlay() -- function to load the images of the background and ti
 		end
 	end
 	if images["bg"][currentFileNameWoExt] == nil then
-		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
-			images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
+		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.jpg") then
+			images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.jpg")
 		else
-			print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
+			print("file " .."songs/img/"..currentFileNameWoExt.."/bg.jpg".." expected")
 		end
 	end
 end
@@ -130,7 +130,7 @@ function loadthestuff() -- main function with all stuff in it
 				-- ui elements
 				--draw bg at the back
 				if images["bg"][currentFileNameWoExt] ~= nil then
-					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.jpg") then
 						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
 					end
 				end -- draws background
@@ -161,12 +161,12 @@ function loadthestuff() -- main function with all stuff in it
 				maps = {}
 				local tlist={
 					x=800, y=0,
-					font=love.graphics.setNewFont(ffont, 24),
+					font=love.graphics.setNewFont(ffont, 28),
 					rounded=false,
-					bordercolor={60,60,60}, -- border color RGB (table)
+					bordercolor={127,127,127}, -- border color RGB (table)
 					selectedcolor={255,255,255}, -- selected color RGB (table)
 					fselectedcolor={0,0,0}, -- font selected color RGB (table)
-					bgcolor={60,60,60},
+					bgcolor={0,0,0},
 					w=480,h=720,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,

@@ -11,7 +11,7 @@ require("libraries/TEsound")
 require("libraries/noobhub")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
--- love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
+love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
@@ -117,7 +117,8 @@ local playerHealth = 100
 local currenttime = ""
 score = 0
 
--- menu
+bg = love.graphics.newImage("assets/bg.png")
+
 -- functions for Game
 function enemyExplode(ei,e)
     local kaboom = {
@@ -261,7 +262,6 @@ function enemyShoot(pattern, object, scale)
     end
 end
 --enemyShoot(10,player)
-local bg = love.graphics.newImage("assets/bg.png")
 
 -----------------------------------------------
 function love.keypressed(key)
@@ -622,6 +622,7 @@ function love.update(dt)
         end
     end
 end
+
 function love.draw()
     if menu_dialog then
         state.mainmenu.draw()
@@ -690,6 +691,7 @@ function love.draw()
         end
         -- UI ELEMENTS, DRAWN ON TOP OF all
         function drawGameUI()
+			bg = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.jpg")
             ffont = "assets/AlteHaasGroteskRegular.ttf"
             ffontbold = "assets/AlteHaasGroteskBold.ttf"
             love.graphics.setColor(0, 0, 0)
