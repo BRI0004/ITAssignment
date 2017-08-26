@@ -1,12 +1,24 @@
+-- STATUS: Complete
+-- CHART TYPE: Randomized
+
 maps["I Do Not Like Speed"] = {
 	metadata = {
 		artist = 'Mergel',
 		BPM = 210,
 		previewTime = 226,
+		offset = 26,
+		enemySpeed = 200,
 	},
-	chart = {
-	},
+	chart = {},
 		charthalf = {},
 }
+
+for i=0,803 do
+	maps["I Do Not Like Speed"].chart[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")
+end
+
+for i=1,803 do
+	maps["I Do Not Like Speed"].charthalf[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")
+end
 
 return maps["I Do Not Like Speed"]
