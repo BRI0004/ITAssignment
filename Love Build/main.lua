@@ -11,6 +11,7 @@ require("libraries/TEsound")
 require("libraries/noobhub")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
+love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
