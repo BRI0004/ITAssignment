@@ -1,12 +1,20 @@
+-- STATUS: Complete
+-- CHART TYPE: Randomized
+
 maps["Tech Noir"] = {
 	metadata = {
 		artist = 'GUNSHIP',
 		BPM = 86,
 		previewTime = 0,
+		offset = 1.6,
+		enemySpeed = 150,
 	},
-	chart = {
-	},
-		charthalf = {},
+	chart = {},
+	charthalf = {},
 }
+
+for i=0,192 do
+	maps["Tech Noir"].chart[2*i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,1)")
+end
 
 return maps["Tech Noir"]

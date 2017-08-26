@@ -508,7 +508,7 @@ function loadthestuff() -- main function with all stuff in it
 							else
 								--print("no half chart for this Beat") -- debug
 							end
-							print("HalfBeat", ChartLocation)
+							-- print("HalfBeat", ChartLocation)
 						end
 						currentHalfBeat = currentHalfBeat + 1
 					end
@@ -520,7 +520,7 @@ function loadthestuff() -- main function with all stuff in it
 						else
 							--print("no chart for this Beat") -- debug
 						end
-						print("Beat",ChartLocation) -- shows beat and counter
+						-- print("Beat",ChartLocation) -- shows beat and counter
 						ChartLocation = ChartLocation + 1 -- increment
 					end
 				end,
