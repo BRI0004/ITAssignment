@@ -235,6 +235,27 @@ function enemyShoot(pattern, object, scale)
             end
         end
     elseif pattern == 12 then
+        currentTime = socket.gettime()
+        angle = 0
+        bulletcolour = round(math.random(1, 4),1)
+        j = 1
+        while j > 16 do
+        if currentTime < socket.gettime() + 0.05 and j > 16 then
+            angle = angle + math.pi/2
+            for i = 1, 4 do
+                local Bullet = {
+                    Position = {x = object.Position.x, y = object.Position.y},
+                    Direction = angle + i*(math.pi/2),
+                    Type = 11,
+                    Colour = bulletcolour,
+                    initDir = angle + i*(math.pi/2),
+                }
+                table.insert(specialBullets,Bullet)
+            end
+            currentTime = socket.gettime()
+            j = j + 1
+        end
+    end
     else
         print("No Pattern Specified")
     end
@@ -390,7 +411,7 @@ function love.update(dt)
             if bossTimer + 1 < socket.gettime() then
                 local bossAdd = {
                     Position = { x = love.math.random(100,800), y = 100},
-                    health = 2500,
+                    health = 2000,
                     sprite = 10,
                     Direction = math.pi/2,
                     Type = 1,
@@ -475,8 +496,8 @@ function love.update(dt)
                         moveMod = -40
                         print("Switch Dir")
                     end
-                    if round(socket.gettime() - b.moveTime, 2) % 2 == 0 then
-                        enemyShoot(11,b)
+                    if round(socket.gettime() - b.moveTime, 2) % 4 == 0 then
+                        enemyShoot(12,b)
                     end
 
                 end
@@ -537,7 +558,7 @@ function love.update(dt)
                 print("ded")
                 TEsound.play("assets/sfx/DEAD.wav",{},0.1)
             end
-            if b.Position.x < -205 or b.Position.x > 1500 or b.Position.y < -225 or b.Position.y > 940 then
+            if b.Position.x < -505 or b.Position.x > 1800 or b.Position.y < -525 or b.Position.y > 1240 then
                 table.remove(specialBullets,bi)
             end
             if b.Type == 11 then
@@ -547,7 +568,7 @@ function love.update(dt)
                     b.phase1 = true
                 end
                 if b.phase1 and not b.phase2 then
-                    b.Direction = b.Direction + dt*1.5
+                    b.Direction = b.Direction + dt*0.3 -- change this value lower to make the circles bigger and slower
                 end
                 if b.Direction > b.initDir + 10*math.pi then
                     b.phase2 = true
@@ -572,6 +593,12 @@ function love.update(dt)
                 end
             end
             for ei,e in pairs(enemyBullets) do
+                distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
+                if distance < ((bulletSize/2+(b.Scale*50))) then
+                    table.remove(enemyBullets, ei)
+                end
+            end
+            for ei,e in pairs(specialBullets) do
                 distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
                 if distance < ((bulletSize/2+(b.Scale*50))) then
                     table.remove(enemyBullets, ei)
