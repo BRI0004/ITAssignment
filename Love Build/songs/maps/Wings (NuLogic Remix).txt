@@ -3,10 +3,16 @@ maps["Wings (NuLogic Remix)"] = {
 		artist = 'Birdy',
 		BPM = 174,
 		previewTime = 222,
+		offset = 3,
+		enemySpeed = 400
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+
+for i=0,2000 do
+	maps["Wings (NuLogic Remix)"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,4)")
+end
 
 return maps["Wings (NuLogic Remix)"]

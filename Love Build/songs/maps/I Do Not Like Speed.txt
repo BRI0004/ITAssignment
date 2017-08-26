@@ -13,11 +13,11 @@ maps["I Do Not Like Speed"] = {
 		charthalf = {},
 }
 
-for i=0,803 do
+for i=0,900 do
 	maps["I Do Not Like Speed"].chart[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")
 end
 
-for i=1,803 do
+for i=1,900 do
 	maps["I Do Not Like Speed"].charthalf[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")
 end
 

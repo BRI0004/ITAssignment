@@ -1,30 +1,21 @@
 maps["Zero Risk Syndrome"] = {
 	metadata = {
 		artist = 'Kobaryo',
-		BPM = 270,
-		previewTime = 86,
+		BPM = 540,
+		previewTime = 30,
 		offset = 25.3,
-		enemySpeed = 600
+		enemySpeed = 400,
 	},
 	chart = {
 	},
 		charthalf = {},
 }
 
-maps["Zero Risk Syndrome"].chart[0] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[1] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[2] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[3] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[4] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[5] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[6] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[7] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[8] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[9] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[10] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[11] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[12] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[13] = loadstring("return addEnemy(1280-540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[14] = loadstring("return addEnemy(540,1,10,3)")
-maps["Zero Risk Syndrome"].chart[15] = loadstring("return addEnemy(1280-540,1,10,3)")
+for i=0,2500 do
+	maps["Zero Risk Syndrome"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,3)")
+end
+for i=1,2500 do
+	maps["Zero Risk Syndrome"].charthalf[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,3)")
+end
+
 return maps["Zero Risk Syndrome"]

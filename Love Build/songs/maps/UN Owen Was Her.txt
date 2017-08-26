@@ -2,11 +2,18 @@ maps["UN Owen Was Her"] = {
 	metadata = {
 		artist = 'ZUN',
 		BPM = 156,
-		previewTime = 158,
+		previewTime = 36,
+		offset = 0,
+		enemySpeed = 250
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+
+for i=0,2000 do
+	maps["UN Owen Was Her"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,3)")
+end
+
 
 return maps["UN Owen Was Her"]

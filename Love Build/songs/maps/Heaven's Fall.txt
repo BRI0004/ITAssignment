@@ -3,10 +3,19 @@ maps["Heaven's Fall"] = {
 		artist = 'Helblinde',
 		BPM = 200,
 		previewTime = 102,
+		offset = 38.8,
+		enemySpeed = 600
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+
+for i=0,2000 do
+	maps["Heaven's Fall"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,2)")
+end
+for i=1,2000 do
+	maps["Heaven's Fall"].charthalf[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,1)")
+end
 
 return maps["Heaven's Fall"]

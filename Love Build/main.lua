@@ -696,9 +696,9 @@ function love.draw()
             love.graphics.rectangle( "fill", 0, 0, 1280, 120)
             --scorez
             love.graphics.setColor(255,255,255)
-            love.graphics.setNewFont(ffontbold, 16)
+            love.graphics.setNewFont(ffont, 16)
             love.graphics.print("Highscore: ".. topscore ,20, 20, 0, 1, 1)
-            love.graphics.setNewFont(ffont, 24)
+            love.graphics.setNewFont(ffontbold, 40)
             love.graphics.print(round(score,0), 20, 36)
             --song and difficulty
             love.graphics.setNewFont(ffont, 16)

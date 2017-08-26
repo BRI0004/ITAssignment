@@ -13,7 +13,7 @@ maps["Tech Noir"] = {
 	charthalf = {},
 }
 
-for i=0,192 do
+for i=0,230 do
 	maps["Tech Noir"].chart[2*i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,1)")
 end
 

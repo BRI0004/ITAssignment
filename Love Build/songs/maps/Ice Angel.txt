@@ -3,10 +3,16 @@ maps["Ice Angel"] = {
 		artist = 'Yooh',
 		BPM = 160,
 		previewTime = 220,
+		offset = 3.5,
+		enemySpeed = 350
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+
+for i=0,1000 do
+	maps["Ice Angel"].chart[i] = loadstring("return addEnemy(math.random(350,1280-350),1,10,3)")
+end
 
 return maps["Ice Angel"]
