@@ -3,12 +3,21 @@ maps["C18H27NO3"] = {
 		artist = 'Team Grimoire',
 		BPM = 210,
 		previewTime = 215,
+		offset = 30,
+		enemySpeed = 200,
+    chartType = 'Dodge',
+    chartDifficulty = '9',
 	},
-	chart = {
-	},
-	charthalf = {
-
-	},
+	chart = {},
+	charthalf = {},
 }
+math.randomseed(2)
+for i=0,1003 do
+	maps["C18H27NO3"].chart[i] = loadstring("return addEnemy(math.random(500,1280-500),1,10,2)")
+end
+
+for i=1,1003 do
+	maps["C18H27NO3"].charthalf[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,1)")
+end
 
 return maps["C18H27NO3"]

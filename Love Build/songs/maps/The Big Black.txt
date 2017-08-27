@@ -1,12 +1,26 @@
+-- STATUS: Complete
+-- CHART TYPE: Randomized
+
 maps["The Big Black"] = {
 	metadata = {
 		artist = 'The Quick Brown Fox',
 		BPM = 360,
 		previewTime = 18,
+		offset = 7.1,
+		enemySpeed = 400,
+    chartType = 'Spam',
+    chartDifficulty = '10',
 	},
-	chart = {
-	},
-		charthalf = {},
+	chart = {},
+	charthalf = {},
 }
+--makes random seed same every time
+math.randomseed(420)
+for i=0,1707 do
+	maps["The Big Black"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,2)")
+end
+for i=1,1707 do
+	maps["The Big Black"].charthalf[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,2)")
+end
 
 return maps["The Big Black"]

@@ -3,10 +3,18 @@ maps["Blue Zenith"] = {
 		artist = 'xi',
 		BPM = 200,
 		previewTime = 221,
+		offset = 2.5,
+		enemySpeed = 300,
+    chartType = 'Bulletstream',
+    chartDifficulty = '6',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(1)
+for i=0,850 do
+	maps["Blue Zenith"].chart[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,3)")
+end
 
 return maps["Blue Zenith"]

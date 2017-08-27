@@ -11,7 +11,7 @@ require("libraries/TEsound")
 require("libraries/noobhub")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
--- love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
+--love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
@@ -118,7 +118,8 @@ local playerHealth = 100
 local currenttime = ""
 score = 0
 
--- menu
+bg = love.graphics.newImage("assets/bg.png")
+
 -- functions for Game
 function enemyExplode(ei,e)
     local kaboom = {
@@ -210,12 +211,12 @@ function enemyShoot(pattern, object, scale)
         for i = 1, 1*scale do
             local Bullet = {
                 Position = {x = object.Position.x, y = object.Position.y},
-                Direction = math.pi/2 - i*(math.pi/128)
+                Direction = math.pi/2 - i*(math.pi/16)
             }
             table.insert(enemyBullets,Bullet)
             local Bullet = {
                 Position = {x = object.Position.x, y = object.Position.y},
-                Direction = math.pi/2 + i*(math.pi/128)
+                Direction = math.pi/2 + i*(math.pi/16)
             }
             table.insert(enemyBullets,Bullet)
         end
@@ -262,7 +263,6 @@ function enemyShoot(pattern, object, scale)
     end
 end
 --enemyShoot(10,player)
-local bg = love.graphics.newImage("assets/bg.png")
 
 -----------------------------------------------
 function love.keypressed(key)
@@ -460,9 +460,9 @@ function love.update(dt)
             end
             if v.Type == 3 then
                 if not v.shootTime then v.shootTime = socket.gettime() end
-                if socket.gettime() > v.shootTime + 0.5 and not v.hasFired then
+                if v.Position.y > 200 and not v.hasFired then
                     print("logging")
-                    enemyShoot(4,v,10)
+                    enemyShoot(4,v,3)
                     v.hasFired = true
                 end
             end
@@ -519,7 +519,6 @@ function love.update(dt)
                     end
                     table.remove(bullets,bi)
                     score = score + 1000*math.sqrt((mpos/mduration)*100)*combo
-                end
             end
             for ei,e in pairs(boss) do
                 distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
@@ -546,6 +545,7 @@ function love.update(dt)
             local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
             if distance < 10 then
                 print("ded")
+                score = score - 100
                 TEsound.play("assets/sfx/DEAD.wav",{},0.1)
             end
             if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
@@ -625,6 +625,7 @@ function love.update(dt)
         end
     end
 end
+
 function love.draw()
     if menu_dialog then
         state.mainmenu.draw()
@@ -647,7 +648,7 @@ function love.draw()
     if game_dialog then
         state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)
-        love.graphics.draw(bg,(player.Position.x+640)/8,(player.Position.y+360)/8,0,1,1,bg:getWidth()/2,bg:getHeight()/2)
+        love.graphics.draw(bg,(player.Position.x+640)/4,(player.Position.y+360)/4,0,1,1,bg:getWidth()/4,bg:getHeight()/4)
         ----------------- doesnt work ?????
 
         love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
@@ -702,18 +703,18 @@ function love.draw()
             love.graphics.rectangle( "fill", 0, 0, 1280, 120)
             --scorez
             love.graphics.setColor(255,255,255)
-            love.graphics.setNewFont(ffontbold, 16)
+            love.graphics.setNewFont(ffont, 16)
             love.graphics.print("Highscore: ".. topscore ,20, 20, 0, 1, 1)
-            love.graphics.setNewFont(ffont, 24)
+            love.graphics.setNewFont(ffontbold, 40)
             love.graphics.print(round(score,0), 20, 36)
             --song and difficulty
             love.graphics.setNewFont(ffont, 16)
 			love.graphics.print("Song", 400,20)
 			love.graphics.print("BPM", 700,20)
-			love.graphics.print("Length", 800,20)
+			love.graphics.print("Length", 900,20)
 			love.graphics.setNewFont(ffontbold, 24)
             love.graphics.print(maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 400, 36)
-            love.graphics.print(sectotime(mpos).."\n"..sectotime(mduration),800,36)
+            love.graphics.print(sectotime(mpos).."\n"..sectotime(mduration),900,36)
 			love.graphics.setNewFont(ffontbold, 40)
 			love.graphics.print(maps[currentFileNameWoExt].metadata.BPM, 700, 36)
 			-- if the score is the highscore then set them to be the same.

@@ -3,10 +3,19 @@ maps["The Violation"] = {
 		artist = 'Fleshgod Apocalypse',
 		BPM = 270,
 		previewTime = 55,
+		offset = 56,
+		enemySpeed = 550,
+    chartType = 'Stamina Enemystream',
+    chartDifficulty = '8 (50 second intro)',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(14)
+
+for i=0,2000 do
+	maps["The Violation"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,4)")
+end
 
 return maps["The Violation"]

@@ -3,10 +3,24 @@ maps["Freedom Dive"] = {
 		artist = 'xi',
 		BPM = 222,
 		previewTime = 29,
+		offset = 2.3,
+		enemySpeed = 600,
+    chartType = 'Enemystream',
+    chartDifficulty = '7',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(3)
+
+for i=0,945 do
+	maps["Freedom Dive"].chart[i] = loadstring("return addEnemy(math.random(450,1280-450),1,10,4)")
+end
+
+
+for i=1,945 do
+	maps["Freedom Dive"].charthalf[i] = loadstring("return addEnemy(math.random(450,1280-450),1,10,4)")
+end
 
 return maps["Freedom Dive"]

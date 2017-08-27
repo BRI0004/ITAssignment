@@ -3,10 +3,20 @@ maps["Running in the 90s"] = {
 		artist = 'Initial D',
 		BPM = 158.5,
 		previewTime = 72,
+		enemySpeed = 300,
+		offset = 19,
+    chartType = 'Bulletstream',
+    chartDifficulty = '4',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(10)
+
+
+for i=0,1500 do
+	maps["Running in the 90s"].chart[i] = loadstring("return addEnemy(math.random(450,1280-450),1,10,3)")
+end
 
 return maps["Running in the 90s"]

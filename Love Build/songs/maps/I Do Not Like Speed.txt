@@ -1,12 +1,27 @@
+-- STATUS: Complete
+-- CHART TYPE: Randomized
+
 maps["I Do Not Like Speed"] = {
 	metadata = {
 		artist = 'Mergel',
 		BPM = 210,
 		previewTime = 226,
+		offset = 26,
+		enemySpeed = 200,
+    chartType = 'Stream Stamina',
+    chartDifficulty = '6',
 	},
-	chart = {
-	},
+	chart = {},
 		charthalf = {},
 }
+math.randomseed(6)
+
+for i=0,900 do
+	maps["I Do Not Like Speed"].chart[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")
+end
+
+for i=1,900 do
+	maps["I Do Not Like Speed"].charthalf[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")
+end
 
 return maps["I Do Not Like Speed"]

@@ -3,10 +3,24 @@ maps["Through the Fire and Flames"] = {
 		artist = 'Dragonforce',
 		BPM = 200,
 		previewTime = 97,
+		offset = 1.5,
+		enemySpeed = 150,
+    chartType = 'Stamina Enemystream',
+    chartDifficulty = '7',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(15)
+
+for i=0,2000 do
+	maps["Through the Fire and Flames"].chart[i] = loadstring("return addEnemy(math.random(500,1280-500),1,10,4)")
+end
+
+for i=1,2000 do
+	maps["Through the Fire and Flames"].chart[i] = loadstring("return addEnemy(math.random(500,1280-500),1,10,3)")
+end
+
 
 return maps["Through the Fire and Flames"]

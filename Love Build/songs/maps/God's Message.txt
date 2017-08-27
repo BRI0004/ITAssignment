@@ -3,10 +3,19 @@ maps["God's Message"] = {
 		artist = 'Shirou Sagisu',
 		BPM = 166,
 		previewTime = 71,
+		offset = 0.8,
+		enemySpeed = 350,
+    chartType = 'Bulletstream',
+    chartDifficulty = '5',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(4)
+
+for i=0,500 do
+	maps["God's Message"].chart[i] = loadstring("return addEnemy(math.random(350,1280-350),1,10,3)")
+end
 
 return maps["God's Message"]

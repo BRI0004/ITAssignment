@@ -3,9 +3,18 @@ maps["Nightcall"] = {
 		artist = 'Kavinsky',
 		BPM = 91,
 		previewTime = 11,
+		offset = 11,
+		enemySpeed = 150,
+    chartType = 'Dodge',
+    chartDifficulty = '2',
 	},
 	chart = {},
 	charthalf = {},
 }
+math.randomseed(8)
+
+for i=0,800 do
+	maps["Nightcall"].chart[i] = loadstring("return addEnemy(math.random(500,1280-500),1,10,1)")
+end
 
 return maps["Nightcall"]

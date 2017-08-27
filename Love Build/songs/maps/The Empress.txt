@@ -7,12 +7,15 @@ maps["The Empress"] = {
 		BPM = 283.5,
 		previewTime = 28,
 		offset = 28.6,
-		enemySpeed = 350,
+		enemySpeed = 400,
+    chartType = 'Enemystream',
+    chartDifficulty = '9',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(13)
 
 for i=0,1026 do
 	maps["The Empress"].chart[i] = loadstring("return addEnemy(math.random(350,1280-350),1,10,4)")

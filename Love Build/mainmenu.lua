@@ -16,25 +16,18 @@ end
 ffont = "assets/AlteHaasGroteskRegular.ttf"
 ffontbold = "assets/AlteHaasGroteskBold.ttf"
 gui = require("libraries/Gspot")
-wave = require("libraries/wave") -- requite some locacl libraries
-displayTitleText = 'Alien'
-displaySubtitleText = 'Maximum The Hormone'
-displayBPMText = '276' -- sets default text
+wave = require("libraries/wave") -- require some local libraries
+displayTitleText = ''
+displaySubtitleText = ''
+displayBPMText = '' -- sets default text
 math.randomseed(os.time())
 randomNumber = math.random(1, 5)
 function loadBGOverlay() -- function to load the images of the background and title of song
-	if images["overlay"][currentFileNameWoExt] == nil then
-		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
-			images["overlay"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/overlay.png")
-		else
-			print("file " .."songs/img/"..currentFileNameWoExt.."/overlay.png".." expected")
-		end
-	end
 	if images["bg"][currentFileNameWoExt] == nil then
-		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
-			images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.png")
+		if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.jpg") then
+			images["bg"][currentFileNameWoExt] = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.jpg")
 		else
-			print("file " .."songs/img/"..currentFileNameWoExt.."/bg.png".." expected")
+			print("file " .."songs/img/"..currentFileNameWoExt.."/bg.jpg".." expected")
 		end
 	end
 end
@@ -62,6 +55,13 @@ function previewAndSelect() -- plays preview of sonog and loads bg and stuff
 		love.audio.stop()
 	end
 	loadBGOverlay()
+  if love.filesystem.exists("songs/img/" .. currentFileNameWoExt .. "/bg.jpg") then
+    bg = love.graphics.newImage("songs/img/" .. currentFileNameWoExt .. "/bg.jpg")
+  elseif love.filesystem.exists("songs/img/" .. currentFileNameWoExt .. "/bg.png") then
+    bg = love.graphics.newImage("songs/img/" .. currentFileNameWoExt .. "/bg.png")
+  else
+    bg = love.graphics.newImage("assets/bg.png")
+  end
 	previewSource = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
 	love.audio.play(previewSource)
 	previewSource:seek(maps[currentFileNameWoExt].metadata.previewTime,"seconds")
@@ -69,6 +69,9 @@ function previewAndSelect() -- plays preview of sonog and loads bg and stuff
 	displayTitleText = currentFileNameWoExt
 	displaySubtitleText = "Artist: ".. maps[currentFileNameWoExt].metadata.artist
 	displayBPMText = "BPM: ".. maps[currentFileNameWoExt].metadata.BPM
+  displaySpeedText = "Bullet Speed: " .. maps[currentFileNameWoExt].metadata.enemySpeed
+  displayDifficultyText = "Difficulty: " .. maps[currentFileNameWoExt].metadata.chartDifficulty
+  displayTypeText = "Chart Type: " .. maps[currentFileNameWoExt].metadata.chartType
 end
 function loadthestuff() -- main function with all stuff in it
 	state = {
@@ -81,7 +84,8 @@ function loadthestuff() -- main function with all stuff in it
 			end,
 			load = function() -- loads main menu and stuff
 				backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
-				local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 250, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+        foregroundImage = love.graphics.newImage("assets/logo.png")
+				local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 350, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				storyModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Story Mode Selected")
 					menu_dialog = false
@@ -89,7 +93,7 @@ function loadthestuff() -- main function with all stuff in it
 					freemode_menu = false
 					story_mode = true
 				end
-				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 330, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
+				local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 430, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 				freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
 					state.mainmenu.gui:feedback("Free Mode Selected")
 					menu_dialog = false
@@ -111,12 +115,17 @@ function loadthestuff() -- main function with all stuff in it
 			end,
 			draw = function()
 				love.graphics.draw(backgroundImage, 0, 0, r, 1, 1, ox, oy, kx, ky)
+        love.graphics.draw(foregroundImage, 560, 120, r, 2/3, 2/3, ox, oy, kx, ky)
 				state.mainmenu.gui:draw()
 				love.graphics.setNewFont(ffontbold,120)
-				love.graphics.setColor(255,255,255,255)
-				love.graphics.printf("Bullet Heaven", 95, 70 ,1000)
+				love.graphics.setColor(0,0,0,127)
+        love.graphics.printf("Bullet", 100, 75 ,1000)
+        love.graphics.printf("Heaven", 100, 165 ,1000)
+        love.graphics.setColor(255,255,255,255)
+				love.graphics.printf("Bullet", 95, 70 ,1000)
+        love.graphics.printf("Heaven", 95, 160 ,1000)
 				love.graphics.setNewFont(ffont,24)
-				love.graphics.printf("A game by Liam Bridge and Matthew Low", 100, 200,800)
+				love.graphics.printf("A game by Liam Bridge and Matthew Low", 100, 300,800)
 			end, -- draws gui
 		},
 		----------------------------------------------------------------------------------------------------------------
@@ -130,7 +139,7 @@ function loadthestuff() -- main function with all stuff in it
 				-- ui elements
 				--draw bg at the back
 				if images["bg"][currentFileNameWoExt] ~= nil then
-					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.png") then
+					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/bg.jpg") then
 						love.graphics.draw(images["bg"][currentFileNameWoExt], 0, 0, 0,(1280/images["bg"][currentFileNameWoExt]:getWidth()),720/(images["bg"][currentFileNameWoExt]:getHeight()))
 					end
 				end -- draws background
@@ -142,14 +151,17 @@ function loadthestuff() -- main function with all stuff in it
 				love.graphics.setNewFont(ffont,30)
 				displaySubtitle = love.graphics.printf(displaySubtitleText, 95, 325,500)
 				displayBPM = love.graphics.printf(displayBPMText, 95, 360,500)
-				love.graphics.rectangle("line", 95, 50, 450, 200)
-				love.graphics.setNewFont(ffont,25)
-				love.graphics.printf("overlay.png missing", 105, 60 ,400)
-				if images["overlay"][currentFileNameWoExt] ~= nil then
-					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
-						love.graphics.draw(images["overlay"][currentFileNameWoExt], 95, 50, 0,(450/images["overlay"][currentFileNameWoExt]:getWidth()),(200/images["overlay"][currentFileNameWoExt]:getHeight()))
-					end
-				end -- draws smaller image
+        displaySpeed = love.graphics.printf(displaySpeedText, 95, 395,500)
+        displayDifficulty = love.graphics.printf(displayDifficultyText, 95, 430,500)
+        displayType = love.graphics.printf(displayTypeText, 95, 465,500) 
+--				love.graphics.rectangle("line", 95, 50, 450, 200)
+--				love.graphics.setNewFont(ffont,25)
+--				love.graphics.printf("overlay.png missing", 105, 60 ,400)
+--				if images["overlay"][currentFileNameWoExt] ~= nil then
+--					if love.filesystem.exists("songs/img/"..currentFileNameWoExt.."/overlay.png") then
+--						love.graphics.draw(images["overlay"][currentFileNameWoExt], 95, 50, 0,(450/images["overlay"][currentFileNameWoExt]:getWidth()),(200/images["overlay"][currentFileNameWoExt]:getHeight()))
+--					end
+--				end -- draws smaller image
 				list:draw() -- draws list
 			end,
 			load = function()
@@ -160,13 +172,13 @@ function loadthestuff() -- main function with all stuff in it
 				}
 				maps = {}
 				local tlist={
-					x=800, y=0,
-					font=love.graphics.setNewFont(ffont, 24),
+					x=740, y=0,
+					font=love.graphics.setNewFont(ffont, 29),
 					rounded=false,
-					bordercolor={60,60,60}, -- border color RGB (table)
+					bordercolor={127,127,127}, -- border color RGB (table)
 					selectedcolor={255,255,255}, -- selected color RGB (table)
 					fselectedcolor={0,0,0}, -- font selected color RGB (table)
-					bgcolor={60,60,60},
+					bgcolor={0,0,0,123},
 					w=480,h=720,showindex=true,
 					fcolor = {255,255,255},
 					showindex = false,
@@ -362,6 +374,8 @@ function loadthestuff() -- main function with all stuff in it
 					love.graphics.draw(group4, 116, 422, 0, 0.9, 0.9)
 					love.graphics.draw(group5, 472, 422, 0, 0.9, 0.9)
 					love.graphics.draw(group6, 828, 422, 0, 0.9, 0.9)
+          love.graphics.setNewFont(ffontbold,24)
+          love.graphics.printf("Song Select", 95, 15,500)
 					-- draw buttons on screen
 
 				end,
@@ -397,6 +411,7 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Story Mode Selected")
 						loadedGroup = 1
 						currentFileNameWoExt = group[loadedGroup].song[1]
+            bg = love.graphics.newImage("assets/groups/group1bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group2 = love.graphics.newImage("assets/groups/group2.png")
@@ -406,7 +421,8 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Free Mode Selected")
 						loadedGroup = 2
 						currentFileNameWoExt = group[loadedGroup].song[1]
-
+            bg = love.graphics.newImage("assets/groups/group2bg.jpg")
+						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group3 = love.graphics.newImage("assets/groups/group3.png")
 
@@ -415,7 +431,8 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Marathon Mode Selected")
 						loadedGroup = 3
 						currentFileNameWoExt = group[loadedGroup].song[1]
-
+            bg = love.graphics.newImage("assets/groups/group3bg.jpg")
+						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group4 = love.graphics.newImage("assets/groups/group4.png")
 
@@ -424,7 +441,8 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Story Mode Selected")
 						loadedGroup = 4
 						currentFileNameWoExt = group[loadedGroup].song[1]
-
+            bg = love.graphics.newImage("assets/groups/group4bg.jpg")
+						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group5 = love.graphics.newImage("assets/groups/group5.png")
 
@@ -433,7 +451,8 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Free Mode Selected")
 						loadedGroup = 5
 						currentFileNameWoExt = group[loadedGroup].song[1]
-
+            bg = love.graphics.newImage("assets/groups/group5bg.jpg")
+						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group6 = love.graphics.newImage("assets/groups/group6.png")
 
@@ -442,6 +461,8 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Marathon Mode Selected")
 						loadedGroup = 6
 						currentFileNameWoExt = group[loadedGroup].song[1]
+            bg = love.graphics.newImage("assets/groups/group6bg.jpg")
+						playGroupSong() -- changes loaded group, and song name, and starts song
 
 					end
 					blacksquare = love.graphics.newImage("assets/black.png")
