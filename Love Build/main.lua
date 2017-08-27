@@ -11,7 +11,7 @@ require("libraries/TEsound")
 require("libraries/noobhub")
 print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
-love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
+--love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
 -- initial variables
 local currentDialogueNumber = 1
 local playernum = 1
@@ -210,12 +210,12 @@ function enemyShoot(pattern, object, scale)
         for i = 1, 1*scale do
             local Bullet = {
                 Position = {x = object.Position.x, y = object.Position.y},
-                Direction = math.pi/2 - i*(math.pi/128)
+                Direction = math.pi/2 - i*(math.pi/16)
             }
             table.insert(enemyBullets,Bullet)
             local Bullet = {
                 Position = {x = object.Position.x, y = object.Position.y},
-                Direction = math.pi/2 + i*(math.pi/128)
+                Direction = math.pi/2 + i*(math.pi/16)
             }
             table.insert(enemyBullets,Bullet)
         end
@@ -458,9 +458,9 @@ function love.update(dt)
             end
             if v.Type == 3 then
                 if not v.shootTime then v.shootTime = socket.gettime() end
-                if socket.gettime() > v.shootTime + 1 and not v.hasFired then
+                if v.Position.y > 200 and not v.hasFired then
                     print("logging")
-                    enemyShoot(4,v,20)
+                    enemyShoot(4,v,3)
                     v.hasFired = true
                 end
             end
@@ -515,7 +515,7 @@ function love.update(dt)
                         table.remove(enemies,ei)
                     end
                     table.remove(bullets,bi)
-                    score = score + 1000*math.sqrt((mpos/mduration)*100)
+                    score = score + 10*math.sqrt((mpos/mduration)*100)
                 end
             end
             for ei,e in pairs(boss) do
@@ -543,6 +543,7 @@ function love.update(dt)
             local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
             if distance < 10 then
                 print("ded")
+                score = score - 100
                 TEsound.play("assets/sfx/DEAD.wav",{},0.1)
             end
             if b.Position.x < -25 or b.Position.x > 1300 or b.Position.y < -25 or b.Position.y > 740 then
@@ -645,7 +646,7 @@ function love.draw()
     if game_dialog then
         state.game_play.draw()
         love.graphics.setColor(255, 255, 255, 192)
-        love.graphics.draw(bg,(player.Position.x+640)/8,(player.Position.y+360)/8,0,1,1,bg:getWidth()/2,bg:getHeight()/2)
+        love.graphics.draw(bg,(player.Position.x+640)/4,(player.Position.y+360)/4,0,1,1,bg:getWidth()/4,bg:getHeight()/4)
         ----------------- doesnt work ?????
 
         love.graphics.draw(playerImage,player.Position.x,player.Position.y,0,playerScale.x,playerScale.y,playerOffset.x,playerOffset.y)
@@ -691,7 +692,6 @@ function love.draw()
         end
         -- UI ELEMENTS, DRAWN ON TOP OF all
         function drawGameUI()
-			bg = love.graphics.newImage("songs/img/"..currentFileNameWoExt.."/bg.jpg")
             ffont = "assets/AlteHaasGroteskRegular.ttf"
             ffontbold = "assets/AlteHaasGroteskBold.ttf"
             love.graphics.setColor(0, 0, 0)
@@ -706,10 +706,10 @@ function love.draw()
             love.graphics.setNewFont(ffont, 16)
 			love.graphics.print("Song", 400,20)
 			love.graphics.print("BPM", 700,20)
-			love.graphics.print("Length", 800,20)
+			love.graphics.print("Length", 900,20)
 			love.graphics.setNewFont(ffontbold, 24)
             love.graphics.print(maps[currentFileNameWoExt].metadata.artist.."\n"..currentFileNameWoExt, 400, 36)
-            love.graphics.print(sectotime(mpos).."\n"..sectotime(mduration),800,36)
+            love.graphics.print(sectotime(mpos).."\n"..sectotime(mduration),900,36)
 			love.graphics.setNewFont(ffontbold, 40)
 			love.graphics.print(maps[currentFileNameWoExt].metadata.BPM, 700, 36)
 			-- if the score is the highscore then set them to be the same.

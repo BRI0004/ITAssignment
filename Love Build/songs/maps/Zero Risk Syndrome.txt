@@ -5,11 +5,14 @@ maps["Zero Risk Syndrome"] = {
 		previewTime = 30,
 		offset = 25.3,
 		enemySpeed = 400,
+    chartType = 'Spam',
+    chartDifficulty = 'Don\'t even try it.',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(666)
 
 for i=0,2500 do
 	maps["Zero Risk Syndrome"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,3)")

@@ -8,6 +8,8 @@ maps["Speed of Link"] = {
 		previewTime = 76.8,
 		offset = 0.8,
 		enemySpeed = 250,
+    chartType = 'Varied',
+    chartDifficulty = '5',
 	},
 	chart = {},
 	charthalf = {},

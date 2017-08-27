@@ -8,10 +8,13 @@ maps["Tech Noir"] = {
 		previewTime = 0,
 		offset = 1.6,
 		enemySpeed = 150,
+    chartType = 'Dodge',
+    chartDifficulty = '1',
 	},
 	chart = {},
 	charthalf = {},
 }
+math.randomseed(12)
 
 for i=0,230 do
 	maps["Tech Noir"].chart[2*i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,1)")

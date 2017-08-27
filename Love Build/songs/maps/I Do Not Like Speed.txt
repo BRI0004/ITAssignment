@@ -8,10 +8,13 @@ maps["I Do Not Like Speed"] = {
 		previewTime = 226,
 		offset = 26,
 		enemySpeed = 200,
+    chartType = 'Stream Stamina',
+    chartDifficulty = '6',
 	},
 	chart = {},
 		charthalf = {},
 }
+math.randomseed(6)
 
 for i=0,900 do
 	maps["I Do Not Like Speed"].chart[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,4)")

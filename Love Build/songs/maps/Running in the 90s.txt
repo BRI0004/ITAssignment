@@ -5,11 +5,14 @@ maps["Running in the 90s"] = {
 		previewTime = 72,
 		enemySpeed = 300,
 		offset = 19,
+    chartType = 'Bulletstream',
+    chartDifficulty = '4',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(10)
 
 
 for i=0,1500 do

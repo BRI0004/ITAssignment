@@ -4,12 +4,15 @@ maps["Heaven's Fall"] = {
 		BPM = 200,
 		previewTime = 102,
 		offset = 38.8,
-		enemySpeed = 600
+		enemySpeed = 600,
+    chartType = 'Dodge',
+    chartDifficulty = '6',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(5)
 
 for i=0,2000 do
 	maps["Heaven's Fall"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,2)")

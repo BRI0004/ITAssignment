@@ -1,35 +1,72 @@
-group[1] = {
- song = {
-	},
- dialogs={
-	}
+group[1]= {
+ song = {},
+ dialogs={}
 }
-group[1].song[1] = "AAA test"
-group[1].song[2] = "AAA test"
-group[1].song[3] = "AAA test"
+group[2]= {
+ song = {},
+ dialogs={}
+}
+group[3]= {
+ song = {},
+ dialogs={}
+}
+group[4]= {
+ song = {},
+ dialogs={}
+}
+group[5]= {
+ song = {},
+ dialogs={}
+}
+group[6]= {
+ song = {},
+ dialogs={}
+}
+group[1].song[1] = "Nightcall"
+group[1].song[2] = "Tech Noir"
+group[1].song[3] = "Running in the 90s"
+group[2].song[1] = "Wings (NuLogic Remix)"
+group[2].song[2] = "Tarantula"
+group[2].song[3] = "Ice Angel"
+group[3].song[1] = "UN Owen Was Her"
+group[3].song[2] = "God's Message"
+group[3].song[3] = "I Do Not Like Speed"
+group[3].song[4] = "Speed of Link"
+group[4].song[1] = "Blue Zenith"
+group[4].song[2] = "Freedom Dive"
+group[4].song[3] = "Over the Fullereneshift"
+group[4].song[4] = "Heaven's Fall"
+group[5].song[1] = "The Empress"
+group[5].song[2] = "The Violation"
+group[5].song[3] = "Through the Fire and Flames"
+group[6].song[1] = "C18H27NO3"
+group[6].song[2] = "The Big Black"
+group[6].song[3] = "Zero Risk Syndrome"
 
---group[1].song[2] = "Tech Noir"
---group[1].song[3] = "Nightcall"
 group[1].dialogs[1] = {
 "Yotsuba awakes from the ruins.",
 "She sees a large enemy in the corner of her eye.",
-"Yotsuba: 'owo what's this?'",
+"Yotsuba: 'What's this?'",
 "Yotsuba : '...Why can I shoot bullets with my arm?'"
 }
 group[1].dialogs[2] = {
-"...: 'Hello Yotsuba'",
-"...: 'My name is steve and you are an intruder to our world'",
-"steve: 'I need to stop you before you realise who you are'",
-"Yotsuba: 'I...I don't understand!?'",
-"steve: ''",
+"...: Hello Yotsuba.",
+"Steve: My name is Steve and you are an intruder to our world.",
+"Steve: I need to stop you before you realise who you are.",
+"Yotsuba: I...I don't understand!?",
+"Steve: ...",
 }
 group[1].dialogs[3] = {
-"succ",
-"...: 'My name is steve and you are an intruder to our world'",
-"steve: 'I need to stop you before you realise who you are'",
-"Yotsuba: 'I...I don't understand!?'",
-"steve: ''",
+"Yotsuba: What is this?",
+"Steve: You'll understand soon enough.",
 }
+group[6].dialogs[1] = {
+"Welcome."}
+group[6].dialogs[2] = {
+"To."}
+group[6].dialogs[3] = {
+"Hell."}
+
 for i=1, #group, 1 do
 return group[i]
 end

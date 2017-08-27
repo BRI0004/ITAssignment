@@ -7,7 +7,9 @@ maps["The Big Black"] = {
 		BPM = 360,
 		previewTime = 18,
 		offset = 7.1,
-		enemySpeed = 400
+		enemySpeed = 400,
+    chartType = 'Spam',
+    chartDifficulty = '10',
 	},
 	chart = {},
 	charthalf = {},

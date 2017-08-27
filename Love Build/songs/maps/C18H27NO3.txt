@@ -5,11 +5,13 @@ maps["C18H27NO3"] = {
 		previewTime = 215,
 		offset = 30,
 		enemySpeed = 200,
+    chartType = 'Dodge',
+    chartDifficulty = '9',
 	},
 	chart = {},
 	charthalf = {},
 }
-
+math.randomseed(2)
 for i=0,1003 do
 	maps["C18H27NO3"].chart[i] = loadstring("return addEnemy(math.random(500,1280-500),1,10,2)")
 end

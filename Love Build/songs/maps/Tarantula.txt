@@ -4,12 +4,15 @@ maps["Tarantula"] = {
 		BPM = 174,
 		previewTime = 49,
 		offset = 22.7,
-		enemySpeed = 300
+		enemySpeed = 300,
+    chartType = 'Dodge',
+    chartDifficulty = '6',
 	},
 	chart = {
 	},
 		charthalf = {},
 }
+math.randomseed(11)
 
 for i=0,1500 do
 	maps["Tarantula"].chart[i] = loadstring("return addEnemy(math.random(300,1280-300),1,10,1)")
