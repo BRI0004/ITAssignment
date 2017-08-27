@@ -326,13 +326,17 @@ function loadthestuff() -- main function with all stuff in it
 						love.graphics.printf("Song "..currentFileNameWoExt.." cleared!", 100,150,9999)
 						love.graphics.printf('scoreTableText', 100,100,999)
 						love.graphics.setNewFont(ffontbold,24)
-						love.graphics.printf("Final Score: "..finalScore, 100,200,9999)
+						love.graphics.printf("Final Score: "..finalScore..'%', 100,200,9999)
 					end,
 					load = function()
 						local scoreTableText = ''
 						backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
-
-						finalScore = score -- rando scoring system
+						--scoring system
+						local a = #maps[currentFileNameWoExt].chart
+						local b = mduration
+						maxScore = a*2*100 + b
+						local rank = score/maxScore * 100
+						finalScore = round(rank,2) -- rando scoring system
 						--[[
 						highScoreTable = {123412}
 						local str = binser.serialize(highScoreTable)
@@ -411,7 +415,6 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Story Mode Selected")
 						loadedGroup = 1
 						currentFileNameWoExt = group[loadedGroup].song[1]
-            bg = love.graphics.newImage("assets/groups/group1bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group2 = love.graphics.newImage("assets/groups/group2.png")
@@ -421,7 +424,6 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Free Mode Selected")
 						loadedGroup = 2
 						currentFileNameWoExt = group[loadedGroup].song[1]
-            bg = love.graphics.newImage("assets/groups/group2bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group3 = love.graphics.newImage("assets/groups/group3.png")
@@ -431,7 +433,6 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Marathon Mode Selected")
 						loadedGroup = 3
 						currentFileNameWoExt = group[loadedGroup].song[1]
-            bg = love.graphics.newImage("assets/groups/group3bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group4 = love.graphics.newImage("assets/groups/group4.png")
@@ -441,7 +442,6 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Story Mode Selected")
 						loadedGroup = 4
 						currentFileNameWoExt = group[loadedGroup].song[1]
-            bg = love.graphics.newImage("assets/groups/group4bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group5 = love.graphics.newImage("assets/groups/group5.png")
@@ -451,7 +451,6 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Free Mode Selected")
 						loadedGroup = 5
 						currentFileNameWoExt = group[loadedGroup].song[1]
-            bg = love.graphics.newImage("assets/groups/group5bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 					end
 					group6 = love.graphics.newImage("assets/groups/group6.png")
@@ -461,7 +460,6 @@ function loadthestuff() -- main function with all stuff in it
 						state.story_mode_select.gui:feedback("Marathon Mode Selected")
 						loadedGroup = 6
 						currentFileNameWoExt = group[loadedGroup].song[1]
-            bg = love.graphics.newImage("assets/groups/group6bg.jpg")
 						playGroupSong() -- changes loaded group, and song name, and starts song
 
 					end
@@ -506,7 +504,14 @@ function loadthestuff() -- main function with all stuff in it
 								source = love.audio.newSource("songs/audio/"..currentFileNameWoExt..".mp3", "stream") -- starts song
 								love.audio.play(source)
 								print("Story next song") -- debug
-								BPMtoDTCount = 0
+                if love.filesystem.exists("songs/img/" .. currentFileNameWoExt .. "/bg.jpg") then
+                  bg = love.graphics.newImage("songs/img/" .. currentFileNameWoExt .. "/bg.jpg")
+                elseif love.filesystem.exists("songs/img/" .. currentFileNameWoExt .. "/bg.png") then
+                  bg = love.graphics.newImage("songs/img/" .. currentFileNameWoExt .. "/bg.png")
+                else
+                  bg = love.graphics.newImage("assets/bg.png")
+                end
+								BPMtoDTCount = 0 - maps[currentFileNameWoExt].metadata.offset
 								ChartLocation = 0 -- reset vars
 								enemySpeed = maps[currentFileNameWoExt].metadata.BPM
 								mduration=source:getDuration(unit) -- reset vars
