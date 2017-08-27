@@ -46,19 +46,61 @@ group[6].song[3] = "Zero Risk Syndrome"
 group[1].dialogs[1] = {
 "Yotsuba awakes from the ruins.",
 "She sees a large enemy in the corner of her eye.",
-"Yotsuba: 'What's this?'",
-"Yotsuba : '...Why can I shoot bullets with my arm?'"
+"Yotsuba: What's this?",
+"Yotsuba : ...Why can I shoot bullets with my arm?"
 }
 group[1].dialogs[2] = {
+}
+group[1].dialogs[3] = {
 "...: Hello Yotsuba.",
 "Steve: My name is Steve and you are an intruder to our world.",
 "Steve: I need to stop you before you realise who you are.",
 "Yotsuba: I...I don't understand!?",
 "Steve: ...",
-}
-group[1].dialogs[3] = {
 "Yotsuba: What is this?",
 "Steve: You'll understand soon enough.",
+}
+group[2].dialogs[1] = {
+"Yotsuba: Anyone?",
+"Yotsuba: Hello?"
+}
+group[2].dialogs[2] = {
+"Yotsuba: Okay, seriously. Where the f**k am I."
+}
+group[2].dialogs[3] = {
+"Yotsuba: Jesus it's cold."
+}
+group[3].dialogs[1] = {
+"...: Hello.",
+"Yotsuba: i swear to god steve if...",
+"Patrick: No, it's Patrick. This will take some explaining.",
+"Patrick: Something happened. It's been 100 years, you're still here, everyone else died. We're all new.",
+"Patrick: Civilisation has restarted. We know all the stuff from the past and we're working it out.",
+"Yotsuba: ...",
+"Yotsuba: What?"
+}
+group[3].dialogs[2] = {
+"Patrick: I wish I could say more, but I'm under a sort of restriction. Can't say any more.",
+"Yotsuba: Please. I don't know what's happening. Just give me a hint. Something.",
+"Patrick: ...",
+"Patrick: Bye.",
+"Yotsuba: ..."
+}
+group[3].dialogs[3] = {
+"Yotsuba: Why am I in a brain?",
+"...: You have been sent. You are our civilisation's only hope of returning to normality.",
+"Yotsuba: Another person? Who the f**k are you?",
+"...: It must remain a secret. But you are the only person from our old society.",
+"...: Win this please.",
+"Yotsuba: Win what? I've just been shooting random s**t for fun.",
+"...: Just shoot everything you see.",
+"...: And don't get hit by that guy.",
+"Yotsuba: What guy?",
+"...: You'll see soon."
+}
+group[3].dialogs[4] = {
+"Yotsuba: JESUS THIS IS FAST",
+"...: Just shoot."
 }
 group[6].dialogs[1] = {
 "Welcome."}
