@@ -314,17 +314,13 @@ function loadthestuff() -- main function with all stuff in it
 						love.graphics.printf("Song "..currentFileNameWoExt.." cleared!", 100,150,9999)
 						love.graphics.printf('scoreTableText', 100,100,999)
 						love.graphics.setNewFont(ffontbold,24)
-						love.graphics.printf("Final Score: "..finalScore..'%', 100,200,9999)
+						love.graphics.printf("Final Score: "..finalScore, 100,200,9999)
 					end,
 					load = function()
 						local scoreTableText = ''
 						backgroundImage = love.graphics.newImage("assets/img/"..randomNumber.. ".png")
-						--scoring system
-						local a = #maps[currentFileNameWoExt].chart
-						local b = mduration
-						maxScore = a*2*100 + b
-						local rank = score/maxScore * 100
-						finalScore = round(rank,2) -- rando scoring system
+
+						finalScore = score -- rando scoring system
 						--[[
 						highScoreTable = {123412}
 						local str = binser.serialize(highScoreTable)

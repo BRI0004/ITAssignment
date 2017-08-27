@@ -18,6 +18,7 @@ local playernum = 1
 local bulletSpeed = 5
 moveMod = 40
 enemySpeed = 100
+local combo = 0
 local playerSize = 64
 local bulletSize = 48
 local playerSpeed = 1000
@@ -430,6 +431,7 @@ function love.update(dt)
             end
             if v.Position.x < -25 or v.Position.x > 1300 or v.Position.y < -25 or v.Position.y > 740 then
                 table.remove(enemies,i)
+                combo = 0
             end
             if v.Position.y > 250 and not v.hasPaused and (v.Type == 1 or v.Type == 2) then
                 v.pause = true
@@ -458,9 +460,9 @@ function love.update(dt)
             end
             if v.Type == 3 then
                 if not v.shootTime then v.shootTime = socket.gettime() end
-                if socket.gettime() > v.shootTime + 1 and not v.hasFired then
+                if socket.gettime() > v.shootTime + 0.5 and not v.hasFired then
                     print("logging")
-                    enemyShoot(4,v,20)
+                    enemyShoot(4,v,10)
                     v.hasFired = true
                 end
             end
@@ -479,8 +481,8 @@ function love.update(dt)
                 if b.Position.y > 300 and not b.hasPaused1 then
                     b.pause = true
                     if not b.pauseTime then b.pauseTime = socket.gettime() end
-                    if socket.gettime() - b.pauseTime > 3 and not isDialogue then b.hasPaused1 = true end
-                    if (socket.gettime() - b.pauseTime) > 1.5 and not b.hasFired1 and not isDialogue then
+                    if socket.gettime() - b.pauseTime > 2 and not isDialogue then b.hasPaused1 = true end
+                    if (socket.gettime() - b.pauseTime) > 1 and not b.hasFired1 and not isDialogue then
                         b.hasFired1 = true
                         enemyShoot(11,b)
                     end
@@ -513,9 +515,10 @@ function love.update(dt)
                         e.health = 0
                         enemyExplode(ei,e)
                         table.remove(enemies,ei)
+                        combo = combo + 1
                     end
                     table.remove(bullets,bi)
-                    score = score + 1000*math.sqrt((mpos/mduration)*100)
+                    score = score + 1000*math.sqrt((mpos/mduration)*100)*combo
                 end
             end
             for ei,e in pairs(boss) do
@@ -655,6 +658,9 @@ function love.draw()
                 table.remove(exp,i)
             end
             love.graphics.draw(explosion,quad[cur],v.x,v.y,0,v.sprite,v.sprite,64,64)
+        end
+        if combo > 4 then
+            love.graphics.printf(combo, 50, 600, 999)
         end
         for i,v in pairs(bullets) do
             love.graphics.draw(playerBullets[0],v.Position.x,v.Position.y,v.Direction,0.2,0.2,50,50)
