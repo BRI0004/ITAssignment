@@ -266,10 +266,8 @@ end
 -----------------------------------------------
 function love.keypressed(key)
   if key == "escape" then
-    menu_dialog = false
-    game_dialog = true
-    isDialogue = true
-
+    menu_dialog = true
+    game_dialog = false
   elseif key == "y" then
     love.event.quit()
   elseif key == "n" then
@@ -725,6 +723,7 @@ function love.draw()
         score_show_dialog = true
         print("Song Ended") -- show scores and stuff
       end
+      love.keypressed("escape")
     end
     drawGameUI()
   end
