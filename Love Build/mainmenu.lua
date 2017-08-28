@@ -72,7 +72,7 @@ function previewAndSelect() -- plays preview of sonog and loads bg and stuff
   displaySpeedText = "Bullet Speed: " .. maps[currentFileNameWoExt].metadata.enemySpeed
   displayDifficultyText = "Difficulty: " .. maps[currentFileNameWoExt].metadata.chartDifficulty
   displayTypeText = "Chart Type: " .. maps[currentFileNameWoExt].metadata.chartType
-  currentSongFull = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")  
+  currentSongFull = love.audio.newSource("songs/audio/"..list:getfusion(listselected), "stream")
   displayLengthText = "Length: " ..  sectotime(currentSongFull:getDuration("seconds"))
 end
 function loadthestuff() -- main function with all stuff in it
@@ -157,7 +157,7 @@ function loadthestuff() -- main function with all stuff in it
         displayBPM = love.graphics.printf(displayBPMText, 95, 360,500)
         displaySpeed = love.graphics.printf(displaySpeedText, 95, 395,500)
         displayDifficulty = love.graphics.printf(displayDifficultyText, 95, 430,500)
-        displayType = love.graphics.printf(displayTypeText, 95, 465,500) 
+        displayType = love.graphics.printf(displayTypeText, 95, 465,500)
         displayLength = love.graphics.printf(displayLengthText, 95, 500, 500)
 --				love.graphics.rectangle("line", 95, 50, 450, 200)
 --				love.graphics.setNewFont(ffont,25)
@@ -498,7 +498,10 @@ function loadthestuff() -- main function with all stuff in it
             game_over_state = true
             state.score_show.load()
             score_show_dialog = true
-            print("Song Ended") -- show scores and stuff
+            print("Song Ended")
+			local r = love.profiler.report('time', 50)
+print(r)
+			love.profiler.stop() -- show scores and stuff
           else -- if on story mode
             storyCurrentSong = storyCurrentSong + 1 -- increment story song number
             if storyCurrentSong > #group[loadedGroup].song then -- if last song

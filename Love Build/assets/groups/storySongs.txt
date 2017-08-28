@@ -46,7 +46,7 @@ group[6].song[3] = "Zero Risk Syndrome"
 group[1].dialogs[1] = {
 "Yotsuba awakes from the ruins.",
 "She sees a large enemy in the corner of her eye.",
-"Yotsuba: What's this?",
+"Yotsuba: UwU What's this?",
 "Yotsuba : ...Why can I shoot bullets with my arm?"
 }
 group[1].dialogs[2] = {

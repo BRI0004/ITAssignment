@@ -13,6 +13,10 @@ print(socket.gettime())
 love.window.setTitle("Bullet Heaven")
 --love.window.setMode( 1280, 720, {fullscreen=true,fullscreentype="exclusive"} )
 -- initial variables
+love.profiler = require('libraries/profile')
+  love.profiler.hookall("Lua")
+  love.profiler.start()
+
 local currentDialogueNumber = 1
 local playernum = 1
 local bulletSpeed = 5
@@ -74,8 +78,8 @@ local playerBullets = {}
 playerBullets[0] = love.graphics.newImage("assets/bulletBlue.png")
 playerBullets[1] = love.graphics.newImage("assets/bulletGreen.png")
 playerBullets[2] = love.graphics.newImage("assets/bulletPink.png")
-playerBullets[3] = love.graphics.newImage("assets/bulletRed.png")
-playerBullets[4] = love.graphics.newImage("assets/bulletBlack.png")
+playerBullets[4] = love.graphics.newImage("assets/bulletRed.png")
+playerBullets[3] = love.graphics.newImage("assets/bulletBlack.png")
 playerBullets[5] = love.graphics.newImage("assets/bulletBlue.png")
 -- playerbullet variables
 local bulletScale = 0.05
@@ -311,6 +315,14 @@ function love.update(dt)
     bulletTimer = bulletTimer + dt
     spellCardTimer = spellCardTimer + dt
     score = score + dt
+    if score < -20000 then
+      love.audio.stop()
+      game_dialog = false
+      game_over_state = true
+      state.score_show.load()
+      score_show_dialog = true
+      print("Song Ended") -- show scores and stuff
+    end
     if boss[1] ~= nil then
       bossTime = bossTime - dt
     end
@@ -499,7 +511,8 @@ function love.update(dt)
             print("Switch Dir")
           end
           print(round(socket.gettime() - b.moveTime))
-          if bossTime % 4 == 0 then
+          print(round(bossTime,1))
+          if round(bossTime,1) % 4 == 0 then
             enemyShoot(12,b)
           end
 
@@ -544,7 +557,7 @@ function love.update(dt)
       b.Position.y = b.Position.y + (math.sin(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
       b.Position.x = b.Position.x + (math.cos(b.Direction)*dt*bulletSpeed*bulletSpeedMod)
       local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
-      if distance < 16 then
+      if distance < 10 then
         print("ded")
         score = score - 200
         TEsound.play("assets/sfx/DEAD.wav",{},0.1)
@@ -587,7 +600,7 @@ function love.update(dt)
       end
       for ei,e in pairs(enemies) do
         distance = ((e.Position.x-b.Position.x)^2+(e.Position.y-b.Position.y)^2)^0.5
-        if distance < ((enemySize[e.sprite]/2+(b.Scale*50))*enemyScale.x)*1 then
+        if distance < ((enemySize[e.sprite]/2+(b.Scale*50))) then
           e.health = e.health - 10
           if e.health < 0 then
             e.health = 0
@@ -677,7 +690,7 @@ function love.draw()
     end
     for i, v in pairs(boss) do
       love.graphics.draw(enemyImage[v.sprite],v.Position.x,v.Position.y,v.Direction,0.3,0.3,50,50)
-      love.graphics.draw(bossHealthBar, 10, 150, 0, boss[1].health/200, 0.2)
+      love.graphics.draw(bossHealthBar, 10, 150, 0, boss[1].health/160, 0.2)
     end
     --love.graphics.draw(bg,player.Position.x/4-300,player.Position.y/4-400,0,4,4,0,0)
     --love.graphics.draw(bg,player.Position.x/2-600,player.Position.y/2-200,0,4,4,0,0)
@@ -717,14 +730,7 @@ function love.draw()
       love.graphics.print(maps[currentFileNameWoExt].metadata.BPM, 800, 36)
       -- if the score is the highscore then set them to be the same.
       if score > topscore then topscore = round(score) end
-      if score < -20000 then
-        love.audio.stop()
-        game_dialog = false
-        game_over_state = true
-        state.score_show.load()
-        score_show_dialog = true
-        print("Song Ended") -- show scores and stuff
-      end
+
     end
     drawGameUI()
   end

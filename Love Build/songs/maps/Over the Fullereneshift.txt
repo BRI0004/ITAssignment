@@ -15,11 +15,11 @@ maps["Over the Fullereneshift"] = {
 math.randomseed(9)
 
 for i=0,2000 do
-	maps["Over the Fullereneshift"].chart[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,4)")
+	maps["Over the Fullereneshift"].chart[i] = loadstring("return addEnemy(math.random(200,1280-200),1,10,4)")
 end
 
 for i=1,2000 do
-	maps["Over the Fullereneshift"].charthalf[i] = loadstring("return addEnemy(math.random(400,1280-400),1,10,4)")
+	maps["Over the Fullereneshift"].charthalf[i] = loadstring("return addEnemy(math.random(200,1280-200),1,10,4)")
 end
 
 return maps["Over the Fullereneshift"]
