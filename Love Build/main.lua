@@ -78,8 +78,8 @@ local playerBullets = {}
 playerBullets[0] = love.graphics.newImage("assets/bulletBlue.png")
 playerBullets[1] = love.graphics.newImage("assets/bulletGreen.png")
 playerBullets[2] = love.graphics.newImage("assets/bulletPink.png")
-playerBullets[4] = love.graphics.newImage("assets/bulletRed.png")
-playerBullets[3] = love.graphics.newImage("assets/bulletBlack.png")
+playerBullets[3] = love.graphics.newImage("assets/bulletRed.png")
+playerBullets[4] = love.graphics.newImage("assets/bulletBlack.png")
 playerBullets[5] = love.graphics.newImage("assets/bulletBlue.png")
 -- playerbullet variables
 local bulletScale = 0.05
@@ -268,18 +268,6 @@ end
 --enemyShoot(10,player)
 
 -----------------------------------------------
-function love.keypressed(key)
-  if key == "escape" then
-    menu_dialog = false
-    game_dialog = true
-    isDialogue = true
-
-  elseif key == "y" then
-    love.event.quit()
-  elseif key == "n" then
-    pause_dialog = false
-  end
-end
 
 
 loadthestuff()
@@ -559,6 +547,13 @@ function love.update(dt)
       local distance = ((player.Position.x-b.Position.x)^2+(player.Position.y-b.Position.y)^2)^0.5
       if distance < 10 then
         print("ded")
+        playerdead = true
+        love.audio.stop()
+        game_dialog = false
+        game_over_state = true
+        state.score_show.load()
+        score_show_dialog = true
+        print("Song Ended")
         score = score - 200
         TEsound.play("assets/sfx/DEAD.wav",{},0.1)
       end
@@ -730,7 +725,6 @@ function love.draw()
       love.graphics.print(maps[currentFileNameWoExt].metadata.BPM, 800, 36)
       -- if the score is the highscore then set them to be the same.
       if score > topscore then topscore = round(score) end
-
     end
     drawGameUI()
   end

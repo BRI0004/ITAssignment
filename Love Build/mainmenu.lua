@@ -89,7 +89,7 @@ function loadthestuff() -- main function with all stuff in it
         foregroundImage = love.graphics.newImage("assets/logo.png")
         local storyModeButton = state.mainmenu.gui:button('Story Mode', {x = 100, y = 350, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         storyModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.mainmenu.gui:feedback("Story Mode Selected")
+    --      state.mainmenu.gui:feedback("Story Mode Selected")
           menu_dialog = false
           story_mode_select_menu = true
           freemode_menu = false
@@ -97,7 +97,7 @@ function loadthestuff() -- main function with all stuff in it
         end
         local freeModeButton = state.mainmenu.gui:button('Free Mode', {x = 100, y = 430, w = 256, h = gui.style.unit*4}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         freeModeButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.mainmenu.gui:feedback("Free Mode Selected")
+    --      state.mainmenu.gui:feedback("Free Mode Selected")
           menu_dialog = false
           freemode_menu = true
           story_mode_select_menu = false
@@ -204,6 +204,25 @@ function loadthestuff() -- main function with all stuff in it
           end
         end
         function love.keypressed(key) -- all key presses check
+          print(key)
+          if game_dialog then
+            if key == "escape" then -- leave select menu
+              freemode_menu = true
+              game_dialog = false
+              love.audio.stop()
+              score = 0
+              highscore = 0
+            end
+          end
+          if game_over_state then
+            if key == "escape" then -- leave select menu
+              freemode_menu = true
+              game_over_state = false
+              love.audio.stop()
+              score = 0
+              highscore = 0
+            end
+          end
           if multiplayer_menu then
             if multiplayer_menu then
               if key == "down" then
@@ -227,6 +246,13 @@ function loadthestuff() -- main function with all stuff in it
             end
           end
           if freemode_menu then
+            if key == "escape" then -- leave select menu
+              menu_dialog = true
+              freemode_menu = false
+              love.audio.stop()
+              score = 0
+              highscore = 0
+            end
             if key == "down" then
               if list:getselected() ~= list:getcount() then
                 listselected = list:getselected() + 1
@@ -261,11 +287,7 @@ function loadthestuff() -- main function with all stuff in it
                 BPMtoDTCount = 0
               end
             end
-            if key == "escape" then -- leave select menu
-              freemode_menu = false
-              menu_dialog = true
-              love.audio.stop()
-            end
+
             list:key(key)
           end
         end
@@ -327,7 +349,7 @@ function loadthestuff() -- main function with all stuff in it
         end
         love.graphics.setNewFont(ffont,24)
         function math.round(n, deci) deci = 10^(deci or 0) return math.floor(n*deci+.5)/deci end
-        if score < -20000 then
+        if score < -20000 or playerdead then
           love.graphics.printf("Song "..currentFileNameWoExt.." failed.", 100,150,9999)
         else
           love.graphics.printf("Song "..currentFileNameWoExt.." cleared!", 100,150,9999)
@@ -429,7 +451,7 @@ function loadthestuff() -- main function with all stuff in it
         group1 = love.graphics.newImage("assets/groups/group1.png")
         local group1Button = state.story_mode_select.gui:button('', {x = 100, y = 100, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         group1Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.story_mode_select.gui:feedback("Story Mode Selected")
+    --      state.story_mode_select.gui:feedback("Story Mode Selected")
           loadedGroup = 1
           currentFileNameWoExt = group[loadedGroup].song[1]
           playGroupSong() -- changes loaded group, and song name, and starts song
@@ -438,7 +460,7 @@ function loadthestuff() -- main function with all stuff in it
 
         local group2Button = state.story_mode_select.gui:button('Group 2', {x = 456, y = 100, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         group2Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.story_mode_select.gui:feedback("Free Mode Selected")
+        --  state.story_mode_select.gui:feedback("Free Mode Selected")
           loadedGroup = 2
           currentFileNameWoExt = group[loadedGroup].song[1]
           playGroupSong() -- changes loaded group, and song name, and starts song
@@ -447,7 +469,7 @@ function loadthestuff() -- main function with all stuff in it
 
         local group3Button = state.story_mode_select.gui:button('Group 3', {x = 812, y = 100, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         group3Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.story_mode_select.gui:feedback("Marathon Mode Selected")
+    --      state.story_mode_select.gui:feedback("Marathon Mode Selected")
           loadedGroup = 3
           currentFileNameWoExt = group[loadedGroup].song[1]
           playGroupSong() -- changes loaded group, and song name, and starts song
@@ -456,7 +478,7 @@ function loadthestuff() -- main function with all stuff in it
 
         local group4Button = state.story_mode_select.gui:button('Group 4', {x = 100, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         group4Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.story_mode_select.gui:feedback("Story Mode Selected")
+    --      state.story_mode_select.gui:feedback("Story Mode Selected")
           loadedGroup = 4
           currentFileNameWoExt = group[loadedGroup].song[1]
           playGroupSong() -- changes loaded group, and song name, and starts song
@@ -465,7 +487,7 @@ function loadthestuff() -- main function with all stuff in it
 
         local group5Button = state.story_mode_select.gui:button('Group 5', {x = 456, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         group5Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.story_mode_select.gui:feedback("Free Mode Selected")
+    --      state.story_mode_select.gui:feedback("Free Mode Selected")
           loadedGroup = 5
           currentFileNameWoExt = group[loadedGroup].song[1]
           playGroupSong() -- changes loaded group, and song name, and starts song
@@ -474,7 +496,7 @@ function loadthestuff() -- main function with all stuff in it
 
         local group6Button = state.story_mode_select.gui:button('Group 6', {x = 812, y = 406, w = 256, h = 256}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
         group6Button.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-          state.story_mode_select.gui:feedback("Marathon Mode Selected")
+    --      state.story_mode_select.gui:feedback("Marathon Mode Selected")
           loadedGroup = 6
           currentFileNameWoExt = group[loadedGroup].song[1]
           playGroupSong() -- changes loaded group, and song name, and starts song
