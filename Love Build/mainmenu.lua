@@ -204,6 +204,14 @@ function loadthestuff() -- main function with all stuff in it
           end
         end
         function love.keypressed(key) -- all key presses check
+          print(key)
+          if game_dialog then
+            if key == "escape" then -- leave select menu
+              freemode_menu = false
+              menu_dialog = true
+              love.audio.stop()
+            end
+          end
           if multiplayer_menu then
             if multiplayer_menu then
               if key == "down" then
@@ -261,11 +269,7 @@ function loadthestuff() -- main function with all stuff in it
                 BPMtoDTCount = 0
               end
             end
-            if key == "escape" then -- leave select menu
-              freemode_menu = false
-              menu_dialog = true
-              love.audio.stop()
-            end
+            
             list:key(key)
           end
         end
